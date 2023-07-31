@@ -8,6 +8,9 @@
 (define-template-type quat (<t>)
     (compose-name NIL (type-prefix <t>) 'quat)
   :include (vec-type 3 <t>)
+  :print-object (lambda (name sv slots)
+                  `(write (list ',name (qx ,name) (qy ,name) (qz ,name) (qw ,name))
+                          :stream ,sv))
   (field (compose-name NIL (type-prefix <t>) 'qw)
          :type <t> :alias (list 3 'w :w)))
 
