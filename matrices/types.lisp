@@ -1,13 +1,9 @@
 #|
- This file is a part of 3d-matrices
- (c) 2022 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.matrices)
-
-(deftype dimension ()
-  `(integer 1 ,(truncate (sqrt array-dimension-limit))))
+(in-package #:org.shirakumo.fraf.math.matrices)
 
 (define-template-type mat (<s> <t>)
     (compose-name NIL (type-prefix <t>) 'mat <s>)
@@ -39,30 +35,30 @@
 
 (defmacro do-mat-combinations (template &rest other-template-args)
   `(do-combinations ,template ,@other-template-args (2 3 4 n)
-     (#-3d-vectors-no-f32 f32
-      #-3d-vectors-no-f64 f64
-      #-3d-vectors-no-u32 u32
-      #-3d-vectors-no-i32 i32)))
+     (#-3d-math-no-f32 f32
+      #-3d-math-no-f64 f64
+      #-3d-math-no-u32 u32
+      #-3d-math-no-i32 i32)))
 
 (do-mat-combinations define-mat)
 
-#-3d-vectors-no-f32 (define-type-alias fmat mat2 mat3 mat4 matn)
-#-3d-vectors-no-f64 (define-type-alias dmat dmat2 dmat3 dmat4 dmatn)
-#-3d-vectors-no-i32 (define-type-alias imat imat2 imat3 imat4 imatn)
-#-3d-vectors-no-u32 (define-type-alias umat umat2 umat3 umat4 umatn)
+#-3d-math-no-f32 (define-type-alias fmat mat2 mat3 mat4 matn)
+#-3d-math-no-f64 (define-type-alias dmat dmat2 dmat3 dmat4 dmatn)
+#-3d-math-no-i32 (define-type-alias imat imat2 imat3 imat4 imatn)
+#-3d-math-no-u32 (define-type-alias umat umat2 umat3 umat4 umatn)
 (define-type-alias *mat2
-  #-3d-vectors-no-f32 mat2 #-3d-vectors-no-f64 dmat2 #-3d-vectors-no-i32 imat2 #-3d-vectors-no-u32 umat2)
+  #-3d-math-no-f32 mat2 #-3d-math-no-f64 dmat2 #-3d-math-no-i32 imat2 #-3d-math-no-u32 umat2)
 (define-type-alias *mat3
-  #-3d-vectors-no-f32 mat3 #-3d-vectors-no-f64 dmat3 #-3d-vectors-no-i32 imat3 #-3d-vectors-no-u32 umat3)
+  #-3d-math-no-f32 mat3 #-3d-math-no-f64 dmat3 #-3d-math-no-i32 imat3 #-3d-math-no-u32 umat3)
 (define-type-alias *mat4
-  #-3d-vectors-no-f32 mat4 #-3d-vectors-no-f64 dmat4 #-3d-vectors-no-i32 imat4 #-3d-vectors-no-u32 umat4)
+  #-3d-math-no-f32 mat4 #-3d-math-no-f64 dmat4 #-3d-math-no-i32 imat4 #-3d-math-no-u32 umat4)
 (define-type-alias *matn
-  #-3d-vectors-no-f32 matn #-3d-vectors-no-f64 dmatn #-3d-vectors-no-i32 imatn #-3d-vectors-no-u32 umatn)
+  #-3d-math-no-f32 matn #-3d-math-no-f64 dmatn #-3d-math-no-i32 imatn #-3d-math-no-u32 umatn)
 (define-type-alias *mat
-  #-3d-vectors-no-f32 mat2 #-3d-vectors-no-f64 dmat2 #-3d-vectors-no-i32 imat2 #-3d-vectors-no-u32 umat2
-  #-3d-vectors-no-f32 mat3 #-3d-vectors-no-f64 dmat3 #-3d-vectors-no-i32 imat3 #-3d-vectors-no-u32 umat3
-  #-3d-vectors-no-f32 mat4 #-3d-vectors-no-f64 dmat4 #-3d-vectors-no-i32 imat4 #-3d-vectors-no-u32 umat4
-  #-3d-vectors-no-f32 matn #-3d-vectors-no-f64 dmatn #-3d-vectors-no-i32 imatn #-3d-vectors-no-u32 umatn)
+  #-3d-math-no-f32 mat2 #-3d-math-no-f64 dmat2 #-3d-math-no-i32 imat2 #-3d-math-no-u32 umat2
+  #-3d-math-no-f32 mat3 #-3d-math-no-f64 dmat3 #-3d-math-no-i32 imat3 #-3d-math-no-u32 umat3
+  #-3d-math-no-f32 mat4 #-3d-math-no-f64 dmat4 #-3d-math-no-i32 imat4 #-3d-math-no-u32 umat4
+  #-3d-math-no-f32 matn #-3d-math-no-f64 dmatn #-3d-math-no-i32 imatn #-3d-math-no-u32 umatn)
 (deftype mat () 'fmat)
 
 (define-alias mat-p (thing)
@@ -178,10 +174,10 @@
 
 (do-mat-combinations define-mat-constructor)
 (do-combinations define-mat*-constructor
-  (#-3d-vectors-no-f32 f32
-   #-3d-vectors-no-f64 f64
-   #-3d-vectors-no-u32 u32
-   #-3d-vectors-no-i32 i32))
+  (#-3d-math-no-f32 f32
+   #-3d-math-no-f64 f64
+   #-3d-math-no-u32 u32
+   #-3d-math-no-i32 i32))
 
 (defun write-matrix (m stream &key (format :nice))
   (etypecase stream

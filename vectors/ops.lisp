@@ -1,10 +1,9 @@
 #|
- This file is a part of 3d-vectors
- (c) 2020 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.vectors)
+(in-package #:org.shirakumo.fraf.math.vectors)
 
 (defmacro define-2vec-dispatch (op)
   `(define-templated-dispatch ,(compose-name NIL '!2v op) (x a b)

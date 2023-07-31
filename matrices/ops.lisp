@@ -1,10 +1,9 @@
 #|
- This file is a part of 3d-matrices
- (c) 2022 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.matrices)
+(in-package #:org.shirakumo.fraf.math.matrices)
 
 (defmacro define-2mat-dispatch (op)
   `(define-templated-dispatch ,(compose-name NIL '!2m op) (x a b)
@@ -293,46 +292,46 @@
   ((mat-type #(0 1) 1 1 1) mperspective))
 
 (define-type-dispatch mtranslation (v)
-  #-3d-vectors-no-f32 ((vec2) mat3 (mtranslation/3/f32 (mat3) v))
-  #-3d-vectors-no-f64 ((dvec2) dmat3 (mtranslation/3/f64 (dmat3) v))
-  #-3d-vectors-no-u32 ((uvec2) umat3 (mtranslation/3/u32 (umat3) v))
-  #-3d-vectors-no-i32 ((ivec2) imat3 (mtranslation/3/i32 (imat3) v))
-  #-3d-vectors-no-f32 ((vec3) mat4 (mtranslation/4/f32 (mat4) v))
-  #-3d-vectors-no-f64 ((dvec3) dmat4 (mtranslation/4/f64 (dmat4) v))
-  #-3d-vectors-no-u32 ((uvec3) umat4 (mtranslation/4/u32 (umat4) v))
-  #-3d-vectors-no-i32 ((ivec3) imat4 (mtranslation/4/i32 (imat4) v)))
+  #-3d-math-no-f32 ((vec2) mat3 (mtranslation/3/f32 (mat3) v))
+  #-3d-math-no-f64 ((dvec2) dmat3 (mtranslation/3/f64 (dmat3) v))
+  #-3d-math-no-u32 ((uvec2) umat3 (mtranslation/3/u32 (umat3) v))
+  #-3d-math-no-i32 ((ivec2) imat3 (mtranslation/3/i32 (imat3) v))
+  #-3d-math-no-f32 ((vec3) mat4 (mtranslation/4/f32 (mat4) v))
+  #-3d-math-no-f64 ((dvec3) dmat4 (mtranslation/4/f64 (dmat4) v))
+  #-3d-math-no-u32 ((uvec3) umat4 (mtranslation/4/u32 (umat4) v))
+  #-3d-math-no-i32 ((ivec3) imat4 (mtranslation/4/i32 (imat4) v)))
 
 (define-type-dispatch mscaling (v)
-  #-3d-vectors-no-f32 ((vec2) mat3 (mscaling/3/f32 (mat3) v))
-  #-3d-vectors-no-f64 ((dvec2) dmat3 (mscaling/3/f64 (dmat3) v))
-  #-3d-vectors-no-u32 ((uvec2) umat3 (mscaling/3/u32 (umat3) v))
-  #-3d-vectors-no-i32 ((ivec2) imat3 (mscaling/3/i32 (imat3) v))
-  #-3d-vectors-no-f32 ((vec3) mat4 (mscaling/4/f32 (mat4) v))
-  #-3d-vectors-no-f64 ((dvec3) dmat4 (mscaling/4/f64 (dmat4) v))
-  #-3d-vectors-no-u32 ((uvec3) umat4 (mscaling/4/u32 (umat4) v))
-  #-3d-vectors-no-i32 ((ivec3) imat4 (mscaling/4/i32 (imat4) v)))
+  #-3d-math-no-f32 ((vec2) mat3 (mscaling/3/f32 (mat3) v))
+  #-3d-math-no-f64 ((dvec2) dmat3 (mscaling/3/f64 (dmat3) v))
+  #-3d-math-no-u32 ((uvec2) umat3 (mscaling/3/u32 (umat3) v))
+  #-3d-math-no-i32 ((ivec2) imat3 (mscaling/3/i32 (imat3) v))
+  #-3d-math-no-f32 ((vec3) mat4 (mscaling/4/f32 (mat4) v))
+  #-3d-math-no-f64 ((dvec3) dmat4 (mscaling/4/f64 (dmat4) v))
+  #-3d-math-no-u32 ((uvec3) umat4 (mscaling/4/u32 (umat4) v))
+  #-3d-math-no-i32 ((ivec3) imat4 (mscaling/4/i32 (imat4) v)))
 
 (define-type-dispatch mrotation (v angle)
-  #-3d-vectors-no-f32 ((null f32) mat2 (mrotation/2/f32 (mat2) +vx+ angle))
-  #-3d-vectors-no-f64 ((null f64) dmat2 (mrotation/2/f64 (dmat2) +vx+ angle))
-  #-3d-vectors-no-f32 ((vec3 f32) mat4 (mrotation/4/f32 (mat4) v angle))
-  #-3d-vectors-no-f64 ((dvec3 f64) dmat4 (mrotation/4/f64 (dmat4) v angle)))
+  #-3d-math-no-f32 ((null f32) mat2 (mrotation/2/f32 (mat2) +vx+ angle))
+  #-3d-math-no-f64 ((null f64) dmat2 (mrotation/2/f64 (dmat2) +vx+ angle))
+  #-3d-math-no-f32 ((vec3 f32) mat4 (mrotation/4/f32 (mat4) v angle))
+  #-3d-math-no-f64 ((dvec3 f64) dmat4 (mrotation/4/f64 (dmat4) v angle)))
 
 (define-type-dispatch mlookat (eye target up)
-  #-3d-vectors-no-f32 ((vec3 vec3 vec3) mat4 (mlookat/4/f32 (mat4) eye target up))
-  #-3d-vectors-no-f64 ((dvec3 dvec3 dvec3) dmat4 (mlookat/4/f64 (dmat4) eye target up)))
+  #-3d-math-no-f32 ((vec3 vec3 vec3) mat4 (mlookat/4/f32 (mat4) eye target up))
+  #-3d-math-no-f64 ((dvec3 dvec3 dvec3) dmat4 (mlookat/4/f64 (dmat4) eye target up)))
 
 (define-type-dispatch mfrustum (l r b u n f)
-  #-3d-vectors-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mfrustum/4/f32 (mat4) l r b u n f))
-  #-3d-vectors-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mfrustum/4/f64 (dmat4) l r b u n f)))
+  #-3d-math-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mfrustum/4/f32 (mat4) l r b u n f))
+  #-3d-math-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mfrustum/4/f64 (dmat4) l r b u n f)))
 
 (define-type-dispatch mperspective (fovy aspect n f)
-  #-3d-vectors-no-f32 ((f32 f32 f32 f32) mat4 (mperspective/4/f32 (mat4) fovy aspect n f))
-  #-3d-vectors-no-f64 ((f64 f64 f64 f64) dmat4 (mperspective/4/f64 (dmat4) fovy aspect n f)))
+  #-3d-math-no-f32 ((f32 f32 f32 f32) mat4 (mperspective/4/f32 (mat4) fovy aspect n f))
+  #-3d-math-no-f64 ((f64 f64 f64 f64) dmat4 (mperspective/4/f64 (dmat4) fovy aspect n f)))
 
 (define-type-dispatch mortho (l r b u n f)
-  #-3d-vectors-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mortho/4/f32 (mat4) l r b u n f))
-  #-3d-vectors-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f)))
+  #-3d-math-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mortho/4/f32 (mat4) l r b u n f))
+  #-3d-math-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f)))
 
 (define-constructor meye !meye)
 (define-constructor mrand !mrand)

@@ -1,14 +1,11 @@
 #|
- This file is a part of 3d-vectors
- (c) 2016 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:cl-user)
-(defpackage #:3d-matrices-test
-  (:nicknames #:org.shirakumo.flare.matrix.test)
-  (:use #:cl #:parachute #:3d-matrices #:3d-vectors))
-(in-package #:org.shirakumo.flare.matrix.test)
+(defpackage #:org.shirakumo.fraf.math.test.matrices
+  (:use #:cl #:parachute #:org.shirakumo.fraf.math))
+(in-package #:org.shirakumo.flare.math.test.matrices)
 
 (defun ~= (a b)
   (< (abs (- a b)) 0.00001))

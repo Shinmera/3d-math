@@ -1,10 +1,9 @@
 #|
- This file is a part of 3d-vectors
- (c) 2020 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.vectors)
+(in-package #:org.shirakumo.fraf.math.vectors)
 
 (defmacro %vec-array (<s> <t> &rest values)
   (let ((array (gensym "ARRAY")))
@@ -35,10 +34,10 @@
                     :value `(lambda (vec) `(aref (,',varr ,vec) ,,i))))))
 
 (defmacro do-vec-combinations (template &rest other-template-args)
-  `(do-combinations ,template ,@other-template-args (2 3 4) (#-3d-vectors-no-f32 f32
-                                                             #-3d-vectors-no-f64 f64
-                                                             #-3d-vectors-no-u32 u32
-                                                             #-3d-vectors-no-i32 i32)))
+  `(do-combinations ,template ,@other-template-args (2 3 4) (#-3d-math-no-f32 f32
+                                                             #-3d-math-no-f64 f64
+                                                             #-3d-math-no-u32 u32
+                                                             #-3d-math-no-i32 i32)))
 
 (do-vec-combinations define-vec)
 
@@ -76,20 +75,20 @@
 
 (define-vec-accessor varr arr)
 
-#-3d-vectors-no-f32 (define-type-alias fvec vec2 vec3 vec4)
-#-3d-vectors-no-f64 (define-type-alias dvec dvec2 dvec3 dvec4)
-#-3d-vectors-no-i32 (define-type-alias ivec ivec2 ivec3 ivec4)
-#-3d-vectors-no-u32 (define-type-alias uvec uvec2 uvec3 uvec4)
+#-3d-math-no-f32 (define-type-alias fvec vec2 vec3 vec4)
+#-3d-math-no-f64 (define-type-alias dvec dvec2 dvec3 dvec4)
+#-3d-math-no-i32 (define-type-alias ivec ivec2 ivec3 ivec4)
+#-3d-math-no-u32 (define-type-alias uvec uvec2 uvec3 uvec4)
 (define-type-alias *vec2
-  #-3d-vectors-no-f32 vec2 #-3d-vectors-no-f64 dvec2 #-3d-vectors-no-i32 ivec2 #-3d-vectors-no-u32 uvec2)
+  #-3d-math-no-f32 vec2 #-3d-math-no-f64 dvec2 #-3d-math-no-i32 ivec2 #-3d-math-no-u32 uvec2)
 (define-type-alias *vec3
-  #-3d-vectors-no-f32 vec3 #-3d-vectors-no-f64 dvec3 #-3d-vectors-no-i32 ivec3 #-3d-vectors-no-u32 uvec3)
+  #-3d-math-no-f32 vec3 #-3d-math-no-f64 dvec3 #-3d-math-no-i32 ivec3 #-3d-math-no-u32 uvec3)
 (define-type-alias *vec4
-  #-3d-vectors-no-f32 vec4 #-3d-vectors-no-f64 dvec4 #-3d-vectors-no-i32 ivec4 #-3d-vectors-no-u32 uvec4)
+  #-3d-math-no-f32 vec4 #-3d-math-no-f64 dvec4 #-3d-math-no-i32 ivec4 #-3d-math-no-u32 uvec4)
 (define-type-alias *vec
-  #-3d-vectors-no-f32 vec2 #-3d-vectors-no-f64 dvec2 #-3d-vectors-no-i32 ivec2 #-3d-vectors-no-u32 uvec2
-  #-3d-vectors-no-f32 vec3 #-3d-vectors-no-f64 dvec3 #-3d-vectors-no-i32 ivec3 #-3d-vectors-no-u32 uvec3
-  #-3d-vectors-no-f32 vec4 #-3d-vectors-no-f64 dvec4 #-3d-vectors-no-i32 ivec4 #-3d-vectors-no-u32 uvec4)
+  #-3d-math-no-f32 vec2 #-3d-math-no-f64 dvec2 #-3d-math-no-i32 ivec2 #-3d-math-no-u32 uvec2
+  #-3d-math-no-f32 vec3 #-3d-math-no-f64 dvec3 #-3d-math-no-i32 ivec3 #-3d-math-no-u32 uvec3
+  #-3d-math-no-f32 vec4 #-3d-math-no-f64 dvec4 #-3d-math-no-i32 ivec4 #-3d-math-no-u32 uvec4)
 (deftype vec () 'fvec)
 
 (define-alias vec-p (thing)
@@ -199,10 +198,10 @@
            ((*vec4 null) ,(type 4)
             ,(constructor '(vx a) '(vy a) '(vz a) '(vw a))))))))
 
-#-3d-vectors-no-f32 (define-vec-constructors f32)
-#-3d-vectors-no-f64 (define-vec-constructors f64)
-#-3d-vectors-no-u32 (define-vec-constructors u32)
-#-3d-vectors-no-i32 (define-vec-constructors i32)
+#-3d-math-no-f32 (define-vec-constructors f32)
+#-3d-math-no-f64 (define-vec-constructors f64)
+#-3d-math-no-u32 (define-vec-constructors u32)
+#-3d-math-no-i32 (define-vec-constructors i32)
 
 (macrolet ((emit ()
              `(define-type-dispatch vcopy (a)

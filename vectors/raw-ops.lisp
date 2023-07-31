@@ -1,10 +1,9 @@
 #|
- This file is a part of 3d-vectors
- (c) 2020 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
+ This file is a part of 3d-math
+ (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.vectors)
+(in-package #:org.shirakumo.fraf.math.vectors)
 
 ;; Element-Wise vector operation
 (define-template 2vecop <op> <s> <t> (x a b)
@@ -353,7 +352,7 @@
 (do-vec-combinations define-polar)
 (do-vec-combinations define-setf)
 (do-vec-combinations define-apply)
-#-3d-vectors-no-f32 (define-like f32)
-#-3d-vectors-no-f64 (define-like f64)
-#-3d-vectors-no-u32 (define-like u32)
-#-3d-vectors-no-i32 (define-like i32)
+#-3d-math-no-f32 (define-like f32)
+#-3d-math-no-f64 (define-like f64)
+#-3d-math-no-u32 (define-like u32)
+#-3d-math-no-i32 (define-like i32)

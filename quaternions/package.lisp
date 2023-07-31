@@ -3,7 +3,7 @@
  (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.math.matrices)
+(in-package #:org.shirakumo.fraf.math.quaternions)
 
 (define-exports
   ;; types.lisp
