@@ -3,7 +3,7 @@
  (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(in-package #:org.shirakumo.fraf.math.toolkit)
+(in-package #:org.shirakumo.fraf.math.internal)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   #-3d-math-u32 (push :3d-math-no-u32 *features*))

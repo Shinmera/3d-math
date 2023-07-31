@@ -7,16 +7,16 @@
 
 (define-template-type quat (<t>)
     (compose-name NIL (type-prefix <t>) 'quat)
-  :include (compose-name NIL (type-prefix <t>) 'vec3)
+  :include (vec-type 3 <t>)
   (field (compose-name NIL (type-prefix <t>) 'qw)
          :type <t> :alias (list 3 'w :w)))
 
 (define-template-type dual-quat (<t>)
-    (compose-name NIL (type-prefix <t>) 'dquat)
-  (field (compose-name NIL (type-prefix <t>) real)
+    (compose-name NIL (type-prefix <t>) 'dual-quat)
+  (field (compose-name NIL (type-prefix <t>) 'qreal)
          :type (compose-name NIL (type-prefix <t>) 'quat)
          :alias (list 0 'real :real))
-  (field (compose-name NIL (type-prefix <t>) dual)
+  (field (compose-name NIL (type-prefix <t>) 'qdual)
          :type (compose-name NIL (type-prefix <t>) 'quat)
          :alias (list 1 'dual :dual)))
 
@@ -29,18 +29,16 @@
 (do-quat-combinations define-dual-quat)
 
 (defmacro define-quat-accessor (name i)
-  (let ((instances (loop for instance in (instances 'quat-type)
-                         when (< i (<s> instance))
-                         collect instance)))
+  (let ((instances (instances 'quat-type)))
     `(progn
        (define-type-dispatch ,name (quat)
          ,@(loop for type in instances
                  collect `((,(lisp-type type)) ,(<t> type)
-                           `(,(place type i) quat))))
+                           `(,,(place type i) quat))))
        (define-type-dispatch (setf ,name) (value quat)
          ,@(loop for type in instances
                  collect `((,(<t> type) ,(lisp-type type)) ,(<t> type)
-                           (setf `(,(place type i) quat) value)))))))
+                           (setf `(,,(place type i) quat) value)))))))
 
 (define-quat-accessor qx 0)
 (define-quat-accessor qy 1)

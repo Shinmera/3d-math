@@ -11,7 +11,8 @@
    #:mat-type
    #:quat-type
    #:dquat-type
-   #:transform-type)
+   #:transform-type
+   #:arr)
   ;; toolkit.lisp
   (:export
    #:*matrix-limit*
@@ -39,28 +40,28 @@
 (defpackage #:org.shirakumo.fraf.math.vectors
   (:use #:cl
         #:org.shirakumo.type-templates
-        #:org.shiarkumo.fraf.math.internal)
+        #:org.shirakumo.fraf.math.internal)
   (:import-from #:org.shirakumo.type-templates #:dbg #:lambda-list-variables))
 
 (defpackage #:org.shirakumo.fraf.math.matrices
   (:use #:cl
         #:org.shirakumo.type-templates
-        #:org.shiarkumo.fraf.math.internal
+        #:org.shirakumo.fraf.math.internal
         #:org.shirakumo.fraf.math.vectors)
   (:local-nicknames
-   (#:v #:org.shirakumo.fraf.vectors)))
+   (#:v #:org.shirakumo.fraf.math.vectors)))
 
 (defpackage #:org.shirakumo.fraf.math.quaternions
   (:use #:cl
         #:org.shirakumo.type-templates
-        #:org.shiarkumo.fraf.math.internal
+        #:org.shirakumo.fraf.math.internal
         #:org.shirakumo.fraf.math.vectors
         #:org.shirakumo.fraf.math.matrices))
 
 (defpackage #:org.shirakumo.fraf.math.transforms
   (:use #:cl
         #:org.shirakumo.type-templates
-        #:org.shiarkumo.fraf.math.internal
+        #:org.shirakumo.fraf.math.internal
         #:org.shirakumo.fraf.math.vectors
         #:org.shirakumo.fraf.math.matrices
         #:org.shirakumo.fraf.math.quaternions))
