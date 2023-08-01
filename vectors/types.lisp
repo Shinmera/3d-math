@@ -15,12 +15,6 @@
 
 (define-template-type vec (<s> <t>)
     (compose-name NIL (type-prefix <t>) 'vec <s>)
-  :print-object (lambda (name sv slots)
-                  `(write (list ',name
-                                ,@(loop for slot in slots
-                                        unless (realized-slot-p slot)
-                                        collect `(,(accessor slot) ,name)))
-                          :stream ,sv))
   (let ((varr (compose-name NIL (type-prefix <t>) 'varr <s>)))
     (field varr
            :type `(simple-array ,<t> (,<s>))
@@ -33,12 +27,21 @@
                     :computed T
                     :value `(lambda (vec) `(aref (,',varr ,vec) ,,i))))))
 
+(defmethod compute-type-instance-definition ((type vec-type))
+  `(progn
+     ,(call-next-method)
+     (defmethod print-object ((vec ,(lisp-type type)) stream)
+       (write (list ',(lisp-type type)
+                    ,@(loop for slot in (slots type)
+                            unless (realized-slot-p slot)
+                            collect `(,(accessor slot) vec)))
+              :stream stream))))
+
 (defmacro do-vec-combinations (template &rest other-template-args)
   `(do-combinations ,template ,@other-template-args (2 3 4) (#-3d-math-no-f32 f32
                                                              #-3d-math-no-f64 f64
                                                              #-3d-math-no-u32 u32
                                                              #-3d-math-no-i32 i32)))
-
 (do-vec-combinations define-vec)
 
 (defmacro define-vec-accessor (name i)

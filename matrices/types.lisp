@@ -7,11 +7,6 @@
 
 (define-template-type mat (<s> <t>)
     (compose-name NIL (type-prefix <t>) 'mat <s>)
-  :make-object (case <s>
-                 (n (list (compose-name NIL (type-prefix <t>) 'mat <s>)
-                          '(n m &rest arr)))
-                 (T (list (compose-name NIL (type-prefix <t>) 'mat <s>)
-                          '(&rest arr))))
   (field (compose-name NIL (type-prefix <t>) 'marr <s>)
          :type `(simple-array ,<t> (,(if (integerp <s>) (* <s> <s>) '*)))
          :alias (list 0 'arr))
@@ -21,6 +16,16 @@
         (T
          (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type `(eql ,<s>) :alias '(1 cols) :value <s>)
          (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type `(eql ,<s>) :alias '(2 rows) :value <s>))))
+
+(defmethod compute-type-instance-definition ((type mat-type))
+  `(progn
+     ,(call-next-method)
+     
+     (defun print-object ((mat ,(lisp-type type)) stream)
+       (write ,(if (eql 'n (first (template-arguments type)))
+                   `(list ',(lisp-type type) (mcols mat) (mrows mat) (marr mat))
+                   `(list ',(list-type type) (marr mat)))
+              :stream stream))))
 
 (defun attribute (type attribute &optional (mat-arg 'm))
   (destructuring-bind (<s> <t>) (template-arguments type)
