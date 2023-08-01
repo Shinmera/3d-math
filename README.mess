@@ -1,0 +1,5 @@
+# About 3d-math
+This library implements types, operators, and algorithms commonly used in math for 2D and 3D graphics.
+
+It supersedes and combines the prior libraries 3d-vectors, 3d-matrices, 3d-quaternions, and 3d-transfroms. The new API is largely backwards compatible, but adds a lot of new functionality.
+
