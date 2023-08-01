@@ -21,10 +21,10 @@
   `(progn
      ,(call-next-method)
      
-     (defun print-object ((mat ,(lisp-type type)) stream)
+     (defmethod print-object ((mat ,(lisp-type type)) stream)
        (write ,(if (eql 'n (first (template-arguments type)))
                    `(list ',(lisp-type type) (mcols mat) (mrows mat) (marr mat))
-                   `(list ',(list-type type) (marr mat)))
+                   `(list ',(lisp-type type) (marr mat)))
               :stream stream))))
 
 (defun attribute (type attribute &optional (mat-arg 'm))

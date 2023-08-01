@@ -8,11 +8,16 @@
 (define-template-type quat (<t>)
     (compose-name NIL (type-prefix <t>) 'quat)
   :include (vec-type 3 <t>)
-  :print-object (lambda (name sv slots)
-                  `(write (list ',name (qx ,name) (qy ,name) (qz ,name) (qw ,name))
-                          :stream ,sv))
-  (field (compose-name NIL (type-prefix <t>) 'qw)
+  (field (compose-name NIL '% (type-prefix <t>) 'qw)
          :type <t> :alias (list 3 'w :w)))
+
+(defmethod compute-type-instance-definition ((type quat-type))
+  `(progn
+     ,(call-next-method)
+     
+     (defmethod print-object ((quat ,(lisp-type type)) stream)
+       (write (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat))
+              :stream stream))))
 
 (define-template-type dual-quat (<t>)
     (compose-name NIL (type-prefix <t>) 'dual-quat)
@@ -37,18 +42,18 @@
        (define-type-dispatch ,name (quat)
          ,@(loop for type in instances
                  collect `((,(lisp-type type)) ,(<t> type)
-                           `(,,(place type i) quat))))
+                           ,(place-form type i 'quat))))
        (define-type-dispatch (setf ,name) (value quat)
          ,@(loop for type in instances
                  collect `((,(<t> type) ,(lisp-type type)) ,(<t> type)
-                           (setf `(,,(place type i) quat) value)))))))
+                           (setf ,(place-form type i 'quat) value)))))))
 
 (define-quat-accessor qx 0)
 (define-quat-accessor qy 1)
 (define-quat-accessor qz 2)
 (define-quat-accessor qw 3)
 
-(define-type-allias *quat quat dquat)
+(define-type-alias *quat quat dquat)
 
 (define-alias quat-p (thing)
   `(typep ,thing '*quat))
