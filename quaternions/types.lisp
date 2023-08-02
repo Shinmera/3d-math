@@ -22,10 +22,10 @@
 (define-template-type dual-quat (<t>)
     (compose-name NIL (type-prefix <t>) 'dual-quat)
   (field (compose-name NIL (type-prefix <t>) 'qreal)
-         :type (compose-name NIL (type-prefix <t>) 'quat)
+         :type (lisp-type (type-instance 'quat <t>))
          :alias (list 0 'real :real))
   (field (compose-name NIL (type-prefix <t>) 'qdual)
-         :type (compose-name NIL (type-prefix <t>) 'quat)
+         :type (lisp-type (type-instance 'quat <t>))
          :alias (list 1 'dual :dual)))
 
 (defmacro do-quat-combinations (template &rest other-template-args)
@@ -52,8 +52,16 @@
 (define-quat-accessor qy 1)
 (define-quat-accessor qz 2)
 (define-quat-accessor qw 3)
+(define-quat-accessor qi 0)
+(define-quat-accessor qj 1)
+(define-quat-accessor qk 2)
+(define-quat-accessor qr 3)
 
 (define-type-alias *quat quat dquat)
+(define-type-alias *dual-quat dual-quat ddual-quat)
 
 (define-alias quat-p (thing)
   `(typep ,thing '*quat))
+
+(define-alias dual-quat-p (thing)
+  `(typep ,thing '*dual-quat))
