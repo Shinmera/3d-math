@@ -6,7 +6,7 @@
 (in-package #:org.shirakumo.fraf.math.quaternions)
 
 (defmacro define-2quat-dispatch (op)
-  `(define-templated-dispatch ,(compose-name NIL '!2v op) (x a b)
+  `(define-templated-dispatch ,(compose-name NIL '!2q op) (x a b)
      ((quat-type 0 #(0 1)) squatop ,op <t>)
      ((quat-type 0 real) squatop ,op real)
      ((quat-type 0 0) 2quatop ,op)))
@@ -16,14 +16,19 @@
      ((quat-type 0) ,op ,@template-args)))
 
 (defmacro define-quatcomp-dispatch (op &optional (comb 'and))
-  `(define-templated-dispatch ,(compose-name NIL '2v op) (a b)
+  `(define-templated-dispatch ,(compose-name NIL '2q op) (a b)
      ((quat-type #(0 1)) squatreduce ,comb ,op <t>)
      ((quat-type real) squatreduce ,comb ,op real)
      ((quat-type 0) 2quatreduce ,comb ,op)))
 
+(define-templated-dispatch !2q* (x a b)
+  ((quat-type 0 #(0 1)) squatop * <t>)
+  ((quat-type 0 real) squatop * real)
+  ((quat-type 0 0) q*q)
+  ((#'(matching-vec 1) quat-type 0) q*v))
+
 (define-2quat-dispatch +)
 (define-2quat-dispatch -)
-(define-2quat-dispatch *)
 (define-2quat-dispatch /)
 (define-2quat-dispatch min)
 (define-2quat-dispatch max)
@@ -46,7 +51,7 @@
 (define-1quat-dispatch !qunit qunit)
 
 (define-type-reductor !q+ q<- !2q+)
-;; (define-type-reductor !q* q<- !2q*)
+(define-type-reductor !q* q<- !2q*)
 (define-type-reductor !q- q<- !2q- !1q-)
 (define-type-reductor !q/ q<- !2q/ !1q/)
 (define-type-reductor !qmin q<- !2qmin)
@@ -67,7 +72,7 @@
   ((mat4 quat) qmat)
   ((dmat3 dquat) qmat)
   ((dmat4 dquat) qmat))
-(define-templated-dispatch !qfrom-mat (x q)
+(define-templated-dispatch !qfrom-mat (x m)
   ((quat mat3) qfrom-mat)
   ((quat mat4) qfrom-mat)
   ((dquat dmat3) qfrom-mat)
@@ -81,6 +86,13 @@
 (define-value-reductor q> 2q> and T)
 (define-value-reductor q>= 2q>= and T)
 
+(define-rest-alias q+ (q &rest others) qzero)
+(define-rest-alias q- (q &rest others) qzero)
+(define-rest-alias q* (q &rest others) qzero)
+(define-rest-alias q/ (q &rest others) qzero)
+(define-rest-alias qmin (q &rest others) qzero)
+(define-rest-alias qmax (q &rest others) qzero)
+
 (define-templated-dispatch q. (a b)
   ((quat-type 0) 2quatreduce + *))
 (define-templated-dispatch qsqrlength (a)
@@ -90,12 +102,17 @@
 (define-templated-dispatch (setf qangle) (value a)
   ((#(1 1) quat-type) set-qangle))
 
-(define-rest-alias q+ (q &rest others) qzero)
-(define-rest-alias q- (q &rest others) qzero)
-(define-rest-alias q* (q &rest others) qzero)
-(define-rest-alias q/ (q &rest others) qzero)
-(define-rest-alias qmin (q &rest others) qzero)
-(define-rest-alias qmax (q &rest others) qzero)
+(define-simple-alias qfrom-angle (axis angle) qzero)
+(define-simple-alias qtowards (from to) qzero)
+(define-simple-alias qlookat (direction up) qzero)
+(define-simple-alias qexpt (q exponent) qzero)
+(define-simple-alias qunit (q) qzero)
+
+(define-alias qmat (q &optional (m (mat3)))
+  `(!qmat ,m ,q))
+
+(define-alias qfrom-mat (m)
+  `(!qfrom-mat (quat) m))
 
 (define-alias qaxis (q)
   `(vunit ,q))
@@ -108,3 +125,14 @@
 
 (define-alias qlength (q)
   `(sqrt (qsqrlength ,q)))
+
+;; [ ] qsetf
+;; [ ] qapply
+;; [ ] qapplyf
+;; [ ] nq+*
+;; [ ] qunit*
+;; [ ] qconjugate
+;; [ ] qinv
+;; [ ] qmix
+;; [ ] qnlerp
+;; [ ] qslerp
