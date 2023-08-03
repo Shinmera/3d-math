@@ -57,6 +57,8 @@
 (define-type-reductor !v/ v<- !2v/ !1v/)
 (define-type-reductor !vmin v<- !2vmin)
 (define-type-reductor !vmax v<- !2vmax)
+(define-templated-dispatch !v+* (x a b s)
+  ((vec-type 0 0 #(0 1)) vec+*))
 (define-templated-dispatch !vclamp (x low a up)
   ((vec-type #(0 1) 0 #(0 1)) clamp <t>)
   ((vec-type real 0 real) clamp real))
@@ -194,6 +196,7 @@
   `(!vclamp (vzero ,x) ,low ,x ,high))
 (define-alias nvclamp (low x high)
   `(!vclamp ,x ,low ,x ,high))
+(define-simple-alias v+* (a b s) vzero)
 
 (defmacro define-all-swizzlers (size)
   (labels ((permute (&rest lists)
