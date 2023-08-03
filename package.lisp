@@ -21,6 +21,7 @@
    #:f64
    #:u32
    #:i32
+   #:type-array
    #:type-prefix
    #:sqr
    #:sqr2

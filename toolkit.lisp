@@ -37,6 +37,14 @@
         (ldb (byte 31 0) i)
         (- (ldb (byte 32 0) (- i))))))
 
+(defmacro type-array (<s> <t> &rest values)
+  (let ((array (gensym "ARRAY")))
+    `(let ((,array (make-array ,<s> :element-type ',<t>)))
+       ,@(loop for i from 0 below <s>
+               for v in values
+               collect `(setf (aref ,array ,i) (,<t> ,v)))
+       ,array)))
+
 (defun type-prefix (type)
   (ecase type
     (f32 '||)

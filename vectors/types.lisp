@@ -52,11 +52,11 @@
        (define-type-dispatch ,name (vec)
          ,@(loop for type in instances
                  collect `((,(lisp-type type)) ,(<t> type)
-                           `(,(place type i) vec))))
+                           ,(place-form type i 'vec))))
        (define-type-dispatch (setf ,name) (value vec)
          ,@(loop for type in instances
                  collect `((,(<t> type) ,(lisp-type type)) ,(<t> type)
-                           (setf `(,(place type i) vec) value)))))))
+                           (setf ,(place-form type i 'vec) value)))))))
 
 (define-vec-accessor vx 0)
 (define-vec-accessor vy 1)

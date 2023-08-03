@@ -65,3 +65,30 @@
 
 (define-alias dual-quat-p (thing)
   `(typep ,thing '*dual-quat))
+
+(defmacro define-quat-constructors (<t>)
+  (flet ((constructor (&rest args)
+           `(,(constructor (type-instance 'quat-type 3 <t>))
+              (type-array 3 ,<t> ,@(butlast args))
+              (,<t> ,(car (last args)))))
+         (vtype (size)
+           (lisp-type (type-instance 'vec-type size <t>))))
+    (let ((*-name (compose-name NIL (type-prefix <t>) 'quat))
+          (type (lisp-type (type-instance 'quat-type 3 <t>))))
+      `(progn
+         (define-type-dispatch ,*-name (&optional a b c d)
+           (() ,type
+            ,(constructor 0 0 0 1))
+           ((,(vtype 3)) ,type
+            ,(constructor '(vx a) '(vy a) '(vz a) 1))
+           ((,(vtype 3) real) ,type
+            ,(constructor '(vx a) '(vy a) '(vz a) 'b))
+           ((real real real) ,type
+            ,(constructor 'a 'b 'c 1))
+           ((real real real real) ,type
+            ,(constructor 'a 'b 'c 'd))
+           ((*quat) ,type
+            ,(constructor '(qx a) '(qx a) '(qx a) '(qx a))))))))
+
+#-3d-math-no-f32 (define-quat-constructors f32)
+#-3d-math-no-f64 (define-quat-constructors f64)
