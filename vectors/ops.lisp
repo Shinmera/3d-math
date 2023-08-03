@@ -15,10 +15,11 @@
   `(define-templated-dispatch ,name (x a)
      ((vec-type 0) ,op ,@template-args)))
 
-(defmacro define-veccomp-dispatch (op &optional (comb 'and))
+(defmacro define-veccomp-dispatch (op &optional (comb 'and) (rop op))
   `(define-templated-dispatch ,(compose-name NIL '2v op) (a b)
      ((vec-type #(0 1)) svecreduce ,comb ,op <t>)
      ((vec-type real) svecreduce ,comb ,op real)
+     ((real vec-type) (svecreduce ,comb ,rop real) b a)
      ((vec-type 0) 2vecreduce ,comb ,op)))
 
 (define-2vec-dispatch +)
@@ -29,14 +30,13 @@
 (define-2vec-dispatch max)
 (define-2vec-dispatch mod)
 
-;; FIXME: These do NOT work correctly for singles followed by vecs
 (define-veccomp-dispatch =)
 (define-veccomp-dispatch ~=)
 (define-veccomp-dispatch /= or)
-(define-veccomp-dispatch <)
-(define-veccomp-dispatch <=)
-(define-veccomp-dispatch >)
-(define-veccomp-dispatch >=)
+(define-veccomp-dispatch < and >)
+(define-veccomp-dispatch <= and >=)
+(define-veccomp-dispatch > and <)
+(define-veccomp-dispatch >= and <=)
 
 (define-templated-dispatch vsetf (a x y &optional z w)
   ((vec-type real real T T) setf))

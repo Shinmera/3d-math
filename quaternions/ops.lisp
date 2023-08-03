@@ -15,10 +15,11 @@
   `(define-templated-dispatch ,name (x a)
      ((quat-type 0) ,op ,@template-args)))
 
-(defmacro define-quatcomp-dispatch (op &optional (comb 'and))
+(defmacro define-quatcomp-dispatch (op &optional (comb 'and) (rop op))
   `(define-templated-dispatch ,(compose-name NIL '2q op) (a b)
      ((quat-type #(0 1)) squatreduce ,comb ,op <t>)
      ((quat-type real) squatreduce ,comb ,op real)
+     ((real quat-type) (squatreduce ,comb ,rop real) b a)
      ((quat-type 0) 2quatreduce ,comb ,op)))
 
 (define-templated-dispatch !2q* (x a b)
@@ -33,14 +34,13 @@
 (define-2quat-dispatch min)
 (define-2quat-dispatch max)
 
-;; FIXME: These do NOT work correctly for singles followed by quats
 (define-quatcomp-dispatch =)
 (define-quatcomp-dispatch ~=)
 (define-quatcomp-dispatch /= or)
-(define-quatcomp-dispatch <)
-(define-quatcomp-dispatch <=)
-(define-quatcomp-dispatch >)
-(define-quatcomp-dispatch >=)
+(define-quatcomp-dispatch < and >)
+(define-quatcomp-dispatch <= and >=)
+(define-quatcomp-dispatch > and <)
+(define-quatcomp-dispatch >= and <=)
 
 (define-1quat-dispatch q<- 1quatop identity)
 
@@ -128,8 +128,6 @@
   `(sqrt (qsqrlength ,q)))
 
 ;; [ ] qsetf
-;; [ ] qapply
-;; [ ] qapplyf
 ;; [ ] nq+*
 ;; [ ] qconjugate
 ;; [ ] qinv

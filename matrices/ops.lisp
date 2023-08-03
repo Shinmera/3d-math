@@ -28,10 +28,11 @@
   `(define-templated-dispatch ,name (x a)
      ((mat-type 0) ,op ,@template-args)))
 
-(defmacro define-matcomp-dispatch (op &optional (comb 'and))
+(defmacro define-matcomp-dispatch (op &optional (comb 'and) (rop op))
   `(define-templated-dispatch ,(compose-name NIL '2m op) (a b)
      ((mat-type #(0 1)) smatreduce ,comb ,op <t>)
      ((mat-type real) smatreduce ,comb ,op real)
+     ((real mat-type) (smatreduce ,comb ,rop real) b a)
      ((mat-type 0) 2matreduce ,comb ,op)))
 
 (defmacro define-constructor (name initializer)
@@ -70,10 +71,10 @@
 (define-matcomp-dispatch =)
 (define-matcomp-dispatch ~=)
 (define-matcomp-dispatch /= or)
-(define-matcomp-dispatch <)
-(define-matcomp-dispatch <=)
-(define-matcomp-dispatch >)
-(define-matcomp-dispatch >=)
+(define-matcomp-dispatch < and >)
+(define-matcomp-dispatch <= and >=)
+(define-matcomp-dispatch > and <)
+(define-matcomp-dispatch >= and <=)
 
 (define-templated-dispatch mvec (a)
   ((mat-type) mvec))
