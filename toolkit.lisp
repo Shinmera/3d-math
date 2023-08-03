@@ -219,12 +219,3 @@
          `(let ,(list ,@(loop for var in (butlast vars)
                               collect `(list ',var ,var)))
             (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
-
-(define-dependent-dispatch-type matching-vec (types i ref)
-  (handler-case (apply #'type-instance 'vec-type (template-arguments (nth ref types)))
-    (error () NIL)))
-
-(define-dependent-dispatch-type matching-array (types i ref)
-  (destructuring-bind (<s> <t>) (template-arguments (nth ref types))
-    (declare (ignore <s>))
-    `(simple-array ,<t> (*))))

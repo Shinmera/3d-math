@@ -60,6 +60,15 @@
                   (apply #'type-instance 'vec-type (1- <s>) <t>))
     (error () NIL)))
 
+(define-dependent-dispatch-type matching-vec (types i ref)
+  (handler-case (apply #'type-instance 'vec-type (template-arguments (nth ref types)))
+    (error () NIL)))
+
+(define-dependent-dispatch-type matching-array (types i ref)
+  (destructuring-bind (<s> <t>) (template-arguments (nth ref types))
+    (declare (ignore <s>))
+    `(simple-array ,<t> (*))))
+
 (define-2mat-dispatch +)
 (define-2mat-dispatch -)
 (define-2mat-dispatch /)

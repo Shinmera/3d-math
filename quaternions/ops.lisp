@@ -22,10 +22,15 @@
      ((real quat-type) (squatreduce ,comb ,rop real) b a)
      ((quat-type 0) 2quatreduce ,comb ,op)))
 
+(define-dependent-dispatch-type matching-vec (types i ref)
+  (handler-case (apply #'type-instance 'vec-type 3 (template-arguments (nth ref types)))
+    (error () NIL)))
+
 (define-templated-dispatch !2q* (x a b)
   ((quat-type 0 #(0 1)) squatop * <t>)
   ((quat-type 0 real) squatop * real)
   ((quat-type 0 0) q*q)
+  ;; FIXME: 
   ((#'(matching-vec 1) quat-type 0) q*v))
 
 (define-2quat-dispatch +)
@@ -57,6 +62,8 @@
 (define-type-reductor !qmin q<- !2qmin)
 (define-type-reductor !qmax q<- !2qmax)
 
+(define-templated-dispatch !q+* (x a b s)
+  ((quat-type 0 #'(matching-vec 0) #(0 1)) q+*))
 (define-templated-dispatch !qrand (x)
   ((quat-type) random))
 (define-templated-dispatch !qfrom-angle (x axis angle)
@@ -128,7 +135,6 @@
   `(sqrt (qsqrlength ,q)))
 
 ;; [ ] qsetf
-;; [ ] nq+*
 ;; [ ] qconjugate
 ;; [ ] qinv
 ;; [ ] qmix

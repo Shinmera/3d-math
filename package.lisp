@@ -49,9 +49,7 @@
    #:define-pure-alias
    #:define-modifying-alias
    #:define-simple-alias
-   #:define-rest-alias
-   #:matching-vec
-   #:matching-array))
+   #:define-rest-alias))
 
 (defpackage #:org.shirakumo.fraf.math.vectors
   (:use #:cl
