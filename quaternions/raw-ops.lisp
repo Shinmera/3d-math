@@ -220,6 +220,23 @@
                       collect `(* len ,(place-form type i 'x))))
         x))))
 
+(define-template qunit* <t> (x q)
+  (let ((type (type-instance 'quat-type <t>)))
+    `((declare (type ,(lisp-type type) x q)
+               (return-type ,(lisp-type type))
+               inline)
+      (let ((len (the ,<t> (sqrt (,(compose-name #\/ '2quatreduce '* '+ <t>) q q)))))
+        (cond ((= 0 len)
+               (setf ,@(loop for i from 0 below 4
+                             collect (place-form type i 'x)
+                             collect `(,<t> 0))))
+              (T
+               (setf len (/ len))
+               (setf ,@(loop for i from 0 below 4
+                             collect (place-form type i 'x)
+                             collect `(* len ,(place-form type i 'x))))))
+        x))))
+
 (define-template qexpt <t> (x q e)
   (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x q)
@@ -341,6 +358,7 @@
 (do-type-combinations quat-type define-q*q)
 (do-type-combinations quat-type define-q*v)
 (do-type-combinations quat-type define-qunit)
+(do-type-combinations quat-type define-qunit*)
 (do-type-combinations quat-type define-qexpt)
 (do-type-combinations quat-type define-qlookat)
 (do-type-combinations quat-type define-qmat (3 4))

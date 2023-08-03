@@ -48,6 +48,7 @@
 (define-1quat-dispatch !1q/ 1quatop /)
 (define-1quat-dispatch !qabs 1quatop abs)
 (define-1quat-dispatch !qunit qunit)
+(define-1quat-dispatch !qunit* qunit*)
 
 (define-type-reductor !q+ q<- !2q+)
 (define-type-reductor !q* q<- !2q*)
@@ -106,6 +107,7 @@
 (define-simple-alias qlookat (direction up) qzero)
 (define-simple-alias qexpt (q exponent) qzero)
 (define-simple-alias qunit (q) qzero)
+(define-simple-alias qunit* (q) qzero)
 
 (define-alias qmat (q &optional (m (mat3)))
   `(!qmat ,m ,q))
@@ -129,7 +131,6 @@
 ;; [ ] qapply
 ;; [ ] qapplyf
 ;; [ ] nq+*
-;; [ ] qunit*
 ;; [ ] qconjugate
 ;; [ ] qinv
 ;; [ ] qmix
