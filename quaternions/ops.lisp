@@ -32,7 +32,6 @@
 (define-2quat-dispatch /)
 (define-2quat-dispatch min)
 (define-2quat-dispatch max)
-(define-2quat-dispatch mod)
 
 ;; FIXME: These do NOT work correctly for singles followed by quats
 (define-quatcomp-dispatch =)
@@ -68,15 +67,15 @@
 (define-templated-dispatch !qexpt (x q exponent)
   ((quat-type 0 #(0 1)) qexpt))
 (define-templated-dispatch !qmat (x q)
-  ((mat3 quat) qmat)
-  ((mat4 quat) qmat)
-  ((dmat3 dquat) qmat)
-  ((dmat4 dquat) qmat))
+  ((mat3 quat) (qmat 3 f32) x q)
+  ((mat4 quat) (qmat 4 f32) x q)
+  ((dmat3 dquat) (qmat 3 f64) x q)
+  ((dmat4 dquat) (qmat 4 f64) x q))
 (define-templated-dispatch !qfrom-mat (x m)
-  ((quat mat3) qfrom-mat)
-  ((quat mat4) qfrom-mat)
-  ((dquat dmat3) qfrom-mat)
-  ((dquat dmat4) qfrom-mat))
+  ((quat mat3) (qfrom-mat 3 f32) x m)
+  ((quat mat4) (qfrom-mat 4 f32) x m)
+  ((dquat dmat3) (qfrom-mat 3 f64) x m)
+  ((dquat dmat4) (qfrom-mat 4 f64) x m))
 
 (define-value-reductor q= 2q= and T)
 (define-value-reductor q~= 2q~= and T)
@@ -94,7 +93,7 @@
 (define-rest-alias qmax (q &rest others) qzero)
 
 (define-templated-dispatch q. (a b)
-  ((quat-type 0) 2quatreduce + *))
+  ((quat-type 0) 2quatreduce * +))
 (define-templated-dispatch qsqrlength (a)
   ((quat-type) 1quatreduce + sqr))
 (define-templated-dispatch qangle (a)
@@ -112,7 +111,7 @@
   `(!qmat ,m ,q))
 
 (define-alias qfrom-mat (m)
-  `(!qfrom-mat (quat) m))
+  `(!qfrom-mat (quat) ,m))
 
 (define-alias qaxis (q)
   `(vunit ,q))

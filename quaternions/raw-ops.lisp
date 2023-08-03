@@ -5,6 +5,24 @@
 
 (in-package #:org.shirakumo.fraf.math.quaternions)
 
+(define-template random <t> (x)
+  (let ((type (type-instance 'quat-type <t>)))
+    `((declare (type ,(lisp-type type) x)
+               (return-type ,(lisp-type type))
+               inline)
+      (let* ((u (random (,<t> 1.0)))
+             (v (random (,<t> 1.0)))
+             (w (random (,<t> 1.0)))
+             (sqr1-u (sqrt (- 1 u)))
+             (sqr-u (sqrt u))
+             (2piv (* 2 (,<t> PI) v))
+             (2piw (* 2 (,<t> PI) w)))
+        (psetf ,(place-form type 0 'x) (* sqr1-u (sin 2piv))
+               ,(place-form type 1 'x) (* sqr1-u (cos 2piv))
+               ,(place-form type 2 'x) (* sqr-u (sin 2piw))
+               ,(place-form type 3 'x) (* sqr-u (cos 2piw))))
+      x)))
+
 (define-template zero <t> (x)
   (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x)
@@ -305,6 +323,7 @@
                             ,(place-form type :w 'x) (* s tt)))))
             x))))))
 
+(do-type-combinations quat-type define-random)
 (do-type-combinations quat-type define-zero)
 (do-type-combinations quat-type define-qfrom-angle)
 (do-type-combinations quat-type define-qtowards)
