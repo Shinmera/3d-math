@@ -88,3 +88,23 @@
 
 #-3d-math-no-f32 (define-quat-constructors f32)
 #-3d-math-no-f64 (define-quat-constructors f64)
+
+(macrolet ((emit ()
+             `(define-type-dispatch qcopy (a)
+                ,@(loop for instance in (instances 'quat-type)
+                        collect `((,(lisp-type instance)) ,(lisp-type instance)
+                                  (,(constructor instance)
+                                   (make-array 3 :element-type ',(<t> instance)
+                                                 :initial-contents ,(place-form instance :arr 'a))
+                                   ,(place-form instance :w 'a)))))))
+  (emit))
+
+(macrolet ((emit ()
+             `(define-type-dispatch qzero (a)
+                ,@(loop for instance in (instances 'quat-type)
+                        collect `((,(lisp-type instance)) ,(lisp-type instance)
+                                  (,(constructor instance)
+                                   (make-array 3 :element-type ',(<t> instance)
+                                                 :initial-element (,(<t> instance) 0))
+                                   ,(place-form instance :w 'a)))))))
+  (emit))
