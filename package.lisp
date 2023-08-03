@@ -43,12 +43,15 @@
    #:eye
    #:rand
    #:define-exports
+   #:do-type-combinations
    #:define-type-reductor
    #:define-value-reductor
    #:define-pure-alias
    #:define-modifying-alias
    #:define-simple-alias
-   #:define-rest-alias))
+   #:define-rest-alias
+   #:matching-vec
+   #:matching-array))
 
 (defpackage #:org.shirakumo.fraf.math.vectors
   (:use #:cl

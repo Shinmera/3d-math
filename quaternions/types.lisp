@@ -28,13 +28,9 @@
          :type (lisp-type (type-instance 'quat <t>))
          :alias (list 1 'dual :dual)))
 
-(defmacro do-quat-combinations (template &rest other-template-args)
-  `(do-combinations ,template ,@other-template-args
-     (#-3d-math-no-f32 f32
-      #-3d-math-no-f64 f64)))
-
-(do-quat-combinations define-quat)
-(do-quat-combinations define-dual-quat)
+(do-combinations define-quat
+  (#-3d-math-no-f32 f32
+   #-3d-math-no-f64 f64))
 
 (defmacro define-quat-accessor (name i)
   (let ((instances (instances 'quat-type)))

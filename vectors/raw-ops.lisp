@@ -325,33 +325,33 @@
       (3 (,(constructor (type-instance 'vec-type 3 <t>)) (,<t> 0) (,<t> 0) (,<t> 0)))
       (4 (,(constructor (type-instance 'vec-type 4 <t>)) (,<t> 0) (,<t> 0) (,<t> 0) (,<t> 0))))))
 
-(do-vec-combinations define-2vecop (+ - * / min max mod))
-(do-vec-combinations define-svecop (+ - * / min max mod grid) (<t> real))
-(do-vec-combinations define-1vecop (- / abs identity))
-(do-vec-combinations define-2vecreduce (and) (= ~= /= < <= >= >) boolean)
-(do-vec-combinations define-svecreduce (and) (= ~= /= < <= >= >) (<t> real) boolean)
-(do-vec-combinations define-2vecreduce (or) (/=) boolean)
-(do-vec-combinations define-svecreduce (or) (/=) (<t> real) boolean)
-(do-vec-combinations define-2vecreduce (+) (*) <t>) ; dot
-(do-vec-combinations define-2vecreduce (sqrt+) (sqr2) float) ; dist
-(do-vec-combinations define-2vecreduce (+) (sqr2) <t>) ; sqrdist
-(do-vec-combinations define-1vecreduce (+ max) (abs) <t>) ; 1norm inorm
-(do-vec-combinations define-1vecreduce (sqrt+) (sqr) float) ; 2norm
-(do-vec-combinations define-1vecreduce (+) (sqr) <t>) ; sqrlen
-(do-vec-combinations define-clamp (<t> real))
-(do-vec-combinations define-lerp)
-(do-vec-combinations define-round (floor round ceiling))
-(do-vec-combinations define-pnorm)
-(do-vec-combinations define-random)
-(do-vec-combinations define-load)
-(do-vec-combinations define-store)
-(do-vec-combinations define-cross)
-(do-vec-combinations define-rotate)
-(do-vec-combinations define-rotate2)
-(do-vec-combinations define-cartesian)
-(do-vec-combinations define-polar)
-(do-vec-combinations define-setf)
-(do-vec-combinations define-apply)
+(do-type-combinations vec-type define-2vecop (+ - * / min max mod))
+(do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))
+(do-type-combinations vec-type define-1vecop (- / abs identity))
+(do-type-combinations vec-type define-2vecreduce (and) (= ~= /= < <= >= >) boolean)
+(do-type-combinations vec-type define-svecreduce (and) (= ~= /= < <= >= >) (<t> real) boolean)
+(do-type-combinations vec-type define-2vecreduce (or) (/=) boolean)
+(do-type-combinations vec-type define-svecreduce (or) (/=) (<t> real) boolean)
+(do-type-combinations vec-type define-2vecreduce (+) (*) <t>) ; dot
+(do-type-combinations vec-type define-2vecreduce (sqrt+) (sqr2) float) ; dist
+(do-type-combinations vec-type define-2vecreduce (+) (sqr2) <t>) ; sqrdist
+(do-type-combinations vec-type define-1vecreduce (+ max) (abs) <t>) ; 1norm inorm
+(do-type-combinations vec-type define-1vecreduce (sqrt+) (sqr) float) ; 2norm
+(do-type-combinations vec-type define-1vecreduce (+) (sqr) <t>) ; sqrlen
+(do-type-combinations vec-type define-clamp (<t> real))
+(do-type-combinations vec-type define-lerp)
+(do-type-combinations vec-type define-round (floor round ceiling))
+(do-type-combinations vec-type define-pnorm)
+(do-type-combinations vec-type define-random)
+(do-type-combinations vec-type define-load)
+(do-type-combinations vec-type define-store)
+(do-type-combinations vec-type define-cross)
+(do-type-combinations vec-type define-rotate)
+(do-type-combinations vec-type define-rotate2)
+(do-type-combinations vec-type define-cartesian)
+(do-type-combinations vec-type define-polar)
+(do-type-combinations vec-type define-setf)
+(do-type-combinations vec-type define-apply)
 #-3d-math-no-f32 (define-like f32)
 #-3d-math-no-f64 (define-like f64)
 #-3d-math-no-u32 (define-like u32)

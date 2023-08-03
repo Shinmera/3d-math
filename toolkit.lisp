@@ -119,6 +119,14 @@
   (declare (ignore x y))
   (random 1.0))
 
+(defmacro do-type-combinations (type template &rest other-template-args)
+  `(do-combinations ,template ,@other-template-args
+     ,@(loop for arg in (template-arguments type)
+             for i from 0
+             collect (delete-duplicates
+                      (loop for instance in (instances type)
+                            collect (nth i (template-arguments instance)))))))
+
 (defmacro define-type-reductor (name transfer 2-op &optional 1-op)
   `(progn
      (defun ,name (target value &rest values)
@@ -211,3 +219,12 @@
          `(let ,(list ,@(loop for var in (butlast vars)
                               collect `(list ',var ,var)))
             (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
+
+(define-dependent-dispatch-type matching-vec (types i ref)
+  (handler-case (apply #'type-instance 'vec-type (template-arguments (nth ref types)))
+    (error () NIL)))
+
+(define-dependent-dispatch-type matching-array (types i ref)
+  (destructuring-bind (<s> <t>) (template-arguments (nth ref types))
+    (declare (ignore <s>))
+    `(simple-array ,<t> (*))))

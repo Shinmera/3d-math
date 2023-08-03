@@ -37,12 +37,11 @@
                             collect `(,(accessor slot) vec)))
               :stream stream))))
 
-(defmacro do-vec-combinations (template &rest other-template-args)
-  `(do-combinations ,template ,@other-template-args (2 3 4) (#-3d-math-no-f32 f32
-                                                             #-3d-math-no-f64 f64
-                                                             #-3d-math-no-u32 u32
-                                                             #-3d-math-no-i32 i32)))
-(do-vec-combinations define-vec)
+(do-combinations define-vec (2 3 4)
+  (#-3d-math-no-f32 f32
+   #-3d-math-no-f64 f64
+   #-3d-math-no-u32 u32
+   #-3d-math-no-i32 i32))
 
 (defmacro define-vec-accessor (name i)
   (let ((instances (loop for instance in (instances 'vec-type)

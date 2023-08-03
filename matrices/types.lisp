@@ -38,14 +38,11 @@
       (:len  (if (eql 'n <s>) `(length (,(place type 'arr) ,mat-arg)) (* <s> <s>)))
       (:array `(,(place type 'arr) ,mat-arg)))))
 
-(defmacro do-mat-combinations (template &rest other-template-args)
-  `(do-combinations ,template ,@other-template-args (2 3 4 n)
-     (#-3d-math-no-f32 f32
-      #-3d-math-no-f64 f64
-      #-3d-math-no-u32 u32
-      #-3d-math-no-i32 i32)))
-
-(do-mat-combinations define-mat)
+(do-combinations define-mat (2 3 4 n)
+  (#-3d-math-no-f32 f32
+   #-3d-math-no-f64 f64
+   #-3d-math-no-u32 u32
+   #-3d-math-no-i32 i32))
 
 #-3d-math-no-f32 (define-type-alias fmat mat2 mat3 mat4 matn)
 #-3d-math-no-f64 (define-type-alias dmat dmat2 dmat3 dmat4 dmatn)
@@ -177,7 +174,7 @@
            ,(case-vec 3)
            ,(case-vec 4))))))
 
-(do-mat-combinations define-mat-constructor)
+(do-type-combinations mat-type define-mat-constructor)
 (do-combinations define-mat*-constructor
   (#-3d-math-no-f32 f32
    #-3d-math-no-f64 f64
