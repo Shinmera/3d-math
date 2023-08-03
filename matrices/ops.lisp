@@ -34,93 +34,6 @@
      ((mat-type real) smatreduce ,comb ,op real)
      ((mat-type 0) 2matreduce ,comb ,op)))
 
-(defmacro define-mat-reductor (name 2-op &optional 1-op)
-  `(progn
-     (defun ,name (target value &rest values)
-       (cond ((null values)
-              ,(if 1-op
-                   `(,1-op target value)
-                   `(m<- target value)))
-             ((null (cdr values))
-              (,2-op target value (first values)))
-             (T
-              (,2-op target value (first values))
-              (dolist (value (rest values) target)
-                (,2-op target target value)))))
-
-     (define-compiler-macro ,name (target value &rest values)
-       (cond ((null values)
-              ,(if 1-op
-                   ``(,',1-op ,target ,value)
-                   ``(m<- ,target ,value)))
-             ((null (cdr values))
-              `(,',2-op ,target ,value ,(first values)))
-             (T
-              (let ((targetg (gensym "TARGET")))
-                `(let ((,targetg ,target))
-                   (,',2-op ,targetg ,value ,(first values))
-                   ,@(loop for value in (rest values)
-                           collect `(,',2-op ,targetg ,targetg ,value)))))))))
-
-(defmacro define-value-reductor (name 2-op comb identity)
-  `(progn
-     (defun ,name (value &rest values)
-       (cond ((null values)
-              ,identity)
-             ((null (cdr values))
-              (,2-op value (first values)))
-             (T
-              (let* ((previous (first values))
-                     (result (,2-op value previous)))
-                (dolist (value (rest values) result)
-                  (setf result (,comb result (,2-op previous value)))
-                  (setf previous value))))))
-
-     (define-compiler-macro ,name (value &rest values)
-       (cond ((null values)
-              ,identity)
-             ((null (cdr values))
-              `(,',2-op ,value ,(first values)))
-             (T
-              (let ((previous (gensym "PREVIOUS"))
-                    (next (gensym "NEXT")))
-                `(let ((,previous ,value))
-                   (,',comb ,@(loop for value in values
-                                    collect `(let ((,next ,value))
-                                               (prog1 (,',2-op ,previous ,next)
-                                                 (setf ,previous ,next))))))))))))
-
-
-(defmacro define-pure-alias (name args &optional (func (compose-name NIL '! name)))
-  `(define-alias ,name ,args
-     `(,',func (mzero ,,(first args)) ,,@(v::lambda-list-variables args))))
-
-(defmacro define-modifying-alias (name args &optional (func (compose-name NIL '! name)))
-  `(define-alias ,name ,args
-     `(,',func ,,(first args) ,,@(v::lambda-list-variables args))))
-
-(defmacro define-simple-alias (name args &optional (func (compose-name NIL '! name)))
-  `(progn (define-pure-alias ,name ,args ,func)
-          (define-modifying-alias ,(compose-name NIL 'n name) ,args ,func)))
-
-(defmacro define-rest-alias (name args &optional (func (compose-name NIL '! name)))
-  (let ((vars (v::lambda-list-variables args))
-        (nname (compose-name NIL 'n name)))
-    `(progn
-       (defun ,name ,args
-         (apply #',func (mzero ,(first args)) ,@vars))
-       (defun ,nname ,args
-         (apply #',func ,(first args) ,@vars))
-       
-       (define-compiler-macro ,name ,args
-         `(let ,(list ,@(loop for var in (butlast vars)
-                              collect `(list ',var ,var)))
-            (,',func (mzero ,',(first args)) ,',@(butlast vars) ,@,(car (last vars)))))
-       (define-compiler-macro ,nname ,args
-         `(let ,(list ,@(loop for var in (butlast vars)
-                              collect `(list ',var ,var)))
-            (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
-
 (defmacro define-constructor (name initializer)
   `(define-type-dispatch ,name (x)
      ,@(loop for instance in (instances 'mat-type)
@@ -207,12 +120,12 @@
   ((#'(matching-vec 1) mat-type) (mdiag) (varr r) m)
   ((mat-type dimension) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
 
-(define-mat-reductor !m+ !2m+)
-(define-mat-reductor !m* !2m*)
-(define-mat-reductor !m- !2m- !1m-)
-(define-mat-reductor !m/ !2m/ !1m/)
-(define-mat-reductor !mmin !2mmin)
-(define-mat-reductor !mmax !2mmax)
+(define-type-reductor !m+ v<- !2m+)
+(define-type-reductor !m* v<- !2m*)
+(define-type-reductor !m- v<- !2m- !1m-)
+(define-type-reductor !m/ v<- !2m/ !1m/)
+(define-type-reductor !mmin v<- !2mmin)
+(define-type-reductor !mmax v<- !2mmax)
 
 (define-templated-dispatch !mzero (x)
   ((mat-type) 0matop zero))
@@ -229,14 +142,14 @@
 (define-value-reductor m> 2m> and T)
 (define-value-reductor m>= 2m>= and T)
 
-(define-pure-alias mapply (m f) !mapply)
+(define-pure-alias mapply (m f) mzero !mapply)
 (define-modifying-alias mapplyf (m f) !mapply)
-(define-simple-alias mcof (m))
-(define-simple-alias minv (m))
-(define-simple-alias minv-affine (m))
-(define-simple-alias mtranspose (m))
-(define-simple-alias mswap-row (m r1 r2))
-(define-simple-alias mswap-col (m c1 c2))
+(define-simple-alias mcof (m) mzero)
+(define-simple-alias minv (m) mzero)
+(define-simple-alias minv-affine (m) mzero)
+(define-simple-alias mtranspose (m) mzero)
+(define-simple-alias mswap-row (m r1 r2) mzero)
+(define-simple-alias mswap-col (m c1 c2) mzero)
 (define-alias mrow (m ri) `(!mrow NIL ,m ,ri))
 (define-alias mcol (m ri) `(!mcol NIL ,m ,ri))
 (define-alias mdiag (m) `(!mdiag NIL ,m))
@@ -254,12 +167,12 @@
 (define-templated-dispatch m2norm (m)
   ((mat-type) m2norm))
 
-(define-rest-alias m+ (m &rest others))
-(define-rest-alias m- (m &rest others))
-(define-rest-alias m* (m &rest others))
-(define-rest-alias m/ (m &rest others))
-(define-rest-alias mmin (m &rest others))
-(define-rest-alias mmax (m &rest others))
+(define-rest-alias m+ (m &rest others) mzero)
+(define-rest-alias m- (m &rest others) mzero)
+(define-rest-alias m* (m &rest others) mzero)
+(define-rest-alias m/ (m &rest others) mzero)
+(define-rest-alias mmin (m &rest others) mzero)
+(define-rest-alias mmax (m &rest others) mzero)
 
 (defun n*m (&rest others)
   (apply #'!m* (car (last others)) others))

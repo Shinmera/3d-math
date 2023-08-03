@@ -105,7 +105,7 @@
          (flet ((constructor (&rest args)
                   `(,(constructor (type-instance 'mat-type size type))
                      ,(if (rest args)
-                          `(v::%vec-array ,(length args) ,type ,@args)
+                          `(type-array ,(length args) ,type ,@args)
                           `(map-into (make-array ,(* size size) :element-type ',type)
                                      #',type ,(first args))))))
            `(progn
@@ -135,7 +135,7 @@
     (labels ((make (size args)
                `(,(constructor (type-instance 'mat-type size type))
                   ,(if (rest args)
-                       `(v::%vec-array ,(length args) ,type ,@args)
+                       `(type-array ,(length args) ,type ,@args)
                        `(map-into (make-array ,(* size size) :element-type ',type)
                                   #',type ,(first args)))))
              (args (n)

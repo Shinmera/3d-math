@@ -21,95 +21,6 @@
      ((vec-type real) svecreduce ,comb ,op real)
      ((vec-type 0) 2vecreduce ,comb ,op)))
 
-(defmacro define-vec-reductor (name 2-op &optional 1-op)
-  `(progn
-     (defun ,name (target value &rest values)
-       (cond ((null values)
-              ,(if 1-op
-                   `(,1-op target value)
-                   `(v<- target value)))
-             ((null (cdr values))
-              (,2-op target value (first values)))
-             (T
-              (,2-op target value (first values))
-              (dolist (value (rest values) target)
-                (,2-op target target value)))))
-
-     (define-compiler-macro ,name (target value &rest values)
-       (dbg "Expanding compiler macro (~a~{ ~a~})" ',name (list* value values))
-       (cond ((null values)
-              ,(if 1-op
-                   ``(,',1-op ,target ,value)
-                   ``(v<- ,target ,value)))
-             ((null (cdr values))
-              `(,',2-op ,target ,value ,(first values)))
-             (T
-              (let ((targetg (gensym "TARGET")))
-                `(let ((,targetg ,target))
-                   (,',2-op ,targetg ,value ,(first values))
-                   ,@(loop for value in (rest values)
-                           collect `(,',2-op ,targetg ,targetg ,value)))))))))
-
-(defmacro define-value-reductor (name 2-op comb identity)
-  `(progn
-     (defun ,name (value &rest values)
-       (cond ((null values)
-              ,identity)
-             ((null (cdr values))
-              (,2-op value (first values)))
-             (T
-              (let* ((previous (first values))
-                     (result (,2-op value previous)))
-                (dolist (value (rest values) result)
-                  (setf result (,comb result (,2-op previous value)))
-                  (setf previous value))))))
-
-     (define-compiler-macro ,name (value &rest values)
-       (dbg "Expanding compiler macro (~a~{ ~a~})" ',name (list* value values))
-       (cond ((null values)
-              ,identity)
-             ((null (cdr values))
-              `(,',2-op ,value ,(first values)))
-             (T
-              (let ((previous (gensym "PREVIOUS"))
-                    (next (gensym "NEXT")))
-                `(let ((,previous ,value))
-                   (,',comb ,@(loop for value in values
-                                    collect `(let ((,next ,value))
-                                               (prog1 (,',2-op ,previous ,next)
-                                                 (setf ,previous ,next))))))))))))
-
-
-(defmacro define-pure-alias (name args &optional (func (compose-name NIL '! name)))
-  `(define-alias ,name ,args
-     `(,',func (vzero ,,(first args)) ,,@(lambda-list-variables args))))
-
-(defmacro define-modifying-alias (name args &optional (func (compose-name NIL '! name)))
-  `(define-alias ,name ,args
-     `(,',func ,,(first args) ,,@(lambda-list-variables args))))
-
-(defmacro define-simple-alias (name args &optional (func (compose-name NIL '! name)))
-  `(progn (define-pure-alias ,name ,args ,func)
-          (define-modifying-alias ,(compose-name NIL 'n name) ,args ,func)))
-
-(defmacro define-rest-alias (name args &optional (func (compose-name NIL '! name)))
-  (let ((vars (lambda-list-variables args))
-        (nname (compose-name NIL 'n name)))
-    `(progn
-       (defun ,name ,args
-         (apply #',func (vzero ,(first args)) ,@vars))
-       (defun ,nname ,args
-         (apply #',func ,(first args) ,@vars))
-       
-       (define-compiler-macro ,name ,args
-         `(let ,(list ,@(loop for var in (butlast vars)
-                              collect `(list ',var ,var)))
-            (,',func (vzero ,',(first args)) ,',@(butlast vars) ,@,(car (last vars)))))
-       (define-compiler-macro ,nname ,args
-         `(let ,(list ,@(loop for var in (butlast vars)
-                              collect `(list ',var ,var)))
-            (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
-
 (define-2vec-dispatch +)
 (define-2vec-dispatch -)
 (define-2vec-dispatch *)
@@ -140,12 +51,12 @@
 (define-1vec-dispatch !1v/ 1vecop /)
 (define-1vec-dispatch !vabs 1vecop abs)
 
-(define-vec-reductor !v+ !2v+)
-(define-vec-reductor !v* !2v*)
-(define-vec-reductor !v- !2v- !1v-)
-(define-vec-reductor !v/ !2v/ !1v/)
-(define-vec-reductor !vmin !2vmin)
-(define-vec-reductor !vmax !2vmax)
+(define-type-reductor !v+ v<- !2v+)
+(define-type-reductor !v* v<- !2v*)
+(define-type-reductor !v- v<- !2v- !1v-)
+(define-type-reductor !v/ v<- !2v/ !1v/)
+(define-type-reductor !vmin v<- !2vmin)
+(define-type-reductor !vmax v<- !2vmax)
 (define-templated-dispatch !vclamp (x low a up)
   ((vec-type #(0 1) 0 #(0 1)) clamp <t>)
   ((vec-type real 0 real) clamp real))
@@ -210,27 +121,27 @@
   ((uvec (integer 2 4)) like u32)
   ((ivec (integer 2 4)) like i32))
 
-(define-rest-alias v+ (v &rest others))
-(define-rest-alias v- (v &rest others))
-(define-rest-alias v* (v &rest others))
-(define-rest-alias v/ (v &rest others))
-(define-rest-alias vmin (v &rest others))
-(define-rest-alias vmax (v &rest others))
+(define-rest-alias v+ (v &rest others) vzero)
+(define-rest-alias v- (v &rest others) vzero)
+(define-rest-alias v* (v &rest others) vzero)
+(define-rest-alias v/ (v &rest others) vzero)
+(define-rest-alias vmin (v &rest others) vzero)
+(define-rest-alias vmax (v &rest others) vzero)
 
-(define-simple-alias vabs (v))
-(define-simple-alias vmod (v modulus) !2vmod)
-(define-simple-alias vfloor (v &optional (d 1)))
-(define-simple-alias vceiling (v &optional (d 1)))
-(define-simple-alias vround (v &optional (d 1)))
-(define-simple-alias vc (a b))
-(define-simple-alias vrot (v axis phi))
-(define-simple-alias vrot2 (v phi))
-(define-simple-alias valign (v grid))
-(define-simple-alias vcartesian (v))
-(define-simple-alias vpolar (v))
-(define-simple-alias vlerp (from to tt))
-(define-simple-alias vrand (v var))
-(define-pure-alias vapply (v func) !vapply)
+(define-simple-alias vabs (v) vzero)
+(define-simple-alias vmod (v modulus) vzero !2vmod)
+(define-simple-alias vfloor (v &optional (d 1)) vzero)
+(define-simple-alias vceiling (v &optional (d 1)) vzero)
+(define-simple-alias vround (v &optional (d 1)) vzero)
+(define-simple-alias vc (a b) vzero)
+(define-simple-alias vrot (v axis phi) vzero)
+(define-simple-alias vrot2 (v phi) vzero)
+(define-simple-alias valign (v grid) vzero)
+(define-simple-alias vcartesian (v) vzero)
+(define-simple-alias vpolar (v) vzero)
+(define-simple-alias vlerp (from to tt) vzero)
+(define-simple-alias vrand (v var) vzero)
+(define-pure-alias vapply (v func) vzero !vapply)
 (define-modifying-alias vapplyf (v func) !vapply)
 
 (define-alias vorder (v fields)

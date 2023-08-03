@@ -18,7 +18,7 @@
   (let ((varr (compose-name NIL (type-prefix <t>) 'varr <s>)))
     (field varr
            :type `(simple-array ,<t> (,<s>))
-           :alias (list 'arr))
+           :alias (list 'arr :arr))
     (loop for i from 0 below <s>
           for f in '(x y z w)
           do (field (compose-name NIL (type-prefix <t>) 'v f <s>)
@@ -209,7 +209,10 @@
 (macrolet ((emit ()
              `(define-type-dispatch vcopy (a)
                 ,@(loop for instance in (instances 'vec-type)
-                        collect `((,(lisp-type instance)) ,(lisp-type instance) (,(compose-name #\- (lisp-type instance) 'copy) a))))))
+                        collect `((,(lisp-type instance)) ,(lisp-type instance)
+                                  (,(constructor instance)
+                                   (make-array ,(<s> instance) :element-type ',(<t> instance)
+                                                               :initial-contents ,(place-form instance :arr 'a))))))))
   (emit))
 
 (macrolet ((emit ()
