@@ -48,6 +48,8 @@
 (define-quatcomp-dispatch >= and <=)
 
 (define-1quat-dispatch q<- 1quatop identity)
+(define-1quat-dispatch !qconjugate conjugate)
+(define-1quat-dispatch !qinv inverses)
 
 (define-1quat-dispatch !1q- 1quatop -)
 (define-1quat-dispatch !1q/ 1quatop /)
@@ -109,6 +111,8 @@
 (define-templated-dispatch (setf qangle) (value a)
   ((#(1 1) quat-type) set-qangle))
 
+(define-simple-alias qconjugate (q) qzero)
+(define-simple-alias qinv (q) qzero)
 (define-simple-alias qfrom-angle (axis angle) qzero)
 (define-simple-alias qtowards (from to) qzero)
 (define-simple-alias qlookat (direction up) qzero)
@@ -135,8 +139,6 @@
   `(sqrt (qsqrlength ,q)))
 
 ;; [ ] qsetf
-;; [ ] qconjugate
-;; [ ] qinv
 ;; [ ] qmix
 ;; [ ] qnlerp
 ;; [ ] qslerp
