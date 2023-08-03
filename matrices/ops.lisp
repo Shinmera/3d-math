@@ -205,7 +205,7 @@
 (define-templated-dispatch !mdiag (r m)
   ((#'(matching-array 1) mat-type) mdiag)
   ((#'(matching-vec 1) mat-type) (mdiag) (varr r) m)
-  ((null mat-type dimension) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
+  ((mat-type dimension) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
 
 (define-mat-reductor !m+ !2m+)
 (define-mat-reductor !m* !2m*)
@@ -283,11 +283,11 @@
 (define-templated-dispatch nmlookat (x eye target up)
   ((mat-type #'(matching-vec 0) 1 1) mlookat))
 (define-templated-dispatch nmfrustum (x l r b u n f)
-  ((mat-type #(0 1) 1 1 1 1 1 1) mfrustum))
+  ((mat-type #(0 1) 1 1 1 1 1) mfrustum))
 (define-templated-dispatch nmperspective (x fovy aspect n f)
   ((mat-type #(0 1) 1 1 1) mperspective))
 (define-templated-dispatch nmortho (x l r b u n f)
-  ((mat-type #(0 1) 1 1 1 1 1 1) mortho))
+  ((mat-type #(0 1) 1 1 1 1 1) mortho))
 (define-templated-dispatch nmperspective (x fovy aspect near far)
   ((mat-type #(0 1) 1 1 1) mperspective))
 
