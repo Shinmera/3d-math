@@ -19,15 +19,6 @@
        (write (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat))
               :stream stream))))
 
-(define-template-type dual-quat (<t>)
-    (compose-name NIL (type-prefix <t>) 'dual-quat)
-  (field (compose-name NIL (type-prefix <t>) 'qreal)
-         :type (lisp-type (type-instance 'quat <t>))
-         :alias (list 0 'real :real))
-  (field (compose-name NIL (type-prefix <t>) 'qdual)
-         :type (lisp-type (type-instance 'quat <t>))
-         :alias (list 1 'dual :dual)))
-
 (do-combinations define-quat
   (#-3d-math-no-f32 f32
    #-3d-math-no-f64 f64))
@@ -54,23 +45,19 @@
 (define-quat-accessor qr 3)
 
 (define-type-alias *quat quat dquat)
-(define-type-alias *dual-quat dual-quat ddual-quat)
 
 (define-alias quat-p (thing)
   `(typep ,thing '*quat))
 
-(define-alias dual-quat-p (thing)
-  `(typep ,thing '*dual-quat))
-
 (defmacro define-quat-constructors (<t>)
   (flet ((constructor (&rest args)
-           `(,(constructor (type-instance 'quat-type 3 <t>))
+           `(,(constructor (type-instance 'quat-type <t>))
               (type-array 3 ,<t> ,@(butlast args))
               (,<t> ,(car (last args)))))
          (vtype (size)
            (lisp-type (type-instance 'vec-type size <t>))))
     (let ((*-name (compose-name NIL (type-prefix <t>) 'quat))
-          (type (lisp-type (type-instance 'quat-type 3 <t>))))
+          (type (lisp-type (type-instance 'quat-type <t>))))
       `(progn
          (define-type-dispatch ,*-name (&optional a b c d)
            (() ,type

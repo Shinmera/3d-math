@@ -61,7 +61,7 @@
 (define-templated-dispatch !qlookat (x dir up)
   ((quat-type #'(matching-vec 0) 1) qlookat))
 (define-templated-dispatch !qexpt (x q exponent)
-  ((quat-type 1 #(0 1)) qexpt))
+  ((quat-type 0 #(0 1)) qexpt))
 (define-templated-dispatch !qmat (x q)
   ((mat3 quat) qmat)
   ((mat4 quat) qmat)

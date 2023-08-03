@@ -6,7 +6,7 @@
 (in-package #:org.shirakumo.fraf.math.quaternions)
 
 (define-template zero <t> (x)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x)
                (return-type ,(lisp-type type))
                inline)
@@ -17,7 +17,7 @@
       x)))
 
 (define-template qfrom-angle <t> (x axis angle)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (vtype (type-instance 'vec-type 3 <t>)))
     `((declare (type ,(lisp-type type) x)
                (type ,(lisp-type vtype) axis)
@@ -32,7 +32,7 @@
         x))))
 
 (define-template qtowards <t> (x from to)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (vtype (type-instance 'vec-type 3 <t>)))
     `((declare (type ,(lisp-type type) x)
                (type ,(lisp-type vtype) from to)
@@ -63,7 +63,7 @@
         x))))
 
 (define-template qangle <t> (q)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) q)
                (return-type ,<t>)
                inline)
@@ -73,7 +73,7 @@
             (* (,<t> 2) (atan length ,(place-form type 3 'q))))))))
 
 (define-template set-qangle <t> (angle x)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x)
                (type ,<t> angle)
                (return-type ,<t>)
@@ -82,7 +82,7 @@
       angle)))
 
 (define-template 2quatop <op> <t> (x a b)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x a b)
                (return-type ,(lisp-type type))
                inline)
@@ -93,7 +93,7 @@
       x)))
 
 (define-template squatop <op> <st> <t> (x a s)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x a)
                (type ,(case <st> (<t> <t>) (T <st>)) s)
                (return-type ,(lisp-type type))
@@ -105,7 +105,7 @@
       x)))
 
 (define-template 1quatop <op> <t> (x a)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x a)
                (return-type ,(lisp-type type))
                inline)
@@ -115,7 +115,7 @@
       x)))
 
 (define-template 2quatreduce <red> <comb> rtype <t> (a b)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (rtype (case rtype
                  (<t> <t>)
                  (float (case <t> (f64 'f64) (T 'f32)))
@@ -129,7 +129,7 @@
                                          ,(place-form type i 'b))))))))
 
 (define-template 1quatreduce <red> <comb> rtype <t> (a)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (rtype (case rtype
                  (<t> <t>)
                  (float (case <t> (f64 'f64) (T 'f32)))
@@ -142,7 +142,7 @@
                        collect `(,<comb> ,(place-form type i 'a))))))))
 
 (define-template squatreduce <red> <comb> <st> rtype <t> (a s)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (rtype (case rtype
                  (<t> <t>)
                  (float (case <t> (f64 'f64) (T 'f32)))
@@ -157,7 +157,7 @@
                          collect `(,<comb> ,(place-form type i 'a) s))))))))
 
 (define-template q*q <t> (x a b)
-  (let* ((type (type-instance 'quat-type 3 <t>))
+  (let* ((type (type-instance 'quat-type <t>))
          (xa (place-form type :x 'a)) (xb (place-form type :x 'b))
          (ya (place-form type :y 'a)) (yb (place-form type :y 'b))
          (za (place-form type :z 'a)) (zb (place-form type :z 'b))
@@ -172,7 +172,7 @@
       x)))
 
 (define-template q*v <t> (x q v)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (vtype (type-instance 'vec-type 3 <t>)))
     `((declare (type ,(lisp-type type) q)
                (type ,(lisp-type vtype) x v)
@@ -192,7 +192,7 @@
         x))))
 
 (define-template qunit <t> (x q)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x q)
                (return-type ,(lisp-type type))
                inline)
@@ -203,7 +203,7 @@
         x))))
 
 (define-template qexpt <t> (x q e)
-  (let ((type (type-instance 'quat-type 3 <t>)))
+  (let ((type (type-instance 'quat-type <t>)))
     `((declare (type ,(lisp-type type) x q)
                (return-type ,(lisp-type type))
                (type ,<t> e)
@@ -221,7 +221,7 @@
       x)))
 
 (define-template qlookat <t> (x dir up)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (vtype (type-instance 'vec-type 3 <t>)))
     `((declare (type ,(lisp-type type) x)
                (type ,(lisp-type vtype) dir up)
@@ -240,7 +240,7 @@
         (,(compose-name #\/ 'qunit <t>) x x)))))
 
 (define-template qmat <s> <t> (x q)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (mtype (type-instance 'mat-type <s> <t>)))
     `((declare (type ,(lisp-type type) q)
                (type ,(lisp-type mtype) x)
@@ -265,7 +265,7 @@
       x)))
 
 (define-template qfrom-mat <s> <t> (x m)
-  (let ((type (type-instance 'quat-type 3 <t>))
+  (let ((type (type-instance 'quat-type <t>))
         (mtype (type-instance 'mat-type <s> <t>)))
     `((declare (type ,(lisp-type type) x)
                (type ,(lisp-type mtype) m)
