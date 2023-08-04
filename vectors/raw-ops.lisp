@@ -97,6 +97,21 @@
                                  (* ,(place-form type i 'b) s))))
       x)))
 
+(define-template inv <s> <t> (x a)
+  (let ((type (type-instance 'vec-type <s> <t>)))
+    `((declare (type ,(lisp-type type) x a)
+               (return-type ,(lisp-type type))
+               inline)
+      (psetf ,@(loop for i from 0 below <s>
+                     collect (place-form type i 'x)
+                     collect `(let ((v ,(place-form type i 'a)))
+                                (if (<= (abs v) ,(case <t>
+                                                   (f32 SINGLE-FLOAT-EPSILON)
+                                                   (f64 DOUBLE-FLOAT-EPSILON)
+                                                   (T 0)))
+                                    (,<t> 0) (/ v)))))
+      x)))
+
 (define-template clamp <st> <s> <t> (x lower a upper)
   (let ((type (type-instance 'vec-type <s> <t>)))
     `((declare (type ,(lisp-type type) a x)
@@ -351,6 +366,7 @@
 (do-type-combinations vec-type define-1vecreduce (sqrt+) (sqr) float) ; 2norm
 (do-type-combinations vec-type define-1vecreduce (+) (sqr) <t>) ; sqrlen
 (do-type-combinations vec-type define-vec+*)
+(do-type-combinations vec-type define-inv)
 (do-type-combinations vec-type define-clamp (<t> real))
 (do-type-combinations vec-type define-lerp)
 (do-type-combinations vec-type define-round (floor round ceiling))

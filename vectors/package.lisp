@@ -39,6 +39,7 @@ This file is a part of 3d-math
   #:!vmin
   #:!vmax
   #:!v+*
+  #:!vinv
   #:!vclamp
   #:!vlerp
   #:!vfloor
@@ -103,6 +104,8 @@ This file is a part of 3d-math
   #:vangle
   #:vclamp
   #:v+*
+  #:vinv
+  #:nvinv
   #:nv+
   #:nv-
   #:nv*
