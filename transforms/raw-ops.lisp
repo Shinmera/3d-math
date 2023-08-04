@@ -4,3 +4,30 @@
 |#
 
 (in-package #:org.shirakumo.fraf.math.transforms)
+
+;; [ ] t+
+;; [ ] t-
+;; [ ] t=
+;; [ ] t~=
+;; [ ] t<-
+;; [ ] t*t
+;; [ ] t*v
+;; [ ] t*p
+;; [ ] tinv
+;; [ ] t*p-inv
+;; [ ] tmix
+;; [ ] tmat
+;; [ ] tfrom-mat
+;; [ ] tdquat
+;; [ ] tfrom-dquat
+;; [ ] tmove
+;; [ ] tmove-by
+;; [ ] toffset
+;; [ ] toffset-by
+;; [ ] tscale
+;; [ ] tscale-by
+;; [ ] trotate
+;; [ ] trotate-by
+;; [ ] tx
+;; [ ] ty
+;; [ ] tz
