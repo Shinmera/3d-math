@@ -69,8 +69,7 @@
                           `(,(lisp-type vtype) (tscaling a))
                           `(,(lisp-type qtype) (trotation a)))))))))
 
-#-3d-math-no-f32 (define-transform-constructors f32)
-#-3d-math-no-f64 (define-transform-constructors f64)
+(do-type-combinations transform-type define-transform-constructors)
 
 (macrolet ((emit ()
              `(define-type-dispatch tcopy (a)

@@ -61,8 +61,7 @@
            ((*quat) ,type
             ,(constructor '(qx a) '(qx a) '(qx a) '(qx a))))))))
 
-#-3d-math-no-f32 (define-quat-constructors f32)
-#-3d-math-no-f64 (define-quat-constructors f64)
+(do-type-combinations quat-type define-quat-constructors)
 
 (macrolet ((emit ()
              `(define-type-dispatch qcopy (a)
