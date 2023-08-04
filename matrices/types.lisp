@@ -66,22 +66,9 @@
 (define-alias mat-p (thing)
   `(typep ,thing '*mat))
 
-(defmacro define-mat-accessor (name slot)
-  (let ((instances (instances 'mat-type)))
-    `(progn
-       (define-type-dispatch ,name (mat)
-         ,@(loop for type in instances
-                 collect `((,(lisp-type type)) ,(place-type type slot)
-                           ,(place-form type slot 'mat))))
-       (define-type-dispatch (setf ,name) (value mat)
-         ,@(loop for type in instances
-                 unless (read-only (slot type slot))
-                 collect `((,(place-type type slot) ,(lisp-type type)) ,(place-type type slot)
-                           (setf ,(place-form type slot 'mat) value)))))))
-
-(define-mat-accessor marr arr)
-(define-mat-accessor mcols cols)
-(define-mat-accessor mrows rows)
+(define-slot-accessor mat-type marr arr)
+(define-slot-accessor mat-type mcols cols)
+(define-slot-accessor mat-type mrows rows)
 
 (defmacro define-mat-constructor (size type)
   (let ((name (compose-name NIL (type-prefix type) 'mat size))

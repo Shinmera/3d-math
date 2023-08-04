@@ -9,7 +9,7 @@
     (compose-name NIL (type-prefix <t>) 'quat)
   :include (vec-type 3 <t>)
   (field (compose-name NIL '% (type-prefix <t>) 'qw)
-         :type <t> :alias (list 3 'w :w)))
+         :type <t> :alias (list 3 'w :w 'r :r)))
 
 (defmethod compute-type-instance-definition ((type quat-type))
   `(progn
@@ -23,26 +23,14 @@
   (#-3d-math-no-f32 f32
    #-3d-math-no-f64 f64))
 
-(defmacro define-quat-accessor (name i)
-  (let ((instances (instances 'quat-type)))
-    `(progn
-       (define-type-dispatch ,name (quat)
-         ,@(loop for type in instances
-                 collect `((,(lisp-type type)) ,(<t> type)
-                           ,(place-form type i 'quat))))
-       (define-type-dispatch (setf ,name) (value quat)
-         ,@(loop for type in instances
-                 collect `((,(<t> type) ,(lisp-type type)) ,(<t> type)
-                           (setf ,(place-form type i 'quat) value)))))))
-
-(define-quat-accessor qx 0)
-(define-quat-accessor qy 1)
-(define-quat-accessor qz 2)
-(define-quat-accessor qw 3)
-(define-quat-accessor qi 0)
-(define-quat-accessor qj 1)
-(define-quat-accessor qk 2)
-(define-quat-accessor qr 3)
+(define-slot-accessor quat-type qx 0)
+(define-slot-accessor quat-type qy 1)
+(define-slot-accessor quat-type qz 2)
+(define-slot-accessor quat-type qw 3)
+(define-slot-accessor quat-type qi 0)
+(define-slot-accessor quat-type qj 1)
+(define-slot-accessor quat-type qk 2)
+(define-slot-accessor quat-type qr 3)
 
 (define-type-alias *quat quat dquat)
 

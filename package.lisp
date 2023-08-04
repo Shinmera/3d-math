@@ -22,6 +22,7 @@
   ;; toolkit.lisp
   (:export
    #:*matrix-limit*
+   #:dimension
    #:enlist
    #:f32
    #:f64
@@ -49,7 +50,8 @@
    #:define-pure-alias
    #:define-modifying-alias
    #:define-simple-alias
-   #:define-rest-alias))
+   #:define-rest-alias
+   #:define-slot-accessor))
 
 (defpackage #:org.shirakumo.fraf.math.vectors
   (:use #:cl

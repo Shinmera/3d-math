@@ -43,39 +43,11 @@
    #-3d-math-no-u32 u32
    #-3d-math-no-i32 i32))
 
-(defmacro define-vec-accessor (name i)
-  (let ((instances (loop for instance in (instances 'vec-type)
-                         when (< i (<s> instance))
-                         collect instance)))
-    `(progn
-       (define-type-dispatch ,name (vec)
-         ,@(loop for type in instances
-                 collect `((,(lisp-type type)) ,(<t> type)
-                           ,(place-form type i 'vec))))
-       (define-type-dispatch (setf ,name) (value vec)
-         ,@(loop for type in instances
-                 collect `((,(<t> type) ,(lisp-type type)) ,(<t> type)
-                           (setf ,(place-form type i 'vec) value)))))))
-
-(define-vec-accessor vx 0)
-(define-vec-accessor vy 1)
-(define-vec-accessor vz 2)
-(define-vec-accessor vw 3)
-
-(defmacro define-vec-slot-accessor (name slot)
-  (let ((instances (instances 'vec-type)))
-    `(progn
-       (define-type-dispatch ,name (vec)
-         ,@(loop for type in instances
-                 collect `((,(lisp-type type)) ,(place-type type slot)
-                           ,(place-form type slot 'vec))))
-       (define-type-dispatch (setf ,name) (value vec)
-         ,@(loop for type in instances
-                 unless (read-only (slot type slot))
-                 collect `((,(place-type type slot) ,(lisp-type type)) ,(place-type type slot)
-                           (setf ,(place-form type slot 'vec) value)))))))
-
-(define-vec-slot-accessor varr arr)
+(define-slot-accessor vec-type vx 0)
+(define-slot-accessor vec-type vy 1)
+(define-slot-accessor vec-type vz 2)
+(define-slot-accessor vec-type vw 3)
+(define-slot-accessor vec-type varr arr)
 
 #-3d-math-no-f32 (define-type-alias fvec vec2 vec3 vec4)
 #-3d-math-no-f64 (define-type-alias dvec dvec2 dvec3 dvec4)
