@@ -27,10 +27,10 @@
     (error () NIL)))
 
 (define-templated-dispatch !2q* (x a b)
+  :ignore-template-types (vec-type)
   ((quat-type 0 #(0 1)) squatop * <t>)
   ((quat-type 0 real) squatop * real)
   ((quat-type 0 0) q*q)
-  ;; FIXME: 
   ((#'(matching-vec 1) quat-type 0) q*v))
 
 (define-2quat-dispatch +)
@@ -65,14 +65,18 @@
 (define-type-reductor !qmax q<- !2qmax)
 
 (define-templated-dispatch !q+* (x a b s)
+  :ignore-template-types (vec-type)
   ((quat-type 0 #'(matching-vec 0) #(0 0)) q+*))
 (define-templated-dispatch !qrand (x)
   ((quat-type) random))
 (define-templated-dispatch !qfrom-angle (x axis angle)
+  :ignore-template-types (vec-type)
   ((quat-type #'(matching-vec 0) #(0 0)) qfrom-angle))
 (define-templated-dispatch !qtowards (x from to)
+  :ignore-template-types (vec-type)
   ((quat-type #'(matching-vec 0) 1) qtowards))
 (define-templated-dispatch !qlookat (x dir up)
+  :ignore-template-types (vec-type)
   ((quat-type #'(matching-vec 0) 1) qlookat))
 (define-templated-dispatch !qexpt (x q exponent)
   ((quat-type 0 #(0 0)) qexpt))
