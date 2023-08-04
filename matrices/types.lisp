@@ -61,7 +61,6 @@
   #-3d-math-no-f32 mat3 #-3d-math-no-f64 dmat3 #-3d-math-no-i32 imat3 #-3d-math-no-u32 umat3
   #-3d-math-no-f32 mat4 #-3d-math-no-f64 dmat4 #-3d-math-no-i32 imat4 #-3d-math-no-u32 umat4
   #-3d-math-no-f32 matn #-3d-math-no-f64 dmatn #-3d-math-no-i32 imatn #-3d-math-no-u32 umatn)
-(deftype mat () 'fmat)
 
 (define-alias mat-p (thing)
   `(typep ,thing '*mat))

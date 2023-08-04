@@ -21,14 +21,16 @@ This file is a part of 3d-math
   #:*vec2
   #:*vec3
   #:*vec4
+  #:vec-p
   #:vcopy
   #:vzero
   #:with-vec
   ;; ops.lisp
   #:vsetf
   #:v<-
+  #:!valign
   #:!1v-
-  #:!1v+
+  #:!1v/
   #:!vabs
   #:!v+
   #:!v*
@@ -36,6 +38,7 @@ This file is a part of 3d-math
   #:!v/
   #:!vmin
   #:!vmax
+  #:!v+*
   #:!vclamp
   #:!vlerp
   #:!vfloor
@@ -51,6 +54,7 @@ This file is a part of 3d-math
   #:!vpolar
   #:!vapply
   #:v=
+  #:v~=
   #:v/=
   #:v<
   #:v<=
@@ -64,6 +68,7 @@ This file is a part of 3d-math
   #:v2norm
   #:vpnorm
   #:vsqrlength
+  #:vlike
   #:v+
   #:v-
   #:v*
@@ -79,13 +84,25 @@ This file is a part of 3d-math
   #:vrot
   #:vrot2
   #:valign
-  #:vorder
   #:vcartesian
   #:vpolar
   #:vlerp
   #:vrand
   #:vapply
   #:vapplyf
+  #:vorder
+  #:vunit
+  #:vunit*
+  #:vrotv
+  #:vscale
+  #:vincf
+  #:vdecf
+  #:vlength
+  #:v1+
+  #:v1-
+  #:vangle
+  #:vclamp
+  #:v+*
   #:nv+
   #:nv-
   #:nv*
@@ -101,27 +118,17 @@ This file is a part of 3d-math
   #:nvrot
   #:nvrot2
   #:nvalign
-  #:nvorder
   #:nvcartesian
   #:nvpolar
   #:nvlerp
   #:nvrand
-  #:vunit
+  #:nvorder
   #:nvunit
-  #:vunit*
   #:nvunit*
-  #:vrotv
   #:nvrotv
-  #:vscale
   #:nvscale
-  #:vincf
-  #:vdecf
-  #:vlength
-  #:v1+
-  #:v1-
-  #:vangle
-  #:vclamp
   #:nvclamp
+  #:nv+*
   ;; Swizzlers are exported by autogen.
   #:+vx2+
   #:+vy2+
