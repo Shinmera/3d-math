@@ -65,17 +65,17 @@
 (define-type-reductor !qmax q<- !2qmax)
 
 (define-templated-dispatch !q+* (x a b s)
-  ((quat-type 0 #'(matching-vec 0) #(0 1)) q+*))
+  ((quat-type 0 #'(matching-vec 0) #(0 0)) q+*))
 (define-templated-dispatch !qrand (x)
   ((quat-type) random))
 (define-templated-dispatch !qfrom-angle (x axis angle)
-  ((quat-type #'(matching-vec 0) #(0 1)) qfrom-angle))
+  ((quat-type #'(matching-vec 0) #(0 0)) qfrom-angle))
 (define-templated-dispatch !qtowards (x from to)
   ((quat-type #'(matching-vec 0) 1) qtowards))
 (define-templated-dispatch !qlookat (x dir up)
   ((quat-type #'(matching-vec 0) 1) qlookat))
 (define-templated-dispatch !qexpt (x q exponent)
-  ((quat-type 0 #(0 1)) qexpt))
+  ((quat-type 0 #(0 0)) qexpt))
 (define-templated-dispatch !qmat (x q)
   ((mat3 quat) (qmat 3 f32) x q)
   ((mat4 quat) (qmat 4 f32) x q)
@@ -86,6 +86,12 @@
   ((quat mat4) (qfrom-mat 4 f32) x m)
   ((dquat dmat3) (qfrom-mat 3 f64) x m)
   ((dquat dmat4) (qfrom-mat 4 f64) x m))
+(define-templated-dispatch !qmix (x a b tt)
+  ((quat-type 0 0 #(0 0)) qmix))
+(define-templated-dispatch !qnlerp (x a b tt)
+  ((quat-type 0 0 #(0 0)) qnlerp))
+(define-templated-dispatch !qslerp (x a b tt)
+  ((quat-type 0 0 #(0 0)) qslerp))
 
 (define-value-reductor q= 2q= and T)
 (define-value-reductor q~= 2q~= and T)
@@ -110,6 +116,8 @@
   ((quat-type) qangle))
 (define-templated-dispatch (setf qangle) (value a)
   ((#(1 1) quat-type) set-qangle))
+(define-templated-dispatch qsetf (a x y z w)
+  ((quat-type real real real real) setf))
 
 (define-simple-alias qconjugate (q) qzero)
 (define-simple-alias qinv (q) qzero)
@@ -119,6 +127,9 @@
 (define-simple-alias qexpt (q exponent) qzero)
 (define-simple-alias qunit (q) qzero)
 (define-simple-alias qunit* (q) qzero)
+(define-simple-alias qmix (a b tt) qzero)
+(define-simple-alias qnlerp (a b tt) qzero)
+(define-simple-alias qslerp (a b tt) qzero)
 
 (define-alias qmat (q &optional (m (mat3)))
   `(!qmat ,m ,q))
@@ -137,8 +148,3 @@
 
 (define-alias qlength (q)
   `(sqrt (qsqrlength ,q)))
-
-;; [ ] qsetf
-;; [ ] qmix
-;; [ ] qnlerp
-;; [ ] qslerp
