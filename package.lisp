@@ -72,7 +72,7 @@
         #:org.shirakumo.fraf.math.vectors
         #:org.shirakumo.fraf.math.matrices))
 
-(defpackage #:org.shirakumo.fraf.math.transforms
+(defpackage #:org.shirakumo.fraf.math.dual-quaternions
   (:use #:cl
         #:org.shirakumo.type-templates
         #:org.shirakumo.fraf.math.internal
@@ -80,8 +80,18 @@
         #:org.shirakumo.fraf.math.matrices
         #:org.shirakumo.fraf.math.quaternions))
 
+(defpackage #:org.shirakumo.fraf.math.transforms
+  (:use #:cl
+        #:org.shirakumo.type-templates
+        #:org.shirakumo.fraf.math.internal
+        #:org.shirakumo.fraf.math.vectors
+        #:org.shirakumo.fraf.math.matrices
+        #:org.shirakumo.fraf.math.quaternions
+        #:org.shirakumo.fraf.math.dual-quaternions))
+
 (defpackage #:org.shirakumo.fraf.math
   (:use #:org.shirakumo.fraf.math.vectors
         #:org.shirakumo.fraf.math.matrices
         #:org.shirakumo.fraf.math.quaternions
-        #:org.shirakumo.fraf.math.transforms))
+        #:org.shirakumo.fraf.math.transforms
+        #:org.shirakumo.fraf.math.dual-quaternions))
