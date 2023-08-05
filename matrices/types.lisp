@@ -17,15 +17,16 @@
          (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type `(eql ,<s>) :alias '(1 cols) :value <s>)
          (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type `(eql ,<s>) :alias '(2 rows) :value <s>))))
 
-(defmethod compute-type-instance-definition ((type mat-type))
-  `(progn
-     ,(call-next-method)
-     
-     (defmethod print-object ((mat ,(lisp-type type)) stream)
-       (write ,(if (eql 'n (first (template-arguments type)))
-                   `(list ',(lisp-type type) (mcols mat) (mrows mat) (marr mat))
-                   `(list ',(lisp-type type) (marr mat)))
-              :stream stream))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmethod compute-type-instance-definition ((type mat-type))
+    `(progn
+       ,(call-next-method)
+       
+       (defmethod print-object ((mat ,(lisp-type type)) stream)
+         (write ,(if (eql 'n (first (template-arguments type)))
+                     `(list ',(lisp-type type) (mcols mat) (mrows mat) (marr mat))
+                     `(list ',(lisp-type type) (marr mat)))
+                :stream stream)))))
 
 (defun attribute (type attribute &optional (mat-arg 'm))
   (destructuring-bind (<s> <t>) (template-arguments type)
@@ -61,6 +62,13 @@
   #-3d-math-no-f32 mat3 #-3d-math-no-f64 dmat3 #-3d-math-no-i32 imat3 #-3d-math-no-u32 umat3
   #-3d-math-no-f32 mat4 #-3d-math-no-f64 dmat4 #-3d-math-no-i32 imat4 #-3d-math-no-u32 umat4
   #-3d-math-no-f32 matn #-3d-math-no-f64 dmatn #-3d-math-no-i32 imatn #-3d-math-no-u32 umatn)
+
+(deftype mat (&optional s) 
+  (case s
+    ((NIL) 'fmat)
+    (2 'mat2)
+    (3 'mat3)
+    (4 'mat4)))
 
 (define-alias mat-p (thing)
   `(typep ,thing '*mat))
@@ -114,7 +122,12 @@
 
 (defmacro define-mat*-constructor (type)
   (let ((name (compose-name NIL (type-prefix type) 'mat))
-        (args (loop for i from 0 below (* 4 4) collect (compose-name NIL 'v i))))
+        (args (loop for i from 0 below (* 4 4) collect (compose-name NIL 'v i)))
+        (mat* (ecase type
+                (f32 'fmat)
+                (f64 'dmat)
+                (i32 'imat)
+                (u32 'umat))))
     (labels ((make (size args)
                `(,(constructor (type-instance 'mat-type size type))
                   ,(if (rest args)
@@ -139,6 +152,26 @@
       `(progn
          (export '(,name))
          (define-type-dispatch ,name (&optional ,@args)
+           ((dimension dimension) ,mat*
+            (cond ((/= ,(first args) ,(second args))
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args)))
+                  ((= ,(first args) 2)
+                   (,(lisp-type (type-instance 'mat-type 2 type))))
+                  ((= ,(first args) 3)
+                   (,(lisp-type (type-instance 'mat-type 3 type))))
+                  ((= ,(first args) 4)
+                   (,(lisp-type (type-instance 'mat-type 4 type))))
+                  (T
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args)))))
+           ((dimension) ,mat*
+            (cond ((= ,(first args) 2)
+                   (,(lisp-type (type-instance 'mat-type 2 type))))
+                  ((= ,(first args) 3)
+                   (,(lisp-type (type-instance 'mat-type 3 type))))
+                  ((= ,(first args) 4)
+                   (,(lisp-type (type-instance 'mat-type 4 type))))
+                  (T
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(first args)))))
            (,(args 2) ,(lisp-type (type-instance 'mat-type 2 type))
             ,(make 2 (subseq args 0 4)))
            (,(args 3) ,(lisp-type (type-instance 'mat-type 3 type))
@@ -147,11 +180,7 @@
             ,(make 4 args))
            ((mat ,@(loop repeat 15 collect 'null)) *mat
             (mcopy ,(first args)))
-           ((vector ,@(loop repeat 15 collect 'null)) ,(ecase type
-                                                         (f32 'mat)
-                                                         (f64 'dmat)
-                                                         (i32 'imat)
-                                                         (u32 'umat))
+           ((vector ,@(loop repeat 15 collect 'null)) ,mat*
             (ecase (length ,(first args))
               (2 ,(make-vector 2))
               (3 ,(make-vector 3))

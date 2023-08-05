@@ -11,13 +11,14 @@
   (field (compose-name NIL '% (type-prefix <t>) 'qw)
          :type <t> :alias (list 3 'w :w 'r :r)))
 
-(defmethod compute-type-instance-definition ((type quat-type))
-  `(progn
-     ,(call-next-method)
-     
-     (defmethod print-object ((quat ,(lisp-type type)) stream)
-       (write (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat))
-              :stream stream))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmethod compute-type-instance-definition ((type quat-type))
+    `(progn
+       ,(call-next-method)
+       
+       (defmethod print-object ((quat ,(lisp-type type)) stream)
+         (write (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat))
+                :stream stream)))))
 
 (do-combinations define-quat
   (#-3d-math-no-f32 f32

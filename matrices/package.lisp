@@ -48,6 +48,7 @@
   #:!mzero
   #:!meye
   #:!mrand
+  #:!mtransfer
   #:m=
   #:m~=
   #:m/=
@@ -122,5 +123,7 @@
   #:madj
   #:mcref
   #:miref
+  #:mtransfer
+  #:mblock
   #:msetf
   #:with-fast-matref)

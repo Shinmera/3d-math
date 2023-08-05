@@ -27,15 +27,16 @@
                     :computed T
                     :value `(lambda (vec) `(aref (,',varr ,vec) ,,i))))))
 
-(defmethod compute-type-instance-definition ((type vec-type))
-  `(progn
-     ,(call-next-method)
-     (defmethod print-object ((vec ,(lisp-type type)) stream)
-       (write (list ',(lisp-type type)
-                    ,@(loop for slot in (slots type)
-                            unless (realized-slot-p slot)
-                            collect `(,(accessor slot) vec)))
-              :stream stream))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmethod compute-type-instance-definition ((type vec-type))
+    `(progn
+       ,(call-next-method)
+       (defmethod print-object ((vec ,(lisp-type type)) stream)
+         (write (list ',(lisp-type type)
+                      ,@(loop for slot in (slots type)
+                              unless (realized-slot-p slot)
+                              collect `(,(accessor slot) vec)))
+                :stream stream)))))
 
 (do-combinations define-vec (2 3 4)
   (#-3d-math-no-f32 f32
@@ -63,6 +64,13 @@
   #-3d-math-no-f32 vec2 #-3d-math-no-f64 dvec2 #-3d-math-no-i32 ivec2 #-3d-math-no-u32 uvec2
   #-3d-math-no-f32 vec3 #-3d-math-no-f64 dvec3 #-3d-math-no-i32 ivec3 #-3d-math-no-u32 uvec3
   #-3d-math-no-f32 vec4 #-3d-math-no-f64 dvec4 #-3d-math-no-i32 ivec4 #-3d-math-no-u32 uvec4)
+
+(deftype vec (&optional s) 
+  (case s
+    ((NIL) 'fvec)
+    (2 'vec2)
+    (3 'vec3)
+    (4 'vec4)))
 
 (define-alias vec-p (thing)
   `(typep ,thing '*vec))
@@ -136,6 +144,15 @@
             ,(constructor '(vx a) '(vy a) '(vz a) '(vw a))))
 
          (define-type-dispatch ,*-name (&optional a b c d)
+           ((dimension null null null) ,(case type (f32 'fvec) (f64 'dvec) (i32 'ivec) (u32 'uvec))
+            (cond ((= a 2)
+                   (,(lisp-type (type-instance 'vec-type 2 type))))
+                  ((= a 3)
+                   (,(lisp-type (type-instance 'vec-type 3 type))))
+                  ((= a 4)
+                   (,(lisp-type (type-instance 'vec-type 4 type))))
+                  (T
+                   (error "Not a valid size for a vector: ~d" a))))
            ((real real) ,(type 2)
             ,(constructor 'a 'b))
            ((real real real) ,(type 3)

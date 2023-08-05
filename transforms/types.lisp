@@ -8,24 +8,25 @@
 (define-template-type transform (<t>)
     (compose-name NIL (type-prefix <t>) 'transform)
   (field (compose-name NIL '% (type-prefix <t>) 'location)
-         :type (lisp-type (type-instance 'vec-type 3 <t>)) 
+         :type (lisp-type (type-instance 'vec-type 3 <t>))
          :alias (list 0 'location :location))
   (field (compose-name NIL '% (type-prefix <t>) 'scaling)
-         :type (lisp-type (type-instance 'vec-type 3 <t>)) 
+         :type (lisp-type (type-instance 'vec-type 3 <t>))
          :alias (list 1 'scaling :scaling))
   (field (compose-name NIL '% (type-prefix <t>) 'rotation)
-         :type (lisp-type (type-instance 'quat-type <t>)) 
+         :type (lisp-type (type-instance 'quat-type <t>))
          :alias (list 2 'rotation :rotation)))
 
-(defmethod compute-type-instance-definition ((type transform-type))
-  `(progn
-     ,(call-next-method)
-     (defmethod print-object ((obj ,(lisp-type type)) stream)
-       (write (list ',(lisp-type type)
-                    ,@(loop for slot in (slots type)
-                            when (realized-slot-p slot)
-                            collect `(,(accessor slot) obj)))
-              :stream stream))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmethod compute-type-instance-definition ((type transform-type))
+    `(progn
+       ,(call-next-method)
+       (defmethod print-object ((obj ,(lisp-type type)) stream)
+         (write (list ',(lisp-type type)
+                      ,@(loop for slot in (slots type)
+                              when (realized-slot-p slot)
+                              collect `(,(accessor slot) obj)))
+                :stream stream)))))
 
 (do-combinations define-transform
   (#-3d-math-no-f32 f32

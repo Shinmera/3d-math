@@ -23,9 +23,10 @@
   (let ((type (type-instance 'transform-type <t>)))
     `((declare (type ,(lisp-type type) x a b)
                (return-type ,(lisp-type type)))
-      ;; implicit tinv of b followed by t+
-      
-      x)))
+      (let ((binv (,(lisp-type type))))
+        (declare (dynamic-extent binv))
+        (,(compose-name #\/ 'tinv <t>) binv b)
+        (,(compose-name #\/ 't+ <t>) x a binv)))))
 
 (define-template t= <t> (a b)
   (let ((type (type-instance 'transform-type <t>)))
@@ -62,7 +63,8 @@
       (!q* x ,(place-form type :rotation 'a) x))))
 
 (define-template t*p <t> (x a b)
-  (let ((type (type-instance 'transform-type <t>)))
+  (let ((type (type-instance 'transform-type <t>))
+        (vtype (type-instance 'vec-type 3 <t>)))
     `((declare (type ,(lisp-type type) a)
                (type ,(lisp-type vtype) x b)
                (return-type ,(lisp-type type)))
@@ -82,11 +84,26 @@
       x)))
 
 (define-template t*p-inv <t> (x a b)
-  (let ((type (type-instance 'transform-type <t>)))
-    `((declare (type ,(lisp-type type) x a)
-               (return-type ,(lisp-type type)))
-      
-      x)))
+  (let ((type (type-instance 'transform-type <t>))
+        (vtype (type-instance 'vec-type 3 <t>))
+        (qtype (type-instance 'quat-type <t>)))
+    `((declare (type ,(lisp-type type) a)
+               (type ,(lisp-type vtype) x b)
+               (return-type ,(lisp-type vtype)))
+      (let* ((invrot (,(lisp-type qtype)))
+             (invscale (,(lisp-type vtype))))
+        (declare (dynamic-extent invrot invscale))
+        ;; Compute tinv inline
+        (!vinv invscale (place-form type :scaling 'a))
+        (!qinv invrot (place-form type :rotation 'a))
+        (v<- x b)
+        (!v* x x invscale)
+        (!q* x invrot x)
+        ;; Re-use the invscale here as a temp vector for the invloc
+        (!v* invscale invscale (place-form type :location 'a))
+        (!v* invscale invscale (,<t> -1))
+        (!q* invscale invrot invscale)
+        (!v+ x x invscale)))))
 
 (define-template tmix <t> (x a b tt)
   (let ((type (type-instance 'transform-type <t>)))
@@ -109,9 +126,9 @@
     `((declare (type ,(lisp-type type) a)
                (type ,(lisp-type mtype) x)
                (return-type ,(lisp-type type)))
-      (let* ((l (place-form type :location 'a))
-             (s (place-form type :scaling 'a))
-             (r (place-form type :rotation 'a))
+      (let* ((l ,(place-form type :location 'a))
+             (s ,(place-form type :scaling 'a))
+             (r ,(place-form type :rotation 'a))
              (x (qx r)) (y (qy r)) (z (qz r)) (w (qw r))
              (xx (* x x)) (xy (* x y)) (xz (* x z)) (xw (* x w))
              (yy (* y y)) (yz (* y z)) (yw (* y w))
@@ -122,30 +139,49 @@
                (* (vx3 s) 2 (- xz yw)) (* (vy3 s) 2 (+ yz xw)) (* (vz3 s) (- 1 (* 2 (+ xx yy)))) (vz3 l)
                0.0 0.0 0.0 1.0)))))
 
-(define-template tfrom-mat <s> <t> (x a)
+(define-template tfrom-mat <t> (x a)
   (let ((type (type-instance 'transform-type <t>))
-        (mtype (type-instance 'mat-type <s> <t>))
+        (qtype (type-instance 'quat-type <t>))
+        (mtype (type-instance 'mat-type 4 <t>))
         (3mtype (type-instance 'mat-type 3 <t>)))
     `((declare (type ,(lisp-type type) x)
+               (type ,(lisp-type mtype) a)
                (return-type ,(lisp-type type)))
-      (let* ((m (,(lisp-type 3mtype) a)))
-        (declare (dynamic-extent m))
-        ;; FIXME: this
-        (!m* m m (qmat3 (qinv rot)))
-        (!qfrom-mat (place-form type :rotation 'x) m)
-        (!mcol (place-form type :location 'x) m 3)
-        (!mdiag (place-form type :scaling 'x) m))
+      (!qfrom-mat ,(place-form type :rotation 'x) m)
+      (let* ((m (,(lisp-type 3mtype)))
+             (rmat (,(lisp-type 3mtype)))
+             (rinv (,(lisp-type qtype))))
+        (declare (dynamic-extent m rmat rinv))
+        (!qinv rinv ,(place-form type :rotation 'x))
+        (!qmat rmat rinv)
+        (!mtransfer m a 0 0 3 3 0 0)
+        (!m* m m rmat)
+        (!mcol ,(place-form type :location 'x) m 3)
+        (!mdiag ,(place-form type :scaling 'x) m))
       x)))
 
+(do-type-combinations transform-type define-t+)
+(do-type-combinations transform-type define-t-)
+(do-type-combinations transform-type define-t=)
+(do-type-combinations transform-type define-t~=)
+(do-type-combinations transform-type define-t<-)
+(do-type-combinations transform-type define-t*v)
+(do-type-combinations transform-type define-t*p)
+(do-type-combinations transform-type define-tinv)
+(do-type-combinations transform-type define-t*p-inv)
+(do-type-combinations transform-type define-tmix)
+(do-type-combinations transform-type define-tmat)
+(do-type-combinations transform-type define-tfrom-mat)
+
 ;; [x] t+
-;; [ ] t-
+;; [x] t-
 ;; [x] t=
 ;; [x] t~=
 ;; [x] t<-
 ;; [x] t*v
 ;; [x] t*p
 ;; [x] tinv
-;; [ ] t*p-inv
+;; [x] t*p-inv
 ;; [x] tmix
 ;; [x] tmat
 ;; [x] tfrom-mat

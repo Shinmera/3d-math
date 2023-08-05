@@ -23,6 +23,7 @@
   (:export
    #:*matrix-limit*
    #:dimension
+   #:index
    #:enlist
    #:f32
    #:f64

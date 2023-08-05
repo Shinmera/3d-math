@@ -69,6 +69,11 @@
     (declare (ignore <s>))
     `(simple-array ,<t> (*))))
 
+(define-dependent-dispatch-type matching-matrix (types i ref size)
+  (destructuring-bind (<s> <t>) (template-arguments (nth ref types))
+    (declare (ignore <s>))
+    (type-instance 'mat-type size <t>)))
+
 (define-2mat-dispatch +)
 (define-2mat-dispatch -)
 (define-2mat-dispatch /)
@@ -134,6 +139,16 @@
   ((mat-type) 0matop eye))
 (define-templated-dispatch !mrand (x)
   ((mat-type) 0matop rand))
+
+(define-templated-dispatch !mtransfer (dst src w h dst-x dst-y src-x src-y)
+  ((#'(matching-matrix 1 2) mat-type dimension 2 index 4 4 4) mtransfer)
+  ((#'(matching-matrix 1 3) mat-type dimension 2 index 4 4 4) mtransfer)
+  ((#'(matching-matrix 1 4) mat-type dimension 2 index 4 4 4) mtransfer)
+  ((#'(matching-matrix 1 n) mat-type dimension 2 index 4 4 4) mtransfer)
+  ((#'(matching-matrix 1 2) mat-type dimension 2 index 4 4 4) mtransfer 2)
+  ((#'(matching-matrix 1 3) mat-type dimension 2 index 4 4 4) mtransfer 3)
+  ((#'(matching-matrix 1 4) mat-type dimension 2 index 4 4 4) mtransfer 4)
+  ((#'(matching-matrix 1 n) mat-type dimension 2 index 4 4 4) mtransfer n))
 
 (define-value-reductor m= 2m= and T)
 (define-value-reductor m~= 2m~= and T)
@@ -251,7 +266,7 @@
 (define-constructor mrand !mrand)
 (define-constructor mzero !mzero)
 
-(declaim (ftype (function (*mat) (values *mat *mat mat-dim &optional)) mpivot))
+(declaim (ftype (function (*mat) (values *mat *mat dimension &optional)) mpivot))
 (defun mpivot (m)
   (assert (= (mrows m) (mcols m)))
   (let* ((c (mrows m))
@@ -259,7 +274,7 @@
          (ra (marr r))
          (p (meye c))
          (s 0))
-    (declare (type mat-dim s))
+    (declare (type dimension s))
     (macrolet ((e (y x) `(aref ra (+ ,x (* ,y c)))))
       (dotimes (i c (values r p s))
         (let ((index 0) (max 0))
@@ -290,7 +305,7 @@
          (s 0)
          (lua (marr lu))
          (scale (make-array n :element-type (array-element-type (marr m)))))
-    (declare (type mat-dim s))
+    (declare (type dimension s))
     (macrolet ((lu (y x) `(aref lua (+ ,x (* ,y n)))))
       ;; Discover the largest element and save the scaling.
       (loop for i from 0 below n
@@ -411,6 +426,12 @@
 
 (define-alias (setf miref) (value m i)
   `(setf (aref (marr ,m) ,i) ,value))
+
+(define-alias mtransfer (x m &key (w (mcols x)) (h (mrows x)) (xx 0) (xy 0) (mx 0) (my 0))
+  `(!mtransfer ,x ,m ,w ,h ,xx ,xy ,mx ,my))
+
+(define-alias mblock (m x y w h)
+  `(!mtransfer (mat ,w ,h) ,m ,w ,h 0 0 ,x ,y))
 
 (defmacro msetf (mat &rest els)
   (let ((m (gensym "MAT"))

@@ -19,6 +19,9 @@
 (deftype dimension ()
   '(integer 1 #.*matrix-limit*))
 
+(deftype index ()
+  '(integer 0 #.(1- *matrix-limit*)))
+
 (defun enlist (list-ish &rest els)
   (if (listp list-ish) list-ish (list* list-ish els)))
 
