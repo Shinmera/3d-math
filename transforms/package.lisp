@@ -4,3 +4,46 @@
 |#
 
 (in-package #:org.shirakumo.fraf.math.transforms)
+
+(define-exports
+  ;; types.lisp
+  ;; Much is omitted, exported by autogen.
+  #:tlocation
+  #:tscaling
+  #:trotation
+  #:*transform
+  #:transform-p
+  #:tcopy
+  #:tzero
+  ;; ops.lisp
+  #:!t*v
+  #:!t*p
+  #:!t*p-inv
+  #:!tinv
+  #:!tmix
+  #:!tmat
+  #:!tfrom-mat
+  #:!t+
+  #:!t-
+  #:t=
+  #:t~=
+  #:t+
+  #:t-
+  #:t*v
+  #:t*p
+  #:t*p-inv
+  #:tinv
+  #:tmix
+  #:tmat
+  #:tfrom-mat
+  #:tmove
+  #:tmove-by
+  #:toffset
+  #:toffset-by
+  #:tscale
+  #:tscale-by
+  #:trotate
+  #:trotate-by
+  #:tx
+  #:ty
+  #:tz)

@@ -174,26 +174,4 @@
 (do-type-combinations transform-type define-tmat)
 (do-type-combinations transform-type define-tfrom-mat)
 
-;; [x] t+
-;; [x] t-
-;; [x] t=
-;; [x] t~=
-;; [x] t<-
-;; [x] t*v
-;; [x] t*p
-;; [x] tinv
-;; [x] t*p-inv
-;; [x] tmix
-;; [x] tmat
-;; [x] tfrom-mat
-;; [ ] tmove
-;; [ ] tmove-by
-;; [ ] toffset
-;; [ ] toffset-by
-;; [ ] tscale
-;; [ ] tscale-by
-;; [ ] trotate
-;; [ ] trotate-by
-;; [ ] tx
-;; [ ] ty
-;; [ ] tz
+
