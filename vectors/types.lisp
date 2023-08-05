@@ -73,7 +73,7 @@
     (4 'vec4)))
 
 (define-alias vec-p (thing)
-  `(typep ,thing '*vec))
+  `(typep ,thing 'fvec))
 
 ;; This reads like a war zone
 ;; FIXME: The deftransforms on REALs clobber more precise type information.

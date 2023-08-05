@@ -35,9 +35,6 @@
 
 (define-type-alias *quat quat dquat)
 
-(define-alias quat-p (thing)
-  `(typep ,thing '*quat))
-
 (defmacro define-quat-constructors (<t>)
   (flet ((constructor (&rest args)
            `(,(constructor (type-instance 'quat-type <t>))

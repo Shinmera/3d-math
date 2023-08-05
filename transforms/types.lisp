@@ -38,9 +38,6 @@
 
 (define-type-alias *transform transform dtransform)
 
-(define-alias transform-p (thing)
-  `(typep ,thing '*transform))
-
 (defmacro define-transform-constructors (<t>)
   (flet ((constructor (location scaling rotation)
            `(,(constructor (type-instance 'transform-type <t>))

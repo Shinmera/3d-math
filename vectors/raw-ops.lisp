@@ -268,7 +268,7 @@
                  (return-type ,(lisp-type type)))
         (let* ((cos (the single-float (cos phi)))
                (sin (the single-float (sin phi)))
-               (c (,(constructor type) ,@(make-list <s> :initial-element (funcall <t> 0))))
+               (c (,(constructor type) ,(make-array <s> :element-type <t> :initial-element (funcall <t> 0))))
                (d (,(compose-name #\/ '2vecreduce '+ '* <s> <t>) axis a)))
           (declare (dynamic-extent c))
           (,(compose-name #\/ 'cross <s> <t>) c axis a)
@@ -348,9 +348,9 @@
              (ignore a)
              inline)
     (ecase s
-      (2 (,(constructor (type-instance 'vec-type 2 <t>)) (,<t> 0) (,<t> 0)))
-      (3 (,(constructor (type-instance 'vec-type 3 <t>)) (,<t> 0) (,<t> 0) (,<t> 0)))
-      (4 (,(constructor (type-instance 'vec-type 4 <t>)) (,<t> 0) (,<t> 0) (,<t> 0) (,<t> 0))))))
+      (2 (,(constructor (type-instance 'vec-type 2 <t>)) ,(make-array 2 :element-type <t> :initial-element (funcall <t> 0))))
+      (3 (,(constructor (type-instance 'vec-type 3 <t>)) ,(make-array 3 :element-type <t> :initial-element (funcall <t> 0))))
+      (4 (,(constructor (type-instance 'vec-type 4 <t>)) ,(make-array 4 :element-type <t> :initial-element (funcall <t> 0)))))))
 
 (do-type-combinations vec-type define-2vecop (+ - * / min max mod))
 (do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))

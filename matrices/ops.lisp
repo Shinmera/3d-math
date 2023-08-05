@@ -15,7 +15,7 @@
   `(define-templated-dispatch !2m* (x a b)
      ((mat-type 0 #(0 1)) smatop * <t>)
      ((mat-type 0 real) smatop * real)
-     ((mat-type 0 0) 2matop *)
+     ((mat-type 0 0) m*m)
      ;; Extra handling for vectors.
      ,@(loop for instance in (instances 'mat-type)
              for (<s> <t>) = (template-arguments instance)
@@ -110,21 +110,21 @@
 (define-1mat-dispatch !minv-affine minv-affine)
 (define-1mat-dispatch !mtranspose mtranspose)
 (define-templated-dispatch !mswap-row (x m r1 r2)
-  ((mat-type 0 dimension dimension) mswap-row))
+  ((mat-type 0 index index) mswap-row))
 (define-templated-dispatch !mswap-col (x m c1 c2)
-  ((mat-type 0 dimension dimension) mswap-col))
+  ((mat-type 0 index index) mswap-col))
 (define-templated-dispatch !mrow (r m ri)
-  ((#'(matching-array 1) mat-type dimension) mrow)
-  ((#'(matching-vec 1) mat-type dimension) (mrow) (varr r) m ri)
-  ((null mat-type dimension) (mrow) (make-array (mcols m) :element-type (array-element-type (marr m))) m ri))
+  ((#'(matching-array 1) mat-type index) mrow)
+  ((#'(matching-vec 1) mat-type index) (mrow) (varr r) m ri)
+  ((null mat-type index) (mrow) (make-array (mcols m) :element-type (array-element-type (marr m))) m ri))
 (define-templated-dispatch !mcol (r m ci)
-  ((#'(matching-array 1) mat-type dimension) mcol)
-  ((#'(matching-vec 1) mat-type dimension) (mcol) (varr r) m ci)
-  ((null mat-type dimension) (mcol) (make-array (mrows m) :element-type (array-element-type (marr m))) m ci))
+  ((#'(matching-array 1) mat-type index) mcol)
+  ((#'(matching-vec 1) mat-type index) (mcol) (varr r) m ci)
+  ((null mat-type index) (mcol) (make-array (mrows m) :element-type (array-element-type (marr m))) m ci))
 (define-templated-dispatch !mdiag (r m)
   ((#'(matching-array 1) mat-type) mdiag)
   ((#'(matching-vec 1) mat-type) (mdiag) (varr r) m)
-  ((mat-type dimension) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
+  ((dimension mat-type) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
 
 (define-type-reductor !m+ v<- !2m+)
 (define-type-reductor !m* v<- !2m*)
@@ -171,7 +171,7 @@
 (define-alias mdiag (m) `(!mdiag NIL ,m))
 
 (define-templated-dispatch mminor (m y x)
-  ((mat-type dimension dimension) mminor))
+  ((mat-type index index) mminor))
 (define-templated-dispatch mdet (m)
   ((mat-type) mdet))
 (define-templated-dispatch mtrace (m)
@@ -213,8 +213,6 @@
   ((mat-type #'(matching-vec 0) 1 1) mlookat))
 (define-templated-dispatch nmfrustum (x l r b u n f)
   ((mat-type #(0 1) 1 1 1 1 1) mfrustum))
-(define-templated-dispatch nmperspective (x fovy aspect n f)
-  ((mat-type #(0 1) 1 1 1) mperspective))
 (define-templated-dispatch nmortho (x l r b u n f)
   ((mat-type #(0 1) 1 1 1 1 1) mortho))
 (define-templated-dispatch nmperspective (x fovy aspect near far)
@@ -274,7 +272,7 @@
          (ra (marr r))
          (p (meye c))
          (s 0))
-    (declare (type dimension s))
+    (declare (type index s))
     (macrolet ((e (y x) `(aref ra (+ ,x (* ,y c)))))
       (dotimes (i c (values r p s))
         (let ((index 0) (max 0))
@@ -305,7 +303,7 @@
          (s 0)
          (lua (marr lu))
          (scale (make-array n :element-type (array-element-type (marr m)))))
-    (declare (type dimension s))
+    (declare (type index s))
     (macrolet ((lu (y x) `(aref lua (+ ,x (* ,y n)))))
       ;; Discover the largest element and save the scaling.
       (loop for i from 0 below n
@@ -405,9 +403,6 @@
 (define-alias !madj (r m)
   `(nmtranspose (!mcof ,r ,m)))
 
-(define-alias mcof (m)
-  `(!mcof (mzero ,m) ,m))
-
 (define-alias madj (m)
   `(nmtranspose (mcof ,m)))
 
@@ -442,6 +437,7 @@
         ,@(loop for el in els
                 for i from 0
                 collect `(aref ,arr ,i)
+                ;; FIXME: this does not work right.
                 collect `(ensure-float ,el)))
        ,m)))
 

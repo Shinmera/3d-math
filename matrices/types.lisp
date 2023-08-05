@@ -71,7 +71,7 @@
     (4 'mat4)))
 
 (define-alias mat-p (thing)
-  `(typep ,thing '*mat))
+  `(typep ,thing 'fmat))
 
 (define-slot-accessor mat-type marr arr)
 (define-slot-accessor mat-type mcols cols)
