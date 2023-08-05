@@ -5,6 +5,19 @@
 
 (in-package #:org.shirakumo.fraf.math.matrices)
 
+(define-template setf <s> <t> (m args)
+  (let ((type (type-instance 'mat-type <s> <t>)))
+    `((declare (type ,(lisp-type type) m)
+               (type list args)
+               (return-type ,(lisp-type type))
+               inline)
+      (let ((marr ,(place-form type 'arr 'm)))
+        (do-times (i 0 ,(attribute type :len) 1 m)
+          (let ((v (pop args)))
+            (unless v (return))
+            (setf (aref marr i) (,<t> v)))))
+      m)))
+
 (define-template mapply <s> <t> (x m f)
   (let ((type (type-instance 'mat-type <s> <t>)))
     `((declare (type ,(lisp-type type) x m)
@@ -698,6 +711,7 @@
           (setf (aref c i) (aref ma ci))
           (incf ci cs))))))
 
+(do-type-combinations mat-type define-setf)
 (do-type-combinations mat-type define-mapply)
 (do-type-combinations mat-type define-mvec)
 (do-type-combinations mat-type define-copy)

@@ -100,7 +100,7 @@
 
 (defmacro do-times (&environment env (var start end &optional (by 1) return) &body body)
   (if (and (constantp start env) (constantp end env) (constantp by env))
-      `(progn
+      `(block NIL
          ,@(loop for i from (eval start) below (eval end) by (eval by)
                  collect `(let ((,var ,i))
                             (declare (ignorable ,var))

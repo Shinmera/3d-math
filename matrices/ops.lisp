@@ -428,18 +428,8 @@
 (define-alias mblock (m x y w h)
   `(!mtransfer (mat ,w ,h) ,m ,w ,h 0 0 ,x ,y))
 
-(defmacro msetf (mat &rest els)
-  (let ((m (gensym "MAT"))
-        (arr (gensym "ARR")))
-    `(let* ((,m ,mat)
-            (,arr (marr ,m)))
-       (psetf
-        ,@(loop for el in els
-                for i from 0
-                collect `(aref ,arr ,i)
-                ;; FIXME: this does not work right.
-                collect `(ensure-float ,el)))
-       ,m)))
+(define-templated-dispatch msetf (m &rest args)
+  ((mat-type) setf))
 
 (defmacro with-fast-matref ((accessor mat width) &body body)
   (let ((w (gensym "WIDTH")) (arr (gensym "ARRAY"))
