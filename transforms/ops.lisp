@@ -126,3 +126,12 @@
 (define-alias tx (a) `(t*v a +vx3+))
 (define-alias ty (a) `(t*v a +vy3+))
 (define-alias tz (a) `(t*v a +vz3+))
+
+(define-alias tdquat (a &optional (q (quat2)))
+  `(!q2from-location ,q (trotation ,a) (tlocation ,a)))
+
+(define-alias tfrom-dquat (q &optional (a (transform)))
+  `(progn (q<- (trotation ,a) (q2real ,q))
+          (vsetf (tscaling ,a) 1 1 1)
+          (!q2location (tlocation ,a) ,q)
+          a))

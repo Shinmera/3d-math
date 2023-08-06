@@ -46,4 +46,6 @@
   #:trotate-by
   #:tx
   #:ty
-  #:tz)
+  #:tz
+  #:tdquat
+  #:tfrom-dquat)

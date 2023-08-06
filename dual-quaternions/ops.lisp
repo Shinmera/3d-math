@@ -55,10 +55,12 @@
 (define-templated-dispatch !q2unit* (x a)
   ((quat2-type 0) qunit*))
 
-(define-templated-dispatch !q2location (x a b)
-  ((#'(matching-vec 1) quat2-type 0) qlocation))
+(define-templated-dispatch !q2location (x a)
+  :ignore-template-types (vec-type)
+  ((#'(matching-vec 1) quat2-type) qlocation))
 
 (define-templated-dispatch !q2from-location (x a b)
+  :ignore-template-types (vec-type quat-type)
   ((quat2-type #'(matching-quat 0) #'(matching-vec 0)) qfrom-location))
 
 (define-rest-alias q2+ (q &rest others) q2zero)
