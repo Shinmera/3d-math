@@ -33,6 +33,12 @@
                              (:file "raw-ops")
                              (:file "ops")
                              (:file "documentation")))
+               (:module "dual-quaternions"
+                :components ((:file "package")
+                             (:file "types")
+                             (:file "raw-ops")
+                             (:file "ops")
+                             (:file "documentation")))
                (:module "transforms"
                 :components ((:file "package")
                              (:file "types")
