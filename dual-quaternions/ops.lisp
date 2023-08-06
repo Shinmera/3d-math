@@ -49,6 +49,12 @@
 (define-templated-dispatch !q2conjugate (x a b)
   ((quat2-type 0 0) per-part-1op !qconjugate))
 
+(define-templated-dispatch !q2unit (x a)
+  ((quat2-type 0) qunit))
+
+(define-templated-dispatch !q2unit* (x a)
+  ((quat2-type 0) qunit*))
+
 (define-templated-dispatch !q2location (x a b)
   ((#'(matching-vec 1) quat2-type 0) qlocation))
 
@@ -65,6 +71,8 @@
 (define-value-reductor q2/= 2q2/= and T)
 
 (define-simple-alias q2conjugate (q) q2zero)
+(define-simple-alias q2unit (q) q2zero)
+(define-simple-alias q2unit* (q) q2zero)
 
 (define-alias q2location (q)
   `(!qlocation (quat) ,q))

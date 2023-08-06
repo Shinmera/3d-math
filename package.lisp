@@ -3,6 +3,12 @@
  (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  #-3d-math-u32 (push :3d-math-no-u32 *features*)
+  #-3d-math-no-f32 (push :3d-math-f32 *features*)
+  #-3d-math-no-f64 (push :3d-math-f64 *features*)
+  #-3d-math-no-i32 (push :3d-math-i32 *features*))
+
 (defpackage #:org.shirakumo.fraf.math.internal
   (:use #:cl #:org.shirakumo.type-templates)
   (:import-from #:org.shirakumo.type-templates #:dbg #:lambda-list-variables)

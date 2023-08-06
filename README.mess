@@ -38,7 +38,7 @@ For the data types themselves similar rules apply:
   - ``vec`` for vectors
   - ``mat`` for matrices
   - ``quat`` for quaternions
-  - ``dual-quat`` for dual-quaternions
+  - ``quat2`` for dual-quaternions
   - ``transform`` for transforms
 - For vectors and matrices, they can also come in different sizes, which is used as a suffix:
   - ``2`` for a 2-dimensional vector or 2x2 square matrix
@@ -58,3 +58,16 @@ The following feature flags indicate which types are supported:
 
 If you would like to disable a specific type, push the corresponding ``:3d-math-no-*`` feature before **compiling** the library. By default ``(unsigned-byte 32)`` types are not available. In order to get them, you must similarly push ``:3d-math-u32`` before compiling.
 
+## Internal Organisation
+Each data type is split off into its own module as follows:
+
+- ``package.lisp`` Additional exports not covered by auto-exporting
+- ``types.lisp`` Definition of the basic template data types, accessors, and constructors
+- ``raw-ops.lisp`` Definition of the raw type-specific operation functions
+- ``ops.lisp`` Definition of the user-facing dispatching operations
+
+Heavy use is made of the "type-templates"(https://shinmera.github.io/type-templates) system to allow generating the many, many different variants of operations for each type combination, as well as the complex dispatching behaviour.
+
+The core template types are ``vec-type``, ``mat-type``, ``quat-type``, ``quat2-type``, and ``transform-type`` respectively. We also provide and heavily make use of the custom types ``f32``, ``f64``, ``u32`` and ``i32`` to define the contained immediate value types.
+
+The shared functions and abbreviating macros used for quickly defining the common reductors, type dispatchers, etc. can be found in ``toolkit.lisp``.

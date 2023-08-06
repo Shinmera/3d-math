@@ -17,6 +17,8 @@
   ;; ops.lisp
   #:q2<-
   #:!q2conjugate
+  #:!q2unit
+  #:!q2unit*
   #:!q2+
   #:!q2*
   #:!q2-
@@ -31,6 +33,8 @@
   #:q2~=
   #:q2/=
   #:q2conjugate
+  #:q2unit
+  #:q2unit*
   #:q2location
   #:q2from-location
   #:q2.

@@ -100,6 +100,30 @@
       (!q* ,(place-form type :dual 'x) q ,(place-form type :dual 'x) (,<t> 0.5))
       x)))
 
+(define-template qunit <t> (x a)
+  (let ((type (type-instance 'quat2-type <t>)))
+    `((declare (type ,(lisp-type type) x a)
+               (return-type ,(lisp-type type)))
+      (let ((length (/ (qlength ,(place-form type :real 'a)))))
+        (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) al) 
+        (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) al)
+        x))))
+
+(define-template qunit* <t> (x a)
+  (let ((type (type-instance 'quat2-type <t>)))
+    `((declare (type ,(lisp-type type) x a)
+               (return-type ,(lisp-type type)))
+      (let ((length (/ (qlength ,(place-form type :real 'a)))))
+        (cond ((<= length ,(ecase <t>
+                             (f32 SINGLE-FLOAT-EPSILON)
+                             (f64 DOUBLE-FLOAT-EPSILON)))
+               (qsetf ,(place-form type :real 'x) 0 0 0 1)
+               (qsetf ,(place-form type :dual 'x) 0 0 0 0))
+              (T
+               (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) al) 
+               (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) al)))
+        x))))
+
 (do-type-combinations quat2-type define-per-part-2op (!q+ !q- !q/))
 (do-type-combinations quat2-type define-per-part-1op (!q- !q/ !qconjugate identity))
 (do-type-combinations quat2-type define-quat2-reduce (and) (q= q~= q/=) boolean)
@@ -108,3 +132,5 @@
 (do-type-combinations quat2-type define-q2*q)
 (do-type-combinations quat2-type define-qlocation)
 (do-type-combinations quat2-type define-qfrom-location)
+(do-type-combinations quat2-type define-qunit)
+(do-type-combinations quat2-type define-qunit*)
