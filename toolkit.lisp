@@ -6,7 +6,10 @@
 (in-package #:org.shirakumo.fraf.math.internal)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  #-3d-math-u32 (push :3d-math-no-u32 *features*))
+  #-3d-math-u32 (push :3d-math-no-u32 *features*)
+  #-3d-math-no-f32 (push :3d-math-f32 *features*)
+  #-3d-math-no-f64 (push :3d-math-f64 *features*)
+  #-3d-math-no-i32 (push :3d-math-i32 *features*))
 
 ;; We choose this limit in order to ensure that matrix indices
 ;; always remain within fixnum range. I'm quite certain you don't

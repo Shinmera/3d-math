@@ -1,5 +1,60 @@
 # About 3d-math
 This library implements types, operators, and algorithms commonly used in math for 2D and 3D graphics.
 
-It supersedes and combines the prior libraries 3d-vectors, 3d-matrices, 3d-quaternions, and 3d-transfroms. The new API is largely backwards compatible, but adds a lot of new functionality.
+It supersedes and combines the prior libraries 3d-vectors, 3d-matrices, 3d-quaternions, and 3d-transfroms. The new API is largely but not entirely backwards compatible, and adds a lot of new functionality.
+
+## General API Conventions
+The API is split over five packages for each data type:
+
+- ``org.shirakumo.fraf.math.vectors``
+- ``org.shirakumo.fraf.math.matrices``
+- ``org.shirakumo.fraf.math.quaternions``
+- ``org.shirakumo.fraf.math.dual-quaternions``
+- ``org.shirakumo.fraf.math.transforms``
+
+With the ``org.shirakumo.fraf.math`` vector combining them all into one. All packages are designed to be ``:use``d, and follow strict function name prefixing to avoid name clashes. The following naming rules apply:
+
+- An operation taking an output target value starts with a ``!``
+- An operation putting the target value into the first argument starts with a ``n``
+- A pure operation that returns a fresh value without any modifications has neither prefix.
+- Each data type has its own prefix for its operations:
+  - ``v`` for vectors
+  - ``m`` for matrices
+  - ``q`` for quaternions
+  - ``q2`` for dual-quaternions
+  - ``t`` for transforms
+
+Some example operations would be: ``v+``, ``nm*``, ``!qinv``
+
+For the data types themselves similar rules apply:
+
+- Each data type can come in several variants depending on the containing data type, with their own prefix for the type name and constructor function:
+  - none for ``single-float``
+  - ``d`` for ``double-float``
+  - ``i`` for ``(signed-byte 32)``
+  - ``u`` for ``(unsigned-byte 32)``
+  - ``*`` for "any of the above"
+- Each data type has its own "base name", after which their constructor functions are named:
+  - ``vec`` for vectors
+  - ``mat`` for matrices
+  - ``quat`` for quaternions
+  - ``dual-quat`` for dual-quaternions
+  - ``transform`` for transforms
+- For vectors and matrices, they can also come in different sizes, which is used as a suffix:
+  - ``2`` for a 2-dimensional vector or 2x2 square matrix
+  - ``3`` for a 3-dimensional vector or 3x3 square matrix
+  - ``4`` for a 4-dimensional vector or 4x4 square matrix
+  - ``n`` for a nxm arbitrary matrix
+  - ``*`` for "any of the above"
+
+Some example types would be: ``vec2``, ``dmatn``, ``quat``, ``vec*`` ``*mat3``
+
+The following feature flags indicate which types are supported:
+
+- ``:3d-math-f32`` the ``single-float`` types
+- ``:3d-math-f64`` the ``double-float`` types
+- ``:3d-math-i32`` the ``(signed-byte 32)`` types
+- ``:3d-math-u32`` the ``(unsigned-byte 32)`` types
+
+If you would like to disable a specific type, push the corresponding ``:3d-math-no-*`` feature before **compiling** the library. By default ``(unsigned-byte 32)`` types are not available. In order to get them, you must similarly push ``:3d-math-u32`` before compiling.
 
