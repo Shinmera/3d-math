@@ -127,7 +127,7 @@
         x))))
 
 (do-type-combinations quat2-type define-per-part-2op (!q+ !q- !q/))
-(do-type-combinations quat2-type define-per-part-1op (!q- !q/ !qconjugate identity))
+(do-type-combinations quat2-type define-per-part-1op (!q- !q/ !qconjugate q<-))
 (do-type-combinations quat2-type define-quat2-reduce (and) (q= q~= q/=) boolean)
 (do-type-combinations quat2-type define-q2*q2)
 (do-type-combinations quat2-type define-q2*v)

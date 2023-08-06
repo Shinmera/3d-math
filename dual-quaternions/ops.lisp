@@ -18,10 +18,10 @@
     (error () NIL)))
 
 (define-templated-dispatch !2q2+ (x a b)
-  ((quat2-type 0 0) per-part-2op !2+))
+  ((quat2-type 0 0) per-part-2op !q+))
 
 (define-templated-dispatch !2q2- (x a b)
-  ((quat2-type 0 0) per-part-2op !2-))
+  ((quat2-type 0 0) per-part-2op !q-))
 
 (define-templated-dispatch !2q2* (x a b)
   :ignore-template-types (vec-type quat-type)
@@ -30,24 +30,24 @@
   ((#'(matching-quat 1) quat2-type 0) q2*q))
 
 (define-templated-dispatch !2q2/ (x a b)
-  ((quat2-type 0 0) per-part-2op !2/))
+  ((quat2-type 0 0) per-part-2op !q/))
 
-(define-templated-dispatch !1q2- (x a b)
-  ((quat2-type 0 0) per-part-1op !2-))
+(define-templated-dispatch !1q2- (x a)
+  ((quat2-type 0) per-part-1op !q-))
 
-(define-templated-dispatch !1q2/ (x a b)
-  ((quat2-type 0 0) per-part-1op !2/))
+(define-templated-dispatch !1q2/ (x a)
+  ((quat2-type 0) per-part-1op !q/))
 
-(define-templated-dispatch q2<- (x a b)
-  ((quat2-type 0 0) per-part-1op identity))
+(define-templated-dispatch q2<- (x a)
+  ((quat2-type 0) per-part-1op q<-))
 
 (define-type-reductor !q2+ q2<- !2q2+)
 (define-type-reductor !q2* q2<- !2q2*)
 (define-type-reductor !q2- q2<- !2q2- !1q2-)
 (define-type-reductor !q2/ q2<- !2q2/ !1q2/)
 
-(define-templated-dispatch !q2conjugate (x a b)
-  ((quat2-type 0 0) per-part-1op !qconjugate))
+(define-templated-dispatch !q2conjugate (x a)
+  ((quat2-type 0) per-part-1op !qconjugate))
 
 (define-templated-dispatch !q2unit (x a)
   ((quat2-type 0) qunit))
@@ -77,7 +77,7 @@
 (define-simple-alias q2unit* (q) q2zero)
 
 (define-alias q2location (q)
-  `(!qlocation (quat) ,q))
+  `(!q2location (quat) ,q))
 
 (define-alias q2from-location (q v)
   `(!q2from-location (quat2) ,q ,v))
