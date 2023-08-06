@@ -35,6 +35,7 @@
   #:!qfrom-angle
   #:!qtowards
   #:!qlookat
+  #:!qunit
   #:!qexpt
   #:!qmat
   #:!qfrom-mat

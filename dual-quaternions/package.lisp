@@ -15,4 +15,24 @@
   #:q2copy
   #:q2zero
   ;; ops.lisp
-  )
+  #:q2<-
+  #:!q2conjugate
+  #:!q2+
+  #:!q2*
+  #:!q2-
+  #:!q2/
+  #:!q2location
+  #:!q2from-location
+  #:q2+
+  #:q2-
+  #:q2*
+  #:q2/
+  #:q2=
+  #:q2~=
+  #:q2/=
+  #:q2conjugate
+  #:q2location
+  #:q2from-location
+  #:q2.
+  #:q2sqrlength
+  #:q2length)
