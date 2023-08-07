@@ -216,8 +216,10 @@
                     collect `(progn
                                (export ',name)
                                (define-alias ,name (v)
+                                 ,(format NIL "Extract a VEC~d made of [~{ ~a~} ]~%" (length comps) comps)
                                  `(vorder ,v ',',(apply #'compose-name NIL comps)))
                                (define-alias (setf ,name) (s v)
+                                 ,(format NIL "Store a VEC~d as a [~{ ~a~} ]~%" (length comps) comps)
                                  `(!vstore ,v ,s ',',(apply #'compose-name NIL comps))))))))
 
 (define-all-swizzlers 2)

@@ -148,6 +148,13 @@ Elements that are not passed explicitly are initialized to zero.
 See VEC
 See VEC4 (type)")
 
+  (function varr
+    "Access the content array of the vector.
+
+Works for vectors any arity and element-type.
+
+See *VEC (type)")
+
   (function vx
     "Access the first element of the vector.
 
@@ -191,6 +198,23 @@ Works for vectors of any arity and element-type.
 
 See *VEC (type)")
 
+  (function v+*
+    "Perform a scaled addition without an intermediate product.
+
+See V+
+See V*
+See *VEC (type)")
+
+  (function vinv
+    "Perform an inversion of the vector.
+
+This inverts each element of the vector, with a special exemption for
+when they're close to zero, in which case the element remains zero
+rather than overflowing.
+
+See V/
+See *VEC (type)")
+
   (function with-vec
     "Bind the variables to convenient accessors for the given elements of the vector.
 
@@ -221,7 +245,7 @@ The updated vector is returned.
 See *VEC (type)")
 
   (function v=
-    "Checks whether the passed vectors are equal in all elements.
+    "Checks whether the passed vectors are identical in all elements.
 
 The elements are checked \"in parallel\", meaning the X element
 of each vector is only checked against the X element of others, and so
@@ -234,6 +258,22 @@ elements.
 
 See *VEC (type)
 See V/=")
+
+  (function v~=
+    "Checks whether the passed vectors are equal in all elements.
+
+The elements are checked \"in parallel\", meaning the X element
+of each vector is only checked against the X element of others, and so
+forth.
+
+The vectors must match in arity.
+You may also pass a REAL in place of a vector, in which case the REAL
+is treated as if it were a vector with the same value in all
+elements.
+
+See *VEC (type)
+See V=
+See ~=")
 
   (function v/=
     "Checks whether any of the passed vectors are different in any of the elements.

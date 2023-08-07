@@ -60,44 +60,45 @@
    #:define-rest-alias
    #:define-slot-accessor))
 
-(defpackage #:org.shirakumo.fraf.math.vectors
-  (:use #:cl
-        #:org.shirakumo.type-templates
-        #:org.shirakumo.fraf.math.internal))
+(unless (find-package '#:org.shirakumo.fraf.math.vectors)
+  (make-package '#:org.shirakumo.fraf.math.vectors
+                :use '(#:cl
+                       #:org.shirakumo.type-templates
+                       #:org.shirakumo.fraf.math.internal))
 
-(defpackage #:org.shirakumo.fraf.math.matrices
-  (:use #:cl
-        #:org.shirakumo.type-templates
-        #:org.shirakumo.fraf.math.internal
-        #:org.shirakumo.fraf.math.vectors))
+  (make-package '#:org.shirakumo.fraf.math.matrices
+                :use '(#:cl
+                       #:org.shirakumo.type-templates
+                       #:org.shirakumo.fraf.math.internal
+                       #:org.shirakumo.fraf.math.vectors))
 
-(defpackage #:org.shirakumo.fraf.math.quaternions
-  (:use #:cl
-        #:org.shirakumo.type-templates
-        #:org.shirakumo.fraf.math.internal
-        #:org.shirakumo.fraf.math.vectors
-        #:org.shirakumo.fraf.math.matrices))
+  (make-package '#:org.shirakumo.fraf.math.quaternions
+                :use '(#:cl
+                       #:org.shirakumo.type-templates
+                       #:org.shirakumo.fraf.math.internal
+                       #:org.shirakumo.fraf.math.vectors
+                       #:org.shirakumo.fraf.math.matrices))
 
-(defpackage #:org.shirakumo.fraf.math.dual-quaternions
-  (:use #:cl
-        #:org.shirakumo.type-templates
-        #:org.shirakumo.fraf.math.internal
-        #:org.shirakumo.fraf.math.vectors
-        #:org.shirakumo.fraf.math.matrices
-        #:org.shirakumo.fraf.math.quaternions))
+  (make-package '#:org.shirakumo.fraf.math.dual-quaternions
+                :use '(#:cl
+                       #:org.shirakumo.type-templates
+                       #:org.shirakumo.fraf.math.internal
+                       #:org.shirakumo.fraf.math.vectors
+                       #:org.shirakumo.fraf.math.matrices
+                       #:org.shirakumo.fraf.math.quaternions))
 
-(defpackage #:org.shirakumo.fraf.math.transforms
-  (:use #:cl
-        #:org.shirakumo.type-templates
-        #:org.shirakumo.fraf.math.internal
-        #:org.shirakumo.fraf.math.vectors
-        #:org.shirakumo.fraf.math.matrices
-        #:org.shirakumo.fraf.math.quaternions
-        #:org.shirakumo.fraf.math.dual-quaternions))
+  (make-package '#:org.shirakumo.fraf.math.transforms
+                :use '(#:cl
+                       #:org.shirakumo.type-templates
+                       #:org.shirakumo.fraf.math.internal
+                       #:org.shirakumo.fraf.math.vectors
+                       #:org.shirakumo.fraf.math.matrices
+                       #:org.shirakumo.fraf.math.quaternions
+                       #:org.shirakumo.fraf.math.dual-quaternions))
 
-(defpackage #:org.shirakumo.fraf.math
-  (:use #:org.shirakumo.fraf.math.vectors
-        #:org.shirakumo.fraf.math.matrices
-        #:org.shirakumo.fraf.math.quaternions
-        #:org.shirakumo.fraf.math.transforms
-        #:org.shirakumo.fraf.math.dual-quaternions))
+  (make-package '#:org.shirakumo.fraf.math
+                :use '(#:org.shirakumo.fraf.math.vectors
+                       #:org.shirakumo.fraf.math.matrices
+                       #:org.shirakumo.fraf.math.quaternions
+                       #:org.shirakumo.fraf.math.transforms
+                       #:org.shirakumo.fraf.math.dual-quaternions)))
