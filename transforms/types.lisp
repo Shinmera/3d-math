@@ -58,6 +58,8 @@
             ,(constructor 'a 'b `(,(lisp-type qtype))))
            ((,vtype ,vtype ,qtype) ,type
             ,(constructor 'a 'b 'c))
+           ((,vtype ,qtype) ,type
+            ,(constructor 'a `(,(lisp-type vtype)) 'b))
            ((,qtype) ,type
             ,(constructor `(,(lisp-type vtype)) `(,(lisp-type vtype)) 'c))
            ((,type) ,type

@@ -57,7 +57,7 @@
   #:m>
   #:m>=
   #:mapply
-  #:mapplyf
+  #:nmapply
   #:mcof
   #:minv
   #:minv-affine

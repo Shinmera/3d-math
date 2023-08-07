@@ -145,8 +145,7 @@
 (define-simple-alias vpolar (v) vzero)
 (define-simple-alias vlerp (from to tt) vzero)
 (define-simple-alias vrand (v var) vzero)
-(define-pure-alias vapply (v func) vzero !vapply)
-(define-modifying-alias vapplyf (v func) !vapply)
+(define-simple-alias vapply (v func) vzero)
 
 (define-alias vorder (v fields)
   `(,'!vload (vlike ,v (length (string ,fields))) ,v ,fields))
@@ -219,7 +218,7 @@
                                  ,(format NIL "Extract a VEC~d made of [~{ ~a~} ]~%" (length comps) comps)
                                  `(vorder ,v ',',(apply #'compose-name NIL comps)))
                                (define-alias (setf ,name) (s v)
-                                 ,(format NIL "Store a VEC~d as a [~{ ~a~} ]~%" (length comps) comps)
+                                 ,(format NIL "Store into a VEC~d the fields [~{ ~a~} ]~%" (length comps) comps)
                                  `(!vstore ,v ,s ',',(apply #'compose-name NIL comps))))))))
 
 (define-all-swizzlers 2)

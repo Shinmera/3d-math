@@ -90,19 +90,3 @@
 
 (define-alias q2length (a)
   `(qlength (qreal ,a)))
-
-;; [*] q2+
-;; [*] q2-
-;; [*] q2*
-;; [*] q2/
-;; [*] q2=
-;; [x] q2~=
-;; [x] q2/=
-;; [x] q2conjugate
-;; [x] q2location
-;; [x] q2from-location
-;; [x] q2.
-;; [x] q2sqrlength
-;; [x] q2length
-;; [ ] q2unit
-;; [ ] q2unit*

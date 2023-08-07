@@ -41,11 +41,11 @@
           (qtype (lisp-type (type-instance 'quat-type <t>)))
           (type (lisp-type (type-instance 'quat2-type <t>))))
       `(progn
-         (define-type-dispatch ,*-name (&optional a b c)
+         (define-type-dispatch ,*-name (&optional a b)
            (() ,type
-            ,(constructor `(,(lisp-type qtype)) `(,(lisp-type qtype))))
+            ,(constructor `(,(lisp-type qtype) 0 0 0 1) `(,(lisp-type qtype) 0 0 0 0)))
            ((,qtype) ,type
-            ,(constructor 'a `(,(lisp-type qtype))))
+            ,(constructor 'a `(,(lisp-type qtype) 0 0 0 0)))
            ((,qtype ,qtype) ,type
             ,(constructor 'a 'b))
            ((,type) ,type
@@ -71,6 +71,6 @@
                         for type = (first (template-arguments instance))
                         collect `((,(lisp-type instance)) ,(lisp-type instance)
                                   (,(constructor instance)
-                                   (,(lisp-type (type-instance 'quat-type type)))
-                                   (,(lisp-type (type-instance 'quat-type type)))))))))
+                                   (,(lisp-type (type-instance 'quat-type type)) 0 0 0 1)
+                                   (,(lisp-type (type-instance 'quat-type type)) 0 0 0 0)))))))
   (emit))

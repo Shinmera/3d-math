@@ -90,7 +90,7 @@ This file is a part of 3d-math
   #:vlerp
   #:vrand
   #:vapply
-  #:vapplyf
+  #:nvapply
   #:vorder
   #:vunit
   #:vunit*
@@ -144,4 +144,16 @@ This file is a part of 3d-math
   #:+vw4+
   #:+vx+
   #:+vy+
-  #:+vz+)
+  #:+vz+
+  #:-vx2+
+  #:-vy2+
+  #:-vx3+
+  #:-vy3+
+  #:-vz3+
+  #:-vx4+
+  #:-vy4+
+  #:-vz4+
+  #:-vw4+
+  #:-vx+
+  #:-vy+
+  #:-vz+)

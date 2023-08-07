@@ -41,7 +41,8 @@
                (:file "matrices/documentation")
                (:file "quaternions/documentation")
                (:file "dual-quaternions/documentation")
-               (:file "transforms/documentation"))
+               (:file "transforms/documentation")
+               (:file "final-package"))
   :depends-on (:documentation-utils
                :type-templates)
   :in-order-to ((asdf:test-op (asdf:test-op :3d-math-test))))
