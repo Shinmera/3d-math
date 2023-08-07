@@ -58,6 +58,9 @@ The following feature flags indicate which types are supported:
 
 If you would like to disable a specific type, push the corresponding ``:3d-math-no-*`` feature before **compiling** the library. By default ``(unsigned-byte 32)`` types are not available. In order to get them, you must similarly push ``:3d-math-u32`` before compiling.
 
+## MORE STUFF HERE
+| "Bla bla bla usage examples bla"(bold, red)
+
 ## Internal Organisation
 Each data type is split off into its own module as follows:
 

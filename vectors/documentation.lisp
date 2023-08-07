@@ -415,6 +415,8 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NV+
+See !V+
 See *VEC (type)")
 
   (function v-
@@ -429,6 +431,8 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NV-
+See !V-
 See *VEC (type)")
 
   (function v*
@@ -443,6 +447,8 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NV*
+See !V*
 See *VEC (type)")
 
   (function v/
@@ -457,6 +463,8 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NV/
+See !V/
 See *VEC (type)")
 
   (function vmin
@@ -471,6 +479,8 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NVMIN
+See !VMIN
 See *VEC (type)")
 
   (function vmax
@@ -485,31 +495,43 @@ You may also pass a REAL in place of a vector, in which case the REAL
 is treated as if it were a vector with the same value in all
 elements.
 
+See NVMAX
+See !VMAX
 See *VEC (type)")
 
   (function vabs
     "Returns a fresh vector with each element being the absolute of the passed vector.
 
+See NVABS
+See !VABS
 See *VEC (type)")
 
   (function vmod
     "Returns a fresh vector with each element being modulated by the divider.
 
+See NVMOD
+See !VMOD
 See *VEC (type)")
 
   (function vfloor
     "Returns a fresh vector with each element being floored by the divider.
 
+See NVFLOOR
+See !VFLOOR
 See *VEC (type)")
 
   (function vceiling
     "Returns a fresh vector with each element being ceilinged by the divider.
 
+See NVCEILING
+See !VCEILING
 See *VEC (type)")
 
   (function vround
     "Returns a fresh vector with each element being rounded by the divider.
 
+See NVROUND
+See !VROUND
 See *VEC (type)")
 
   (function vc
@@ -517,6 +539,8 @@ See *VEC (type)")
 
 The vectors must be 3-element vectors.
 
+See NVC
+See !VC
 See *VEC3 (type)")
 
   (function vrot
@@ -524,6 +548,8 @@ See *VEC3 (type)")
 
 The vector must be a 3-element vector.
 
+See NVROT
+See !VROT
 See *VEC3 (type)")
 
   (function vrot2
@@ -531,6 +557,8 @@ See *VEC3 (type)")
 
 The vector must be a 2-element vector.
 
+See NVROT2
+See !VROT2
 See *VEC2 (type)")
 
   (function valign
@@ -538,6 +566,8 @@ See *VEC2 (type)")
 
 The elements are rounded to the grid.
 
+See NVALIGN
+See !VALIGN
 See *VEC (type)")
 
   (function vcartesian
@@ -547,6 +577,7 @@ For a polar/spherical vector, the first element is the radius, the
 second the theta inclination and the third the phi azimuth.
 The vector must be a 2 or 3-element vector.
 
+See !VCARTESIAN
 See *VEC2 (type)
 See *VEC3 (type)
 See VPOLAR")
@@ -558,6 +589,7 @@ For a polar/spherical vector, the first element is the radius, the
 second the theta inclination and the third the phi azimuth.
 The vector must be a 2 or 3-element vector.
 
+See !VPOLAR
 See *VEC2 (type)
 See *VEC3 (type)
 See VPOLAR")
@@ -568,6 +600,7 @@ See VPOLAR")
 Each element is interpolated independently.
 The two vectors must match in type.
 
+See !VLERP
 See *VEC (type)")
 
   (function vrand
@@ -580,6 +613,7 @@ The elements of the fresh vector are randomised as follows:
 
 Meaning the randomisation diameter is VAR around the origin V.
 
+See !VRAND
 See *VEC (type)")
 
   (function vapply
@@ -589,14 +623,6 @@ The function must accept one argument and return a REAL.
 
 See *VEC (type)
 See VAPPLYF")
-
-  (function vapplyf
-    "Returns the modified vector where each element is computed by calling the function on each element of the vector
-
-The function must accept one argument and return a REAL.
-
-See *VEC (type)
-See VAPPLY")
 
   (function vorder
     "Return a fresh vector with the elements taken from the given vector in the specified order.
@@ -615,6 +641,8 @@ You may also SETF this place:
 The symbol naming the fields may contain the characters X Y Z _
 wherein _ denotes \"do not touch\".
 
+See NVORDER
+See !VORDER
 See *VEC (type)")
 
   (function vunit
@@ -622,6 +650,8 @@ See *VEC (type)")
 
 This signals an error if the vector is zero.
 
+See NVUNIT
+See !VUNIT
 See *VEC (type)
 See VUNIT*")
 
@@ -630,6 +660,8 @@ See VUNIT*")
 
 If the vector is zero, the returned vector is also zero.
 
+See NVUNIT*
+See !VUNIT*
 See *VEC (type)
 See VUNIT")
 
@@ -640,6 +672,8 @@ The two vectors must be 3-element vectors.
 The secondary vector's element specify the angle around each axis to
 rotate by. Rotation happens in order of X, Y, Z.
 
+See NVROTV
+See !VROTV
 See *VEC3 (type)
 See VROT")
 
@@ -648,6 +682,8 @@ See VROT")
 
 This signals an error if the vector is zero.
 
+See NVSCALE
+See !VSCALE
 See *VEC (type)
 See V2NORM
 See V*")
@@ -694,6 +730,8 @@ See *VEC (type)")
   (function vclamp
     "Returns a fresh vector with each element clamped by the specified lower and upper bounds.
 
+See NVCLAMP
+See !VCLAMP
 See *VEC (type)")
 
   (variable +vx2+
@@ -753,5 +791,65 @@ See VEC3 (type)")
 
   (variable +vz+
     "Constant 3-element single-float vector with the following elements: [ 0 0 1 ]
+
+See VEC3 (type)")
+
+  (variable -vx2+
+    "Constant 2-element single-float vector with the following elements: [ -1 0 ]
+
+See VEC2 (type)")
+
+  (variable -vy2+
+    "Constant 2-element single-float vector with the following elements: [ 0 -1 ]
+
+See VEC2 (type)")
+
+  (variable -vx3+
+    "Constant 3-element single-float vector with the following elements: [ -1 0 0 ]
+
+See VEC3 (type)")
+
+  (variable -vy3+
+    "Constant 3-element single-float vector with the following elements: [ 0 -1 0 ]
+
+See VEC3 (type)")
+
+  (variable -vz3+
+    "Constant 3-element single-float vector with the following elements: [ 0 0 -1 ]
+
+See VEC3 (type)")
+
+  (variable -vx4+
+    "Constant 4-element single-float vector with the following elements: [ -1 0 0 0 ]
+
+See VEC4 (type)")
+
+  (variable -vy4+
+    "Constant 4-element single-float vector with the following elements: [ 0 -1 0 0 ]
+
+See VEC4 (type)")
+
+  (variable -vz4+
+    "Constant 4-element single-float vector with the following elements: [ 0 0 -1 0 ]
+
+See VEC4 (type)")
+
+  (variable -vw4+
+    "Constant 4-element single-float vector with the following elements: [ 0 0 0 -1 ]
+
+See VEC4 (type)")
+
+  (variable -vx+
+    "Constant 3-element single-float vector with the following elements: [ -1 0 0 ]
+
+See VEC3 (type)")
+
+  (variable -vy+
+    "Constant 3-element single-float vector with the following elements: [ 0 -1 0 ]
+
+See VEC3 (type)")
+
+  (variable -vz+
+    "Constant 3-element single-float vector with the following elements: [ 0 0 -1 ]
 
 See VEC3 (type)"))
