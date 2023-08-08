@@ -208,6 +208,7 @@ Each data type is split off into its own module as follows:
 - ``types.lisp`` Definition of the basic template data types, accessors, and constructors
 - ``raw-ops.lisp`` Definition of the raw type-specific operation functions
 - ``ops.lisp`` Definition of the user-facing dispatching operations
+- ``test.lisp`` Unit tests
 
 Heavy use is made of the "type-templates"(https://shinmera.github.io/type-templates) system to allow generating the many, many different variants of operations for each type combination, as well as the complex dispatching behaviour.
 

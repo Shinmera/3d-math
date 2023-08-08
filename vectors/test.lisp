@@ -3,12 +3,7 @@
  (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(defpackage #:org.shirakumo.fraf.math.test.vectors
-  (:use #:cl #:parachute #:org.shirakumo.fraf.math))
-(in-package #:org.shirakumo.flare.math.test.vectors)
-
-(defun ~= (a b)
-  (<= (abs (- a b)) 0.0001))
+(in-package #:org.shirakumo.fraf.math.test)
 
 (defun va= (a b)
   (and (v= (vxy a) (vxy b))
@@ -23,10 +18,11 @@
           (fail (,op (vec 1 2) (vec 1 2 3 4)))
           (fail (,op (vec 1 2 3) (vec 1 2 3 4))))) 
 
-(define-test 3d-vectors)
+(define-test vectors
+  :parent 3d-math)
 
-(define-test struct
-  :parent 3d-vectors
+(define-test vector-struct
+  :parent vectors
   (of-type vec2 (vec2 1 2))
   (of-type vec3 (vec3 1 2 3))
   (of-type vec4 (vec4 1 2 3 4))
@@ -52,9 +48,9 @@
   (is = 3 (vz (vec 1 2 3 4)))
   (is = 4 (vw (vec 1 2 3 4))))
 
-(define-test comparators
-  :parent 3d-vectors
-  :depends-on (struct)
+(define-test vector-comparators
+  :parent vectors
+  :depends-on (vector-struct)
   (true (v= (vec 1 2) (vec 1 2)))
   (true (v= (vec 1 2 3) (vec 1 2 3)))
   (true (v= (vec 1 2 3 4) (vec 1 2 3 4)))
@@ -104,9 +100,9 @@
   (false (v>= (vec 1 1 1 1) (vec 2 2 2 2)))
   (isv-type-eq-error v>=))
 
-(define-test swizzling
-  :parent 3d-vectors
-  :depends-on (comparators)
+(define-test vector-swizzling
+  :parent vectors
+  :depends-on (vector-comparators)
   ;; I'm not going to enumerate all possibilities, fuck that.
   (is v= (vec 2 2 2 2) (vorder (vec 1 2 3 4) :yyyy))
   (is v= (vec 3 0 0 0) (vorder (vec 1 2 3 4) :z___))
@@ -116,9 +112,9 @@
   (is v= (vec 0 1 0)   (setf (vx_z (vec 1 1 1)) (vec 0 0 0)))
   (is v= (vec 1 0 0 2) (setf (vxw (vec 0 0 0 0)) (vec 1 2))))
 
-(define-test constants
-  :parent 3d-vectors
-  :depends-on (comparators)
+(define-test vector-constants
+  :parent vectors
+  :depends-on (vector-comparators)
   (is v= (vec 1 0) +vx2+)
   (is v= (vec 0 1) +vy2+)
   (is v= (vec 1 0 0) +vx3+)
@@ -132,9 +128,9 @@
   (is v= (vec 0 1 0) +vy+)
   (is v= (vec 0 0 1) +vz+))
 
-(define-test arithmetic
-  :parent 3d-vectors
-  :depends-on (comparators swizzling)
+(define-test vector-arithmetic
+  :parent vectors
+  :depends-on (vector-comparators vector-swizzling)
   ;; FIXME: Tests for the modifying variants
   (is va= (vec 1 2 3 4) (v+ (vec 1 2 3 4)))
   (is va= (vec 3 4 5 6) (v+ (vec 1 2 3 4) 2))
@@ -160,8 +156,8 @@
   (is va= (vec 0 1 2 3) (v1- (vec 1 2 3 4))))
 
 (define-test vector-math
-  :parent 3d-vectors
-  :depends-on (comparators)
+  :parent vectors
+  :depends-on (vector-comparators)
   (is = 1 (vlength (vec 1 0 0 0)))
   (is = 4 (vlength (vec 4 0 0 0)))
   (is = (sqrt (+ 1 4 9 16)) (vlength (vec 1 2 3 4)))
@@ -184,9 +180,9 @@
   (is v= (vec 5 0 5 0) (vmod (vec 5 10 15 20) 10))
   (is v= (vec -1 0 2 2) (vclamp -1 (vec -2 0 2 3) 2)))
 
-(define-test modifiers
-  :parent 3d-vectors
-  :depends-on (comparators)
+(define-test vector-modifiers
+  :parent vectors
+  :depends-on (vector-comparators)
   (let ((vec (vec 1 2 3 4)))
     (is v= (vec 4 3 2 1) (vsetf vec 4 3 2 1))
     (is v= (vec 5 4 3 2) (vapply vec #'1+))

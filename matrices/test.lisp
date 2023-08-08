@@ -3,27 +3,23 @@
  (c) 2023 Shirakumo http://shirakumo.org (shirakumo@tymoon.eu)
 |#
 
-(defpackage #:org.shirakumo.fraf.math.test.matrices
-  (:use #:cl #:parachute #:org.shirakumo.fraf.math))
-(in-package #:org.shirakumo.flare.math.test.matrices)
+(in-package #:org.shirakumo.fraf.math.test)
 
-(defun ~= (a b)
-  (< (abs (- a b)) 0.00001))
+(define-test matrices
+  :parent 3d-math)
 
-(define-test 3d-matrices)
-
-(define-test struct
-  :parent 3d-matrices)
+(define-test matrix-struct
+  :parent matrices)
 
 (defmacro define-matrix-struct-test (n)
-  (let* ((matx (3d-matrices::intern* 'mat n))
-         (maty (3d-matrices::intern* 'mat (case n (2 3) (3 4) (4 2))))
-         (mcopyx (3d-matrices::intern* 'mcopy n))
-         (matx-p (3d-matrices::intern* matx '-p))
-         (mirefx (3d-matrices::intern* 'miref n))
-         (mcrefx (3d-matrices::intern* 'mcref n)))
+  (let* ((matx (matrices::intern* 'mat n))
+         (maty (matrices::intern* 'mat (case n (2 3) (3 4) (4 2))))
+         (mcopyx (matrices::intern* 'mcopy n))
+         (matx-p (matrices::intern* matx '-p))
+         (mirefx (matrices::intern* 'miref n))
+         (mcrefx (matrices::intern* 'mcref n)))
     `(define-test ,matx
-       :parent struct
+       :parent matrix-struct
        :compile-at :execute
        (of-type ,matx (,matx))
        (of-type ,matx (,mcopyx (,matx)))
@@ -51,7 +47,7 @@
 (define-matrix-struct-test 4)
 
 (define-test matn
-  :parent struct
+  :parent matrix-struct
   :compile-at :execute
   (of-type mat2 (matn 2 2))
   (of-type mat3 (matn 3 3))
@@ -77,9 +73,9 @@
   (is = 2 (mcols (matn 1 2)))
   (is = 1 (mrows (matn 1 2))))
 
-(define-test comparison
-  :parent 3d-matrices
-  :depends-on (struct)
+(define-test matrix-comparison
+  :parent matrices
+  :depends-on (matrix-struct)
   (true (m= (mat2) 0))
   (true (m= 0 (mat2)))
   (false (m= (mat2) 1))
@@ -130,9 +126,9 @@
   (fail (m>= (mat2) (mat3)))
   (fail (m>= (matn 2 3) (matn 3 2))))
 
-(define-test arithmetic
-  :parent 3d-matrices
-  :depends-on (comparison)
+(define-test matrix-arithmetic
+  :parent matrices
+  :depends-on (matrix-comparison)
   (is m= (mat 1 1 1 1) (m+ 1 (mat2 0)))
   (is m= (mat 1 2 3 4) (m+ 1 (mat 0 1 2 3)))
   (is m= (mat 1 2 3 4) (m+ (mat 1 0 3 0) (mat 0 2 0 4)))
@@ -201,9 +197,9 @@
     (is m= (mat 13 20 5 8) (nm* mat (mat 1 2 3 4)))
     (is m= (mat 5 8 13 20) (n*m (mat 0 1 1 0) mat))))
 
-(define-test construction
-  :parent 3d-matrices
-  :depends-on (comparison)
+(define-test matrix-construction
+  :parent matrices
+  :depends-on (matrix-comparison)
   (is m= (mat 1 0 0 1) (meye 2))
   (is equal '(1.0 1.0 1.0 1.0 1.0) (mdiag (meye 5)))
   (true (every (lambda (a) (<= 0.0 a 1.0)) (marr (mrand 20 20))))
@@ -211,9 +207,9 @@
   (is m= (mat 1 1 1 1) (muniform 2 2 1))
   (is m= (matn 2 3 1)  (muniform 2 3 1)))
 
-(define-test sectioning
-  :parent 3d-matrices
-  :depends-on (comparison)
+(define-test matrix-sectioning
+  :parent matrices
+  :depends-on (matrix-comparison)
   (is v= (vec 1 3) (mcol (mat 1 2 3 4) 0))
   (is v= (vec 1 4 7) (mcol (mat 1 2 3 4 5 6 7 8 9) 0))
   (is v= (vec 2 5 8) (mcol (mat 1 2 3 4 5 6 7 8 9) 1))
@@ -232,8 +228,8 @@
     (is m= (mat 8 7 9 5 4 6 2 1 3) (nmswap-col mat 0 1))))
 
 (define-test matrix-math
-  :parent 3d-matrices
-  :depends-on (comparison)
+  :parent matrices
+  :depends-on (matrix-comparison)
   (is m= (mat 1 1 1 3 -1 -1 4 0 -1) (mlu (mat 1 1 1 3 2 2 4 4 3) NIL))
   (is m= (mat 4 4 3 0.75 -1 -0.25 0.25 0 0.25) (mlu (mat 1 1 1 3 2 2 4 4 3) T))
   (is ~= -2 (mdet (mat 1 2 3 4)))
@@ -280,9 +276,9 @@
     (is ~= -0.39977652 (second values))
     (is ~= -0.22664261 (third values))))
 
-(define-test transforms
-  :parent 3d-matrices
-  :depends-on (comparison)
+(define-test matrix-transforms
+  :parent matrices
+  :depends-on (matrix-comparison)
   (is m= (mat 1 0 0 5 0 1 0 6 0 0 1 7 0 0 0 1) (mtranslation (vec 5 6 7)))
   (is m= (mat 5 0 0 0 0 6 0 0 0 0 7 0 0 0 0 1) (mscaling (vec 5 6 7)))
   (let ((c (cos 90))
