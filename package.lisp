@@ -22,9 +22,10 @@
    #:vec-type
    #:mat-type
    #:quat-type
-   #:dquat-type
+   #:quat2-type
    #:transform-type
-   #:arr)
+   #:arr
+   #:*zero)
   ;; toolkit.lisp
   (:export
    #:*matrix-limit*

@@ -88,7 +88,7 @@
 
 (define-dependent-dispatch-type lower-vec (types i ref)
   (handler-case (destructuring-bind (<s> <t>) (template-arguments (nth ref types))
-                  (apply #'type-instance 'vec-type (1- <s>) <t>))
+                  (type-instance 'vec-type (1- <s>) <t>))
     (error () NIL)))
 
 (define-dependent-dispatch-type matching-vec (types i ref)
@@ -216,22 +216,41 @@
 
 (define-rest-alias m+ (m &rest others) mzero)
 (define-rest-alias m- (m &rest others) mzero)
-(define-rest-alias m* (m &rest others) mzero)
 (define-rest-alias m/ (m &rest others) mzero)
 (define-rest-alias mmin (m &rest others) mzero)
 (define-rest-alias mmax (m &rest others) mzero)
+
+;; FIXME: support v*m
+(defun m* (m &rest others)
+  (apply #'!m* (*zero (car (last others))) m others))
+
+(define-compiler-macro m* (m &rest others)
+  (let ((l (gensym "LAST")))
+    `(let ((,l ,(car (last others))))
+       (!m* (*zero ,l) ,m ,@(butlast others) ,l))))
+
+(defun nm* (m &rest others)
+  (apply #'!m* m others))
+
+(define-compiler-macro nm* (m &rest others)
+  `(!m* ,m ,@others))
 
 (defun n*m (&rest others)
   (apply #'!m* (car (last others)) others))
 
 (define-compiler-macro n*m (&rest others)
-  `(!m* ,(car (last others)) ,@others))
+  (let ((l (gensym "LAST")))
+    `(let ((,l ,(car (last others))))
+       (!m* ,l ,@(butlast others) ,l))))
 
 (define-templated-dispatch nmtranslate (x v)
+  :ignore-template-types (vec-type)
   ((mat-type #'(lower-vec 0)) mtranslate))
 (define-templated-dispatch nmscale (x v)
+  :ignore-template-types (vec-type)
   ((mat-type #'(lower-vec 0)) mscale))
 (define-templated-dispatch nmrotate (x v angle)
+  :ignore-template-types (vec-type)
   ((mat-type #'(lower-vec 0) #(0 1)) mrotate))
 
 (define-templated-dispatch nmtranslation (x v)

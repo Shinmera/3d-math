@@ -120,10 +120,23 @@
 
 (define-rest-alias q+ (q &rest others) qzero)
 (define-rest-alias q- (q &rest others) qzero)
-(define-rest-alias q* (q &rest others) qzero)
 (define-rest-alias q/ (q &rest others) qzero)
 (define-rest-alias qmin (q &rest others) qzero)
 (define-rest-alias qmax (q &rest others) qzero)
+
+(defun q* (m &rest others)
+  (apply #'!q* (*zero (car (last others))) m others))
+
+(define-compiler-macro q* (m &rest others)
+  (let ((l (gensym "LAST")))
+    `(let ((,l ,(car (last others))))
+       (!q* (*zero ,l) ,m ,@(butlast others) ,l))))
+
+(defun nq* (m &rest others)
+  (apply #'!q* m others))
+
+(define-compiler-macro nq* (m &rest others)
+  `(!q* ,m ,@others))
 
 (define-templated-dispatch q. (a b)
   ((quat-type 0) 2quatreduce * +))

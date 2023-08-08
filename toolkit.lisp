@@ -236,3 +236,6 @@
                  unless (read-only slot-instance)
                  collect `((,(lisp-type slot-instance) ,(lisp-type type)) ,(lisp-type slot-instance)
                            (setf ,(place-form type slot 'obj) value)))))))
+
+(declaim (ftype (function (T) (values T &optional)) *like))
+(defun *like (x) (error "EARLY *LIKE"))

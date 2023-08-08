@@ -74,8 +74,21 @@
 
 (define-rest-alias q2+ (q &rest others) q2zero)
 (define-rest-alias q2- (q &rest others) q2zero)
-(define-rest-alias q2* (q &rest others) q2zero)
 (define-rest-alias q2/ (q &rest others) q2zero)
+
+(defun q2* (m &rest others)
+  (apply #'!q2* (*zero (car (last others))) m others))
+
+(define-compiler-macro q2* (m &rest others)
+  (let ((l (gensym "LAST")))
+    `(let ((,l ,(car (last others))))
+       (!q2* (*zero ,l) ,m ,@(butlast others) ,l))))
+
+(defun nq2* (m &rest others)
+  (apply #'!q2* m others))
+
+(define-compiler-macro nq2* (m &rest others)
+  `(!q2* ,m ,@others))
 
 (define-value-reductor q2= 2q2= and T)
 (define-value-reductor q2~= 2q2~= and T)
