@@ -69,6 +69,8 @@
       (let ((ma ,(place-form type 'arr 'm))
             (na ,(place-form type 'arr 'n))
             (xa ,(place-form type 'arr 'x)))
+        ,@(when (eql <s> 'n)
+            `((assert (and (= (mcols m) (mcols n)) (= (mrows m) (mrows n))))))
         (do-times (i 0 ,(attribute type :len) 1 x)
           (setf (aref xa i) (,<op> (aref ma i) (aref na i))))))))
 
@@ -104,6 +106,8 @@
       (let* ((ma ,(place-form type 'arr 'm))
              (na ,(place-form type 'arr 'n))
              (r (,<comb> (aref ma 0) (aref na 0))))
+        ,@(when (eql <s> 'n)
+            `((assert (and (= (mcols m) (mcols n)) (= (mrows m) (mrows n))))))
         (do-times (i 1 ,(attribute type :len) 1 r)
           (setf r (,<red> r (,<comb> (aref ma i) (aref na i)))))))))
 
@@ -148,6 +152,10 @@
             (mc ,(attribute type :cols 'm))
             (nc ,(attribute type :cols 'n))
             (xi 0) (mi 0))
+        ,@(when (eql <s> 'n)
+            `((assert (and (= (mcols m) (mrows n))
+                           (= (mrows x) (mrows m))
+                           (= (mcols x) (mcols n))))))
         (do-times (xy 0 ,(attribute type :rows 'x) 1 x)
           (do-times (xx 0 ,(attribute type :cols 'x) 1)
             (let ((c (,<t> 0))

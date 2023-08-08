@@ -200,12 +200,12 @@
 (define-test matrix-sectioning
   :parent matrices
   :depends-on (matrix-comparison)
-  (is v= (vec 1 3) (mcol (mat 1 2 3 4) 0))
-  (is v= (vec 1 4 7) (mcol (mat 1 2 3 4 5 6 7 8 9) 0))
-  (is v= (vec 2 5 8) (mcol (mat 1 2 3 4 5 6 7 8 9) 1))
-  (is v= (vec 1 2) (mrow (mat 1 2 3 4) 0))
-  (is v= (vec 1 2 3) (mrow (mat 1 2 3 4 5 6 7 8 9) 0))
-  (is v= (vec 4 5 6) (mrow (mat 1 2 3 4 5 6 7 8 9) 1))
+  (is equal #(1 3) (mcol (mat 1 2 3 4) 0))
+  (is equal #(1 4 7) (mcol (mat 1 2 3 4 5 6 7 8 9) 0))
+  (is equal #(2 5 8) (mcol (mat 1 2 3 4 5 6 7 8 9) 1))
+  (is equal #(1 2) (mrow (mat 1 2 3 4) 0))
+  (is equal #(1 2 3) (mrow (mat 1 2 3 4 5 6 7 8 9) 0))
+  (is equal #(4 5 6) (mrow (mat 1 2 3 4 5 6 7 8 9) 1))
   (is equal #(1.0 5.0 9.0) (mdiag (mat 1 2 3 4 5 6 7 8 9)))
   (is m= (mat 1 2 4 5) (mblock (mat 1 2 3 4 5 6 7 8 9) 0 0 2 2))
   (is m= (mat 5 6 8 9) (mblock (mat 1 2 3 4 5 6 7 8 9) 1 1 3 3))
