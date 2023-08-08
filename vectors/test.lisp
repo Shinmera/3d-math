@@ -23,6 +23,7 @@
 
 (define-test vector-struct
   :parent vectors
+  :compile-at :execute
   (of-type vec2 (vec2 1 2))
   (of-type vec3 (vec3 1 2 3))
   (of-type vec4 (vec4 1 2 3 4))

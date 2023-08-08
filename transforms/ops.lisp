@@ -66,9 +66,17 @@
 (define-rest-alias t+ (a &rest others) tzero)
 (define-rest-alias t- (a &rest others) tzero)
 
-(define-simple-alias t*v (a b) vzero)
-(define-simple-alias t*p (a b) vzero)
-(define-simple-alias t*p-inv (a b) vzero)
+(define-alias t*v (a b)
+  `(!t*v (vzero ,b) ,a ,b))
+(define-modifying-alias nt*v (a b) !t*v)
+
+(define-alias t*p (a b)
+  `(!t*p (vzero ,b) ,a ,b))
+(define-modifying-alias nt*p (a b) !t*p)
+
+(define-alias t*p-inv (a b)
+  `(!t*p-inv (vzero ,b) ,a ,b))
+(define-modifying-alias nt*p-inv (a b) !t*p-inv)
 
 (define-simple-alias tinv (a) tzero)
 (define-simple-alias tmix (a b tt) tzero)
@@ -127,9 +135,9 @@
      (nq* (trotation ,a) q)
      ,a))
 
-(define-alias tx (a) `(t*v a +vx3+))
-(define-alias ty (a) `(t*v a +vy3+))
-(define-alias tz (a) `(t*v a +vz3+))
+(define-alias tx (a) `(t*v ,a +vx3+))
+(define-alias ty (a) `(t*v ,a +vy3+))
+(define-alias tz (a) `(t*v ,a +vz3+))
 
 (define-alias tdquat (a &optional (q (quat2)))
   `(!q2from-location ,q (trotation ,a) (tlocation ,a)))

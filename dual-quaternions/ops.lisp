@@ -38,6 +38,15 @@
 (define-templated-dispatch !1q2/ (x a)
   ((quat2-type 0) per-part-1op !q/))
 
+(define-templated-dispatch 2q2= (a b)
+  ((quat2-type 0) quat2-reduce and q=))
+
+(define-templated-dispatch 2q2~= (a b)
+  ((quat2-type 0) quat2-reduce and q~=))
+
+(define-templated-dispatch 2q2/= (a b)
+  ((quat2-type 0) quat2-reduce and q/=))
+
 (define-templated-dispatch q2<- (x a)
   ((quat2-type 0) per-part-1op q<-))
 
@@ -83,10 +92,10 @@
   `(!q2from-location (quat2) ,q ,v))
 
 (define-alias q2. (a b)
-  `(q. (qreal ,a) (qreal ,b)))
+  `(q. (q2real ,a) (q2real ,b)))
 
 (define-alias q2sqrlength (a)
-  `(qsqrlength (qreal ,a)))
+  `(qsqrlength (q2real ,a)))
 
 (define-alias q2length (a)
-  `(qlength (qreal ,a)))
+  `(qlength (q2real ,a)))

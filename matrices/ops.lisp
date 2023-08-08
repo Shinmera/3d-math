@@ -5,6 +5,33 @@
 
 (in-package #:org.shirakumo.fraf.math.matrices)
 
+(defmacro with-fast-matref ((accessor mat) &body body)
+  (let ((m (gensym "M"))
+        (arr (gensym "ARRAY"))
+        (w (gensym "WIDTH")) 
+        (x (gensym "X"))
+        (y (gensym "Y"))
+        (v (gensym "V")))
+    `(let ((,m ,mat))
+       (etypecase ,m
+         ,@(loop for type in (instances 'mat-type)
+                 collect `(,(lisp-type type)
+                           (let ((,arr ,(place-form type :arr m))
+                                 (,w ,(attribute type :cols m)))
+                             (declare (type dimension ,w))
+                             (declare (type ,(lisp-type (slot type :arr))))
+                             (flet ((,accessor (,y ,x)
+                                      (declare (type index ,y ,x))
+                                      (declare (optimize speed (safety 1)))
+                                      (aref ,arr (+ ,x (* ,y ,w))))
+                                    ((setf ,accessor) (,v ,y ,x)
+                                      (declare (type index ,y ,x))
+                                      (declare (optimize speed (safety 1)))
+                                      (setf (aref ,arr (+ ,x (* ,y ,w))) (,(second (template-arguments type)) ,v))))
+                               (declare (inline ,accessor (setf ,accessor)))
+                               (declare (ignorable #',accessor #'(setf ,accessor)))
+                               ,@body))))))))
+
 (defmacro define-2mat-dispatch (op &optional (revop op))
   `(define-templated-dispatch ,(compose-name NIL '!2m op) (x a b)
      ((mat-type 0 #(0 1)) smatop ,op <t>)
@@ -48,7 +75,7 @@
      (((eql 2)) mat2 (,initializer (mat2)))
      (((eql 3)) mat3 (,initializer (mat3)))
      (((eql 4)) mat4 (,initializer (mat4)))
-     ((integer) matn (,initializer (matn x x)))))
+     (((and integer (not (member 2 3 4)))) matn (,initializer (matn x x)))))
 
 (defmacro define-vec-return (name args)
   (let ((nname (compose-name NIL 'n name)))
@@ -366,34 +393,34 @@
          (G (meye m))
          (ra (marr r))
          (ga (marr g)))
-    (macrolet ((g (y x) `(aref ga (+ ,x (* ,y m))))
-               (r (y x) `(aref ra (+ ,x (* ,y m)))))
-      (dotimes (j n (values Q R))
-        (loop for i downfrom (1- m) above j
-              for a = (r (1- i) j)
-              for b = (r     i  j)
-              for c = 0
-              for s = 0
-              do (cond ((= 0 b) (setf c 1))
-                       ((= 0 a) (setf s 1))
-                       ((< (abs a) (abs b))
-                        (let ((r (/ a b)))
-                          (setf s (/ (sqrt (1+ (* r r)))))
-                          (setf c (* s r))))
-                       (T
-                        (let ((r (/ b a)))
-                          (setf c (/ (sqrt (1+ (* r r)))))
-                          (setf s (* c r)))))
-                 (setf (g (1- i) (1- i)) c
-                       (g (1- i)     i)  (- s)
-                       (g     i  (1- i)) s
-                       (g     i      i)  c)
-                 (n*m (mtranspose G) R)
-                 (nm* Q G)
-                 (setf (g (1- i) (1- i)) 1
-                       (g (1- i)     i)  0
-                       (g     i  (1- i)) 0
-                       (g     i      i)  1))))))
+    (with-fast-matref (g G)
+      (with-fast-matref (r R)
+        (dotimes (j n (values Q R))
+          (loop for i downfrom (1- m) above j
+                for a = (r (1- i) j)
+                for b = (r     i  j)
+                for c = 0
+                for s = 0
+                do (cond ((= 0 b) (setf c 1))
+                         ((= 0 a) (setf s 1))
+                         ((< (abs a) (abs b))
+                          (let ((r (/ a b)))
+                            (setf s (/ (sqrt (1+ (* r r)))))
+                            (setf c (* s r))))
+                         (T
+                          (let ((r (/ b a)))
+                            (setf c (/ (sqrt (1+ (* r r)))))
+                            (setf s (* c r)))))
+                   (setf (g (1- i) (1- i)) c
+                         (g (1- i)     i)  (- s)
+                         (g     i  (1- i)) s
+                         (g     i      i)  c)
+                   (n*m (mtranspose G) R)
+                   (nm* Q G)
+                   (setf (g (1- i) (1- i)) 1
+                         (g (1- i)     i)  0
+                         (g     i  (1- i)) 0
+                         (g     i      i)  1)))))))
 
 (declaim (ftype (function (*mat &optional (integer 0)) (values simple-array &optional)) meigen))
 (defun meigen (m &optional (iterations 50))
@@ -436,31 +463,4 @@
   `(!mtransfer (mat ,w ,h) ,m ,w ,h 0 0 ,x ,y))
 
 (define-templated-dispatch msetf (m &rest args)
-  ((mat-type) setf))
-
-(defmacro with-fast-matref ((accessor mat) &body body)
-  (let ((m (gensym "M"))
-        (arr (gensym "ARRAY"))
-        (w (gensym "WIDTH")) 
-        (x (gensym "X"))
-        (y (gensym "Y"))
-        (v (gensym "V")))
-    `(let ((,m ,mat))
-       (etypecase ,m
-         ,@(loop for type in (instances 'mat-type)
-                 collect `(,(lisp-type type)
-                           (let ((,arr ,(place-form type :arr m))
-                                 (,w ,(attribute type :cols m)))
-                             (declare (type dimension ,w))
-                             (declare (type ,(lisp-type (slot type :arr))))
-                             (flet ((,accessor (,y ,x)
-                                      (declare (type index ,y ,x))
-                                      (declare (optimize speed (safety 1)))
-                                      (aref ,arr (+ ,x (* ,y ,w))))
-                                    ((setf ,accessor) (,v ,y ,x)
-                                      (declare (type index ,y ,x))
-                                      (declare (optimize speed (safety 1)))
-                                      (setf (aref ,arr (+ ,x (* ,y ,w))) ,v)))
-                               (declare (inline ,accessor (setf ,accessor)))
-                               (declare (ignorable #',accessor #'(setf ,accessor)))
-                               ,@body))))))))
+  ((mat-type list) setf))
