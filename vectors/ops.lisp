@@ -126,7 +126,7 @@
 (define-templated-dispatch vlike (a s)
   ((fvec integer) like f32)
   ((dvec integer) like f64)
-  ((uvec integer) like u32)
+  #+3d-math-u32 ((uvec integer) like u32)
   ((ivec integer) like i32))
 
 (define-rest-alias v+ (v &rest others) vzero)

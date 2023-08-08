@@ -348,9 +348,9 @@
              (ignore a)
              inline)
     (ecase s
-      (2 (,(constructor (type-instance 'vec-type 2 <t>)) ,(make-array 2 :element-type <t> :initial-element (funcall <t> 0))))
-      (3 (,(constructor (type-instance 'vec-type 3 <t>)) ,(make-array 3 :element-type <t> :initial-element (funcall <t> 0))))
-      (4 (,(constructor (type-instance 'vec-type 4 <t>)) ,(make-array 4 :element-type <t> :initial-element (funcall <t> 0)))))))
+      (2 (,(constructor (type-instance 'vec-type 2 <t>)) (make-array 2 :element-type ',<t> :initial-element (,<t> 0))))
+      (3 (,(constructor (type-instance 'vec-type 3 <t>)) (make-array 3 :element-type ',<t> :initial-element (,<t> 0))))
+      (4 (,(constructor (type-instance 'vec-type 4 <t>)) (make-array 4 :element-type ',<t> :initial-element (,<t> 0)))))))
 
 (do-type-combinations vec-type define-2vecop (+ - * / min max mod))
 (do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))
