@@ -11,11 +11,11 @@
          :type `(simple-array ,<t> (,(if (integerp <s>) (* <s> <s>) '*)))
          :alias (list 0 'arr :arr))
   (cond ((eql <s> 'n)
-         (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type 'dimension :alias '(1 cols))
-         (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type 'dimension :alias '(2 rows)))
+         (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type 'dimension :alias '(1 rows))
+         (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type 'dimension :alias '(2 cols)))
         (T
-         (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type `(eql ,<s>) :alias '(1 cols) :value <s>)
-         (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type `(eql ,<s>) :alias '(2 rows) :value <s>))))
+         (field (compose-name NIL (type-prefix <t>) 'mrows <s>) :type `(eql ,<s>) :alias '(1 rows) :value <s>)
+         (field (compose-name NIL (type-prefix <t>) 'mcols <s>) :type `(eql ,<s>) :alias '(2 cols) :value <s>))))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defmethod compute-type-instance-definition ((type mat-type))
@@ -114,7 +114,7 @@
                 ((real ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
                  ,(apply #'constructor (make-list (length args) :initial-element (first args))))
                 ((,lisp-type ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
-                 (,(compose-name NIL (type-prefix type) 'mat size '-copy) ,(first args)))
+                 (mcopy ,(first args)))
                 ((,(compose-name NIL '* 'mat size) ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
                  ,(constructor `(marr ,(first args))))
                 ((sequence ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
