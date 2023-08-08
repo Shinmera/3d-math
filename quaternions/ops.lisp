@@ -134,6 +134,8 @@
 (define-simple-alias qmix (a b tt) qzero)
 (define-simple-alias qnlerp (a b tt) qzero)
 (define-simple-alias qslerp (a b tt) qzero)
+(define-simple-alias q+* (a b s) qzero)
+(define-alias qrand () `(!qrand (quat)))
 
 (define-alias qmat (q &optional (m (mat3)))
   `(!qmat ,m ,q))

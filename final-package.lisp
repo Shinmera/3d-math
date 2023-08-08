@@ -1,11 +1,14 @@
-(unless (find-package '#:org.shirakumo.fraf.math)
-  (make-package '#:org.shirakumo.fraf.math
-                :use '(#:org.shirakumo.fraf.math.vectors
-                       #:org.shirakumo.fraf.math.matrices
-                       #:org.shirakumo.fraf.math.quaternions
-                       #:org.shirakumo.fraf.math.transforms
-                       #:org.shirakumo.fraf.math.dual-quaternions)))
-
 (export (loop for symbol being the symbols of '#:org.shirakumo.fraf.math
               collect symbol)
         '#:org.shirakumo.fraf.math)
+
+(loop for symbol being the symbols of '#:org.shirakumo.fraf.math
+      do (when (and (fboundp symbol) (documentation symbol 'function))
+           (let ((! (find-symbol (format NIL "!~a" symbol) '#:org.shirakumo.fraf.math))
+                 (n (find-symbol (format NIL "~a~a" :n symbol) '#:org.shirakumo.fraf.math)))
+             (when (and ! (not (documentation ! 'function)))
+               (setf (documentation ! 'function)
+                     (format NIL "Transferring variant of ~a~%~%See ~a" symbol symbol)))
+             (when (and n (not (documentation n 'function)))
+               (setf (documentation n 'function)
+                     (format NIL "Modifying variant of ~a~%~%See ~a" symbol symbol))))))

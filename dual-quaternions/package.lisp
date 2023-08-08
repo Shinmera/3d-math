@@ -25,6 +25,13 @@
   #:!q2/
   #:!q2location
   #:!q2from-location
+  #:nq2+
+  #:nq2-
+  #:nq2*
+  #:nq2/
+  #:nq2conjugate
+  #:nq2unit
+  #:nq2unit*
   #:q2+
   #:q2-
   #:q2*

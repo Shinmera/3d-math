@@ -58,8 +58,148 @@ The following feature flags indicate which types are supported:
 
 If you would like to disable a specific type, push the corresponding ``:3d-math-no-*`` feature before **compiling** the library. By default ``(unsigned-byte 32)`` types are not available. In order to get them, you must similarly push ``:3d-math-u32`` before compiling.
 
-## MORE STUFF HERE
-| "Bla bla bla usage examples bla"(bold, red)
+## Vectors
+The vectors API supports the following operations:
+
+- Constructors
+  ``vec``, ``vec2``, ``vec3``, ``vec4``
+  ``dvec``, ``dvec2``, ``dvec3``, ``dvec4``
+  ``uvec``, ``uvec2``, ``uvec3``, ``uvec4``
+  ``ivec``, ``ivec2``, ``ivec3``, ``ivec4``
+  ``vrand``, ``vzero``, ``vcopy``
+- Accessors
+  ``vx``, ``vy``, ``vz``, ``vw``, ``varr``
+- Comparators
+  ``v=``, ``v~=``, ``v/=``, ``v<``, ``v<=``, ``v>``, ``v>=``
+- Arithmetic
+  ``v+``, ``v-``, ``v*``, ``v/``, ``v+*``, ``vincf``, ``vdecf``, ``v1+``, ``v1-``, ``vscale``, ``vc``, ``v.``
+- Element-wise
+  ``vmin``, ``vmax``, ``vabs``, ``vmod``, ``vfloor``, ``vceiling``, ``vround``, ``valign``
+- Norms
+  ``v1norm``, ``vinorm``, ``v2norm``, ``vpnorm``
+- Distances
+  ``vdistance``, ``vsqrdistance``, ``vlength``, ``vsqrlength``, ``vangle``
+- Rotation
+  ``vrot``, ``vrot2``, ``vrotv``
+- Polar Coordinates
+  ``vpolar``, ``vcartesian``
+- Interpolation
+  ``vlerp``
+- Normalisation
+  ``vinv``, ``vunit``, ``vunit*``
+- Constants
+  ``+vx2+``, ``+vy2+``, ``+vx3+``, ``+vy3+``, ``+vz3+``, ``+vx4+``, ``+vy4+``, ``+vz4+``, ``+vw4+``
+  ``-vx2+``, ``-vy2+``, ``-vx3+``, ``-vy3+``, ``-vz3+``, ``-vx4+``, ``-vy4+``, ``-vz4+``, ``-vw4+``
+- Misc
+  ``v<-``, ``vsetf``, ``with-vec``
+
+## Matrices
+The matrices API supports the following operations:
+
+- Constructors
+  ``mat``, ``mat2``, ``mat3``, ``mat4``, ``matn``
+  ``dmat``, ``dmat2``, ``dmat3``, ``dmat4``, ``dmatn``
+  ``umat``, ``umat2``, ``umat3``, ``umat4``, ``umatn``
+  ``imat``, ``imat2``, ``imat3``, ``imat4``, ``imatn``
+  ``mcopy``, ``mzero``, ``mrand``, ``meye``, ``mblock``
+- Accessors
+  ``marr``, ``mcref``, ``miref``
+- Comparators
+  ``m=``, ``m~=``, ``m/=``, ``m<``, ``m<=``, ``m>``, ``m>=``
+- Arithmetic
+  ``m+``, ``m-``, ``m*``, ``m/``
+- Element-wise
+  ``mmin``, ``mmax``
+- Norms
+  ``m1norm``, ``minorm``, ``m2norm``
+- Transformations
+  ``nmtranslate``, ``nmscale``, ``nmrotate``
+  ``mtranslation``, ``mscaling``, ``mrotation``
+  ``mlookat``, ``mfrustum``, ``mperspective``, ``mortho``
+- Matrix operations
+  ``mrow``, ``mcol``, ``mdiag``, ``mminor``, ``mdet``, ``mtrace``
+  ``mpivot``, ``mlu``, ``mqr``, ``meigen``, ``mcofactor``, ``mcof``, ``madj``
+  ``minv``, ``minv-affine``, ``mtranspose``
+- Misc
+  ``mswap-row``, ``mswap-col``, ``mapply``, ``mtransfer``
+  ``m<-``, ``msetf``, ``with-fast-matref``
+
+## Quaternions
+Quaternions represent a rotation or orientation in 3D space. The advantage over the matrix representation is that quaternions are not subject to gimbal lock and offer faster and more precise manipulation over time.
+
+The quaternions API supports the following operations:
+
+- Constructors
+  ``quat``, ``dquat``
+  ``qfrom-angle``, ``qtowards``, ``qlookat``
+  ``qrand``, ``qcopy``, ``qzero``
+  ``qmat``, ``qfrom-mat``
+- Accessors
+  ``qx``, ``qy``, ``qz``, ``qw``
+  ``qi``, ``qj``, ``qk``, ``qr``
+  ``qaxis``, ``qangle``
+- Comparators
+  ``q=``, ``q~=``, ``q/=``, ``q<``, ``q<=``, ``q>``, ``q>=``
+- Arithmetic
+  ``q+``, ``q-``, ``q*``, ``q/``, ``q+*``, ``qexpt``, ``q.``
+- Distances
+  ``qlength``, ``qsqrlength``
+- Element-wise
+  ``qmin``, ``qmax``
+- Interpolation
+  ``qmix``, ``qnlerp``, ``qslerp``
+- Normalisation
+  ``qinv``, ``qunit``, ``qunit*``, ``qconjugate``
+- Misc
+  ``q<-``, ``qsetf``
+
+## Dual Quaternions
+Dual quaternions represent a rotation and a translation, without scaling. They can be useful as an alternative representation of transformations, as they preserve twists without loss, while linear matrix interpolation leads to a "squeezing" effect.
+
+The dual-quaternions API supports the following operations:
+
+- Constructors
+  ``quat2``, ``dquat2``
+  ``q2location``, ``q2from-location``
+  ``q2copy``, ``q2zero``
+- Accessors
+  ``q2real``, ``q2dual``
+- Comparators
+  ``q2=``, ``q2~=``, ``q2/=``
+- Arithmetic
+  ``q2+``, ``q2-``, ``q2*``, ``q2/``, ``q2.``
+- Distances
+  ``q2length``, ``q2sqrlength``
+- Normalisation
+  ``q2unit``, ``q2unit*``, ``q2conjugate``
+- Misc
+  ``q2<-``
+
+## Transforms
+Transforms encapsulate a translation, rotation, and scaling, sometimes also referred to as a "gizmo". It allows encapsulating the transformation of an object without falling victim to gimbal lock or drifting precision from the transform matrix representation.
+
+The transforms API supports the following operations:
+
+- Constructors
+  ``transform``, ``dtransform``
+  ``tmat``, ``tfrom-mat``
+  ``tdquat``, ``tfrom-dquat``
+  ``tcopy``, ``tzero``
+- Accessors
+  ``tlocation``, ``tscaling``, ``trotation``
+- Comparators
+  ``t=``, ``t~=``, ``t/=``
+- Arithmetic
+  ``t+``, ``t-``, ``t*v``, ``t*p``, ``t*p-inv``
+- Interpolation
+  ``tmix``
+- Normalisation
+  ``tinv``
+- Transformations
+  ``tmove``, ``toffset``, ``tscale``, ``trotate``
+  ``tmove-by``, ``toffset-by``, ``tscale-by``, ``trotate-by``
+- Misc
+  ``t<-``, ``tx``, ``ty``, ``tz``
 
 ## Internal Organisation
 Each data type is split off into its own module as follows:

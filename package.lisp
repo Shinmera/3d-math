@@ -94,4 +94,11 @@
                        #:org.shirakumo.fraf.math.vectors
                        #:org.shirakumo.fraf.math.matrices
                        #:org.shirakumo.fraf.math.quaternions
+                       #:org.shirakumo.fraf.math.dual-quaternions))
+
+  (make-package '#:org.shirakumo.fraf.math
+                :use '(#:org.shirakumo.fraf.math.vectors
+                       #:org.shirakumo.fraf.math.matrices
+                       #:org.shirakumo.fraf.math.quaternions
+                       #:org.shirakumo.fraf.math.transforms
                        #:org.shirakumo.fraf.math.dual-quaternions)))

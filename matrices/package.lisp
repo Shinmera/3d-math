@@ -27,8 +27,6 @@
   #:mvec
   #:mcopy
   #:m<-
-  #:!1m-
-  #:!1m/
   #:!mapply
   #:!mcof
   #:!minv

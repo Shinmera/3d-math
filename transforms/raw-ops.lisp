@@ -44,6 +44,14 @@
            (v~= ,(place-form type :scaling 'a) ,(place-form type :scaling 'b))
            (q~= ,(place-form type :rotation 'a) ,(place-form type :rotation 'b))))))
 
+(define-template t/= <t> (a b)
+  (let ((type (type-instance 'transform-type <t>)))
+    `((declare (type ,(lisp-type type) a b)
+               (return-type boolean))
+      (and (v/= ,(place-form type :location 'a) ,(place-form type :location 'b))
+           (v/= ,(place-form type :scaling 'a) ,(place-form type :scaling 'b))
+           (q/= ,(place-form type :rotation 'a) ,(place-form type :rotation 'b))))))
+
 (define-template t<- <t> (x a)
   (let ((type (type-instance 'transform-type <t>)))
     `((declare (type ,(lisp-type type) x a)
@@ -165,6 +173,7 @@
 (do-type-combinations transform-type define-t-)
 (do-type-combinations transform-type define-t=)
 (do-type-combinations transform-type define-t~=)
+(do-type-combinations transform-type define-t/=)
 (do-type-combinations transform-type define-t<-)
 (do-type-combinations transform-type define-t*v)
 (do-type-combinations transform-type define-t*p)

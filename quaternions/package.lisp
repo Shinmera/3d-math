@@ -70,11 +70,13 @@
   #:qmix
   #:qnlerp
   #:qslerp
+  #:q+*
+  #:qrand
   #:qmat
   #:qfrom-mat
   #:qaxis
   #:qlength
-  #:n+
+  #:nq+
   #:nq-
   #:nq*
   #:nq/

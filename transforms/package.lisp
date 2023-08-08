@@ -16,6 +16,7 @@
   #:tcopy
   #:tzero
   ;; ops.lisp
+  #:t<-
   #:!t*v
   #:!t*p
   #:!t*p-inv
@@ -27,6 +28,7 @@
   #:!t-
   #:t=
   #:t~=
+  #:t/=
   #:t+
   #:t-
   #:t*v

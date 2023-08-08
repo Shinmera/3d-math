@@ -25,6 +25,9 @@
 (define-templated-dispatch 2t~= (a b)
   ((transform-type 0) t~=))
 
+(define-templated-dispatch 2t/= (a b)
+  ((transform-type 0) t/=))
+
 (define-templated-dispatch t<- (x a)
   ((transform-type 0) t<-))
 
@@ -59,6 +62,7 @@
 
 (define-value-reductor t= 2t= and T)
 (define-value-reductor t~= 2t~= and T)
+(define-value-reductor t/= 2t/= and T)
 (define-rest-alias t+ (a &rest others) tzero)
 (define-rest-alias t- (a &rest others) tzero)
 

@@ -424,6 +424,18 @@ under large differences in the arguments.
 See !QSLERP
 See NQSLERP
 See *QUAT (type)")
+
+  (function q+*
+    "Perform a scaled addition without an intermediate product.
+
+See Q+
+See Q*
+See *QUAT (type)")
+
+  (function qrand
+    "Returns a random unit quaternion.
+
+See QUAT (type)")
   
   (function qmat
     "Constructs an affine transformation matrix describing the quaternion's rotation.

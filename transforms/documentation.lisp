@@ -120,6 +120,17 @@ See T~=
 See T/=
 See *TRANSFORM (type)")
   
+  (function t/=
+    "Checks whether the passed transforms are different in any elements.
+
+The elements are checked \"in parallel\", meaning the LOCATION element
+of each transform is only checked against the LOCATION element of others,
+etc.
+
+See T=
+See T~=
+See *TRANSFORM (type)")
+  
   (function t+
     "Combines the two transforms together and returns a fresh transform.
 
