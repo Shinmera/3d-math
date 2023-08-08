@@ -612,6 +612,8 @@ The elements of the fresh vector are randomised as follows:
     (+ (X V) (- (RANDOM (X VAR)) (/ (X VAR) 2)))
 
 Meaning the randomisation diameter is VAR around the origin V.
+If the VAR is a REAL, the returned vector is a *VEC3 that matches the
+VAR's type.
 
 See !VRAND
 See *VEC (type)")

@@ -74,9 +74,15 @@
 (macrolet ((emit ()
              `(define-type-dispatch qzero (a)
                 ,@(loop for instance in (instances 'quat-type)
+                        for <t> = (<t> instance)
                         collect `((,(lisp-type instance)) ,(lisp-type instance)
                                   (,(constructor instance)
-                                   (make-array 3 :element-type ',(<t> instance)
-                                                 :initial-element (,(<t> instance) 0))
-                                   ,(place-form instance :w 'a)))))))
+                                   (make-array 3 :element-type ',<t>
+                                                 :initial-element (,<t> 0))
+                                   (,<t> 0)))
+                        collect `((,(lisp-type (type-instance 'vec-type 3 <t>))) ,(lisp-type instance)
+                                  (,(constructor instance)
+                                   (make-array 3 :element-type ',<t>
+                                                 :initial-element (,<t> 0))
+                                   (,<t> 0)))))))
   (emit))

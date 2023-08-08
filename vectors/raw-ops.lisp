@@ -38,7 +38,7 @@
                inline)
       (psetf ,@(loop for i from 0 below <s>
                      collect (place-form type i 'x)
-                     collect `(,<op> (place-form type i 'a))))
+                     collect `(,<op> ,(place-form type i 'a))))
       x)))
 
 ;; Element-wise vector reduce operation

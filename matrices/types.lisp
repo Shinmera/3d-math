@@ -89,6 +89,11 @@
              (,(constructor (type-instance 'mat-type size type))
               (map-into (make-array (* n m) :element-type ',type :initial-element (,type 0))
                         #',type args)
+              n m))
+            ((dimension dimension sequence) ,lisp-type
+             (,(constructor (type-instance 'mat-type size type))
+              (map-into (make-array (* n m) :element-type ',type :initial-element (,type 0))
+                        #',type (first args))
               n m)))))
       (integer
        (let ((vec-type (type-instance 'vec-type size type))
@@ -112,7 +117,7 @@
                  (,(compose-name NIL (type-prefix type) 'mat size '-copy) ,(first args)))
                 ((,(compose-name NIL '* 'mat size) ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
                  ,(constructor `(marr ,(first args))))
-                ((vector ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
+                ((sequence ,@(loop repeat (1- (length args)) collect 'null)) ,lisp-type
                  ,(constructor (first args)))
                 ((,@(loop repeat size collect (lisp-type vec-type))
                   ,@(loop repeat (- (length args) size) collect 'null)) ,lisp-type
@@ -152,6 +157,17 @@
       `(progn
          (export '(,name))
          (define-type-dispatch ,name (&optional ,@args)
+           ((dimension dimension sequence) ,mat*
+            (cond ((/= ,(first args) ,(second args))
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))
+                  ((= ,(first args) 2)
+                   (,(lisp-type (type-instance 'mat-type 2 type)) ,(third args)))
+                  ((= ,(first args) 3)
+                   (,(lisp-type (type-instance 'mat-type 3 type)) ,(third args)))
+                  ((= ,(first args) 4)
+                   (,(lisp-type (type-instance 'mat-type 4 type)) ,(third args)))
+                  (T
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))))
            ((dimension dimension) ,mat*
             (cond ((/= ,(first args) ,(second args))
                    (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args)))

@@ -186,6 +186,6 @@
   (let ((vec (vec 1 2 3 4)))
     (is v= (vec 4 3 2 1) (vsetf vec 4 3 2 1))
     (is v= (vec 5 4 3 2) (vapply vec #'1+))
-    (is v= (vec 3 2 1 0) (vapplyf vec #'1-))
+    (is v= (vec 3 2 1 0) (nvapply vec #'1-))
     (is v= (vec 8 7 6 5) (vincf vec 5))
     (is v= (vec 6 5 4 3) (vdecf vec 2))))

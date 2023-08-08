@@ -5,16 +5,20 @@
 
 (in-package #:org.shirakumo.fraf.math.matrices)
 
-(defmacro define-2mat-dispatch (op)
+(defmacro define-2mat-dispatch (op &optional (revop op))
   `(define-templated-dispatch ,(compose-name NIL '!2m op) (x a b)
      ((mat-type 0 #(0 1)) smatop ,op <t>)
      ((mat-type 0 real) smatop ,op real)
+     ((mat-type #(0 1) 0) (smatop ,revop <t>) x b (,op a))
+     ((mat-type real 0) (smatop ,revop real) x b (,op a))
      ((mat-type 0 0) 2matop ,op)))
 
 (defmacro define-2mat-*-dispatch ()
   `(define-templated-dispatch !2m* (x a b)
      ((mat-type 0 #(0 1)) smatop * <t>)
      ((mat-type 0 real) smatop * real)
+     ((mat-type #(0 1) 0) (smatop * <t>) x b a)
+     ((mat-type real 0) (smatop * real) x b a)
      ((mat-type 0 0) m*m)
      ;; Extra handling for vectors.
      ,@(loop for instance in (instances 'mat-type)
@@ -75,8 +79,8 @@
     (type-instance 'mat-type size <t>)))
 
 (define-2mat-dispatch +)
-(define-2mat-dispatch -)
-(define-2mat-dispatch /)
+(define-2mat-dispatch - +)
+(define-2mat-dispatch / *)
 (define-2mat-dispatch min)
 (define-2mat-dispatch max)
 
@@ -124,7 +128,7 @@
 (define-templated-dispatch !mdiag (r m)
   ((#'(matching-array 1) mat-type) mdiag)
   ((#'(matching-vec 1) mat-type) (mdiag) (varr r) m)
-  ((dimension mat-type) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
+  ((null mat-type) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
 
 (define-type-reductor !m+ v<- !2m+)
 (define-type-reductor !m* v<- !2m*)
@@ -240,8 +244,10 @@
 
 (define-type-dispatch mrotation (v angle)
   #-3d-math-no-f32 ((null f32) mat2 (mrotation/2/f32 (mat2) +vx+ angle))
+  #-3d-math-no-f32 ((null real) mat2 (mrotation/2/f32 (mat2) +vx+ (f32 angle)))
   #-3d-math-no-f64 ((null f64) dmat2 (mrotation/2/f64 (dmat2) +vx+ angle))
   #-3d-math-no-f32 ((vec3 f32) mat4 (mrotation/4/f32 (mat4) v angle))
+  #-3d-math-no-f32 ((vec3 real) mat4 (mrotation/4/f32 (mat4) v (f32 angle)))
   #-3d-math-no-f64 ((dvec3 f64) dmat4 (mrotation/4/f64 (dmat4) v angle)))
 
 (define-type-dispatch mlookat (eye target up)
@@ -250,14 +256,17 @@
 
 (define-type-dispatch mfrustum (l r b u n f)
   #-3d-math-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mfrustum/4/f32 (mat4) l r b u n f))
+  #-3d-math-no-f32 ((real real real real real real) mat4 (mfrustum/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f)))
   #-3d-math-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mfrustum/4/f64 (dmat4) l r b u n f)))
 
 (define-type-dispatch mperspective (fovy aspect n f)
   #-3d-math-no-f32 ((f32 f32 f32 f32) mat4 (mperspective/4/f32 (mat4) fovy aspect n f))
+  #-3d-math-no-f32 ((real real real real) mat4 (mperspective/4/f32 (mat4) (f32 fovy) (f32 aspect) (f32 n) (f32 f)))
   #-3d-math-no-f64 ((f64 f64 f64 f64) dmat4 (mperspective/4/f64 (dmat4) fovy aspect n f)))
 
 (define-type-dispatch mortho (l r b u n f)
   #-3d-math-no-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mortho/4/f32 (mat4) l r b u n f))
+  #-3d-math-no-f32 ((real real real real real real) mat4 (mortho/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f)))
   #-3d-math-no-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f)))
 
 (define-constructor meye !meye)
@@ -407,19 +416,17 @@
   `(nmtranspose (mcof ,m)))
 
 (define-alias mcref (m y x)
-  (let ((mg (gensym "M")))
-    `(let ((,mg ,m))
-       (aref (marr ,mg) (+ ,x (* ,y (mcols ,mg)))))))
+  `(aref (marr ,m) (+ ,x (* ,y (mcols ,m)))))
 
 (define-alias (setf mcref) (value m y x)
-  (let ((mg (gensym "M")))
-    `(let ((,mg ,m))
-       (setf (aref (marr ,mg) (+ ,x (* ,y (mcols ,mg)))) ,value))))
+  ;; FIXME: coerce value!
+  `(setf (aref (marr ,m) (+ ,x (* ,y (mcols ,m)))) ,value))
 
 (define-alias miref (m i)
   `(aref (marr ,m) ,i))
 
 (define-alias (setf miref) (value m i)
+  ;; FIXME: coerce value!
   `(setf (aref (marr ,m) ,i) ,value))
 
 (define-alias mtransfer (x m &key (w (mcols x)) (h (mrows x)) (xx 0) (xy 0) (mx 0) (my 0))

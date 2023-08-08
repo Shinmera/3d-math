@@ -74,7 +74,11 @@
 (define-templated-dispatch !vceiling (x a &optional (divisor 1))
   ((vec-type 0 real) round ceiling))
 (define-templated-dispatch !vrand (x a var)
-  ((vec-type 0 0) random))
+  ((vec-type 0 0) random)
+  ;; FIXME: this sucks!
+  ((vec-type real real) (random) x (nv+ (vzero x) a) (nv+ (vzero x) var))
+  ((vec-type 0 real) (random) x a (nv+ (vzero x) var))
+  ((vec-type real 0) (random) x (nv+ (vzero x) a) var))
 (define-templated-dispatch !vload (x a fields)
   ((*vec vec-type symbol) load))
 (define-templated-dispatch !vstore (x a fields)
@@ -144,8 +148,12 @@
 (define-simple-alias vcartesian (v) vzero)
 (define-simple-alias vpolar (v) vzero)
 (define-simple-alias vlerp (from to tt) vzero)
-(define-simple-alias vrand (v var) vzero)
 (define-simple-alias vapply (v func) vzero)
+
+(define-alias vrand (&optional (v #.(vec 0 0 0)) (var 1))
+  `(!vrand (typecase ,v (single-float (vec3)) (double-float (dvec3)) (integer (ivec3)) (T ,v)) ,v ,var))
+(define-alias nvrand (v &optional (var 1))
+  `(!vrand ,v ,v ,var))
 
 (define-alias vorder (v fields)
   `(,'!vload (vlike ,v (length (string ,fields))) ,v ,fields))

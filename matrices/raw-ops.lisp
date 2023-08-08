@@ -716,6 +716,7 @@
 (do-type-combinations mat-type define-mvec)
 (do-type-combinations mat-type define-copy)
 (do-type-combinations mat-type define-smatop (+ - * / min max) (<t> real))
+(do-type-combinations mat-type define-2matop (+ - * / min max))
 (do-type-combinations mat-type define-1matop (- / identity))
 (do-type-combinations mat-type define-2matreduce (and) (= ~= /= < <= >= >) boolean)
 (do-type-combinations mat-type define-smatreduce (and) (= ~= /= < <= >= >) (<t> real) boolean)

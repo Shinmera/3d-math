@@ -29,10 +29,10 @@
 (define-test transform-translation
   :parent transforms
   :depends-on (transform-struct)
-  (is m~= (meye 4) (tmat4 (transform)))
-  (is m~= (mtranslation (vec 1 2 3)) (tmat4 (transform (vec 1 2 3))))
-  (is m~= (mscaling (vec 1 2 3)) (tmat4 (transform (vec 0 0 0) (vec 1 2 3))))
-  (is m~= (mrotation +vx+ PI) (tmat4 (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI))))
+  (is m~= (meye 4) (tmat (transform)))
+  (is m~= (mtranslation (vec 1 2 3)) (tmat (transform (vec 1 2 3))))
+  (is m~= (mscaling (vec 1 2 3)) (tmat (transform (vec 0 0 0) (vec 1 2 3))))
+  (is m~= (mrotation +vx+ PI) (tmat (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI))))
   (is t~= (transform) (tfrom-mat (meye 4)))
   (is t~= (transform (vec 1 2 3)) (tfrom-mat (mtranslation (vec 1 2 3))))
   (is t~= (transform (vec 0 0 0) (vec 1 2 3)) (tfrom-mat (mscaling (vec 1 2 3))))

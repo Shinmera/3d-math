@@ -128,7 +128,7 @@ You may initialise the matrix as follows:
 - No arguments initialises all entries to zero
 - One argument initialises all entries to that value
 - 4 arguments initialise the entries to those values
-- A 4-element vector copies the elements in row-major order
+- A 4-element sequence copies the elements in row-major order
 - 2 VEC2s will be used as the columns of the matrix
 - A *MAT2 will coerce and transfer the entries
 
@@ -142,7 +142,7 @@ You may initialise the matrix as follows:
 - No arguments initialises all entries to zero
 - One argument initialises all entries to that value
 - 9 arguments initialise the entries to those values
-- A 9-element vector copies the elements in row-major order
+- A 9-element sequence copies the elements in row-major order
 - 3 VEC3s will be used as the columns of the matrix
 - A *MAT3 will coerce and transfer the entries
 
@@ -156,7 +156,7 @@ You may initialise the matrix as follows:
 - No arguments initialises all entries to zero
 - One argument initialises all entries to that value
 - 16 arguments initialise the entries to those values
-- A 16-element vector copies the elements in row-major order
+- A 16-element sequence copies the elements in row-major order
 - 4 VEC4s will be used as the columns of the matrix
 - A *MAT4 will coerce and transfer the entries
 
@@ -178,14 +178,16 @@ See MATN (type)")
 You may initialise the matrix as follows:
 - One argument creates a square zero matrix of that size
 - Two arguments creates a mxn zero matrix of that size
+- Three arguments creates a mxn zero matrix of that size with elements
+  filled from the sequence in the third argument.
 - 4 arguments creates a 2x2 matrix with those elements
 - 9 arguments creates a 3x3 matrix with those elements
 - 16 arguments creates a 4x4 matrix with those elements
-- A 4-element vector creates a 2x2 matrix with the elements in
+- A 4-element sequence creates a 2x2 matrix with the elements in
   row-major order
-- A 9-element vector creates a 3x3 matrix with the elements in
+- A 9-element sequence creates a 3x3 matrix with the elements in
   row-major order
-- A 16-element vector creates a 4x4 matrix with the elements in
+- A 16-element sequence creates a 4x4 matrix with the elements in
   row-major order
 - 2 VEC2s will be used as the columns of a 2x2 matrix
 - 3 VEC3s will be used as the columns of a 3x3 matrix

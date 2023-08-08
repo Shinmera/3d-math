@@ -12,10 +12,7 @@
   :parent quaternions
   (of-type quat (quat))
   (of-type quat (quat 0 0 0 1))
-  (of-type dquat (dquat))
-  (of-type dquat (dquat (quat 0 0 0 1) (quat 0 0 0 1)))
   (true (quat-p (quat)))
-  (true (dquat-p (dquat)))
   (is = 0 (qx (quat)))
   (is = 0 (qy (quat)))
   (is = 0 (qz (quat)))
@@ -37,8 +34,8 @@
   (is qequal (qfrom-angle +vx+ (+ PI)) (qfrom-angle +vx+ (- PI)))
   (is v= +vy+ (qaxis (qfrom-angle +vy+ PI)))
   (is ~= (coerce PI 'single-float) (qangle (qfrom-angle +vy+ PI)))
-  (is q= (qfrom-angle +vy+ PI) (qfrom-mat (qmat4 (qfrom-angle +vy+ PI))))
-  (is q= (qfrom-angle +vx+ (/ PI 2)) (qfrom-mat (qmat4 (qfrom-angle +vx+ (/ PI 2)))))
+  (is q= (qfrom-angle +vy+ PI) (qfrom-mat (qmat (qfrom-angle +vy+ PI))))
+  (is q= (qfrom-angle +vx+ (/ PI 2)) (qfrom-mat (qmat (qfrom-angle +vx+ (/ PI 2)))))
   (is qequal (qfrom-angle +vy+ PI) (qfrom-mat (mrotation +vy+ PI))))
 
 (define-test quaternion-arithmetic
@@ -67,8 +64,8 @@
   (dotimes (i 100)
     (let ((axis (nvunit (vrand (vec 0 0 0) 10)))
           (angle (random (* 2 PI))))
-      (is m~= (qmat4 (qfrom-angle axis angle)) (mrotation axis angle))))
+      (is m~= (qmat (qfrom-angle axis angle)) (mrotation axis angle))))
   (dotimes (i 100)
     (let ((quat (nvunit (quat (random 1.0) (random 1.0) (random 1.0) (random 1.0)))))
-      (is qequal quat (qfrom-mat (qmat4 quat))))))
+      (is qequal quat (qfrom-mat (qmat quat))))))
 

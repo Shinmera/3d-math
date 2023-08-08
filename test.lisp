@@ -4,7 +4,9 @@
 |#
 
 (defpackage #:org.shirakumo.fraf.math.test
-  (:use #:cl #:parachute #:org.shirakumo.fraf.math.internal))
+  (:use #:cl #:parachute
+        #:org.shirakumo.fraf.math.internal
+        #:org.shirakumo.fraf.math))
 
 (in-package #:org.shirakumo.fraf.math.test)
 
