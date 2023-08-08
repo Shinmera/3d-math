@@ -4,3 +4,7 @@
 |#
 
 (in-package #:org.shirakumo.fraf.math.test)
+
+(define-test dual-quaternions
+  :parent 3d-math
+  :depends-on (vectors matrices quaternions))

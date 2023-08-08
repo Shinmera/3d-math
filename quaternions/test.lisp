@@ -6,7 +6,8 @@
 (in-package #:org.shirakumo.fraf.math.test)
 
 (define-test quaternions
-  :parent 3d-math)
+  :parent 3d-math
+  :depends-on (vectors matrices))
 
 (define-test quaternion-struct
   :parent quaternions

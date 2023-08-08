@@ -11,7 +11,7 @@
        (v= (vxyzw a) (vxyzw b))))
 
 (defun deg (rad)
-  (* rad (/ 180 PI)))
+  (float (* rad (/ 180 PI)) rad))
 
 (defmacro isv-type-eq-error (op)
   `(progn (fail (,op (vec 1 2) (vec 1 2 3)))

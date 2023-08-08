@@ -17,6 +17,7 @@
                (:file "vectors/test")
                (:file "matrices/test")
                (:file "quaternions/test")
+               (:file "dual-quaternions/test")
                (:file "transforms/test"))
   :depends-on (:3d-math :parachute)
   :perform (asdf:test-op (op c) (uiop:symbol-call :parachute :test :org.shirakumo.fraf.math.test)))

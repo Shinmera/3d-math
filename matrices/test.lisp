@@ -6,7 +6,8 @@
 (in-package #:org.shirakumo.fraf.math.test)
 
 (define-test matrices
-  :parent 3d-math)
+  :parent 3d-math
+  :depends-on (vectors))
 
 (define-test matrix-struct
   :parent matrices)
