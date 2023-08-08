@@ -51,17 +51,17 @@
       `(progn
          (define-type-dispatch ,*-name (&optional a b c)
            (() ,type
-            ,(constructor `(,(lisp-type vtype)) `(,(lisp-type vtype)) `(,(lisp-type qtype))))
+            ,(constructor `(,(lisp-type vtype)) `(,(lisp-type vtype) 1 1 1) `(,(lisp-type qtype))))
            ((,vtype) ,type
-            ,(constructor 'a `(,(lisp-type vtype)) `(,(lisp-type qtype))))
+            ,(constructor 'a `(,(lisp-type vtype) 1 1 1) `(,(lisp-type qtype))))
            ((,vtype ,vtype) ,type
             ,(constructor 'a 'b `(,(lisp-type qtype))))
            ((,vtype ,vtype ,qtype) ,type
             ,(constructor 'a 'b 'c))
            ((,vtype ,qtype) ,type
-            ,(constructor 'a `(,(lisp-type vtype)) 'b))
+            ,(constructor 'a `(,(lisp-type vtype) 1 1 1) 'b))
            ((,qtype) ,type
-            ,(constructor `(,(lisp-type vtype)) `(,(lisp-type vtype)) 'c))
+            ,(constructor `(,(lisp-type vtype)) `(,(lisp-type vtype) 1 1 1) 'c))
            ((,type) ,type
             ,(constructor '(vcopy (tlocation a)) '(vcopy (tscaling a)) '(qcopy (trotation a))))
            ((*transform) ,type
