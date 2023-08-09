@@ -127,6 +127,12 @@
                       (loop for instance in (instances type)
                             collect (nth i (template-arguments instance)))))))
 
+(defmacro do-instance-combinations (template &rest templates)
+  `(do-combinations ,template
+     ,@(loop for type in templates
+             collect (loop for instance in (instances type)
+                           collect (lisp-type instance)))))
+
 (defmacro define-type-reductor (name transfer 2-op &optional 1-op)
   `(progn
      (defun ,name (target value &rest values)

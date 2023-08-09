@@ -53,6 +53,7 @@
    #:rand
    #:define-exports
    #:do-type-combinations
+   #:do-instance-combinations
    #:define-type-reductor
    #:define-value-reductor
    #:define-pure-alias

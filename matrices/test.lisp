@@ -12,6 +12,9 @@
 (define-test matrix-struct
   :parent matrices)
 
+(defun vector= (a b)
+  (every #'= a b))
+
 (defmacro define-matrix-struct-test (n)
   (let* ((matx (find-symbol (format NIL "~a~a" 'mat n)))
          (maty (find-symbol (format NIL "~a~a" 'mat (case n (2 3) (3 4) (4 2)))))
@@ -194,21 +197,21 @@
   :parent matrices
   :depends-on (matrix-comparison)
   (is m= (mat 1 0 0 1) (meye 2))
-  (is equal #(1.0 1.0 1.0 1.0 1.0) (mdiag (meye 5)))
+  (is vector= #(1.0 1.0 1.0 1.0 1.0) (mdiag (meye 5)))
   (true (every (lambda (a) (<= 0.0 a 1.0)) (marr (mrand 20)))))
 
 (define-test matrix-sectioning
   :parent matrices
   :depends-on (matrix-comparison)
-  (is equal #(1 3) (mcol (mat 1 2 3 4) 0))
-  (is equal #(1 4 7) (mcol (mat 1 2 3 4 5 6 7 8 9) 0))
-  (is equal #(2 5 8) (mcol (mat 1 2 3 4 5 6 7 8 9) 1))
-  (is equal #(1 2) (mrow (mat 1 2 3 4) 0))
-  (is equal #(1 2 3) (mrow (mat 1 2 3 4 5 6 7 8 9) 0))
-  (is equal #(4 5 6) (mrow (mat 1 2 3 4 5 6 7 8 9) 1))
-  (is equal #(1.0 5.0 9.0) (mdiag (mat 1 2 3 4 5 6 7 8 9)))
+  (is vector= #(1 3) (mcol (mat 1 2 3 4) 0))
+  (is vector= #(1 4 7) (mcol (mat 1 2 3 4 5 6 7 8 9) 0))
+  (is vector= #(2 5 8) (mcol (mat 1 2 3 4 5 6 7 8 9) 1))
+  (is vector= #(1 2) (mrow (mat 1 2 3 4) 0))
+  (is vector= #(1 2 3) (mrow (mat 1 2 3 4 5 6 7 8 9) 0))
+  (is vector= #(4 5 6) (mrow (mat 1 2 3 4 5 6 7 8 9) 1))
+  (is vector= #(1.0 5.0 9.0) (mdiag (mat 1 2 3 4 5 6 7 8 9)))
   (is m= (mat 1 2 4 5) (mblock (mat 1 2 3 4 5 6 7 8 9) 0 0 2 2))
-  (is m= (mat 5 6 8 9) (mblock (mat 1 2 3 4 5 6 7 8 9) 1 1 3 3))
+  (is m= (mat 5 6 8 9) (mblock (mat 1 2 3 4 5 6 7 8 9) 1 1 2 2))
   (let ((mat (mat 1 2 3 4 5 6 7 8 9)))
     (is m= (mat 7 8 9 4 5 6 1 2 3) (nmswap-row mat 0 2))
     (is m= (mat 8 7 9 5 4 6 2 1 3) (nmswap-col mat 0 1))))
@@ -246,14 +249,14 @@
   (is ~= 18 (m1norm (mat 1 2 3 4 5 6 7 8 9)))
   (is ~= 24 (minorm (mat 1 2 3 4 5 6 7 8 9)))
   (is ~= (sqrt 285) (m2norm (mat 1 2 3 4 5 6 7 8 9)))
-  (multiple-value-bind (Q R) (mqr (mat 1 1 1 3 2 2 4 4 3))
+  (multiple-value-bind (Q R) (finish (mqr (mat 1 1 1 3 2 2 4 4 3)))
     (is m~= (mat 0.19611613  0.14269547  0.9701426
                  0.58834845 -0.80860764  7.450581e-9
                  0.78446454  0.5707819  -0.24253567) Q)
     (is m~= (mat 5.0990195 4.510671  3.7262068
                  0.0       0.8086077 0.23782583
                  0.0       0.0       0.24253565) R))
-  (let ((values (meigen (mat 1 1 1 3 2 2 4 4 3) 50)))
+  (let ((values (finish (meigen (mat 1 1 1 3 2 2 4 4 3) 50))))
     (is ~= 6.6264195 (aref values 0))
     (is ~= -0.39977652 (aref values 1))
     (is ~= -0.22664261 (aref values 2))))
