@@ -43,6 +43,7 @@
 
 (define-quatcomp-dispatch =)
 (define-quatcomp-dispatch ~=)
+(define-quatcomp-dispatch equal=)
 (define-quatcomp-dispatch /= or)
 (define-quatcomp-dispatch < and >)
 (define-quatcomp-dispatch <= and >=)
@@ -112,6 +113,7 @@
 
 (define-value-reductor q= 2q= and T)
 (define-value-reductor q~= 2q~= and T)
+(define-value-reductor qequal 2qequal= and T)
 (define-value-reductor q/= 2q/= and T)
 (define-value-reductor q< 2q< and T)
 (define-value-reductor q<= 2q<= and T)

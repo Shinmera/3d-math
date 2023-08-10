@@ -44,6 +44,7 @@
   #:!qslerp
   #:q=
   #:q~=
+  #:qequal
   #:q/=
   #:q<
   #:q<=

@@ -133,7 +133,8 @@ elements.
 
 See *QUAT (type)
 See Q/=
-See Q~=")
+See Q~=
+See QEQUAL")
   
   (function q~=
     "Checks whether the passed quaternions are equal in all elements.
@@ -141,6 +142,23 @@ See Q~=")
 The elements are checked \"in parallel\", meaning the R element
 of each quaternion is only checked against the R element of others, and so
 forth.
+
+You may also pass a REAL in place of a quaternion, in which case the REAL
+is treated as if it were a quaternion with the same value in all
+elements.
+
+See ~=
+See *QUAT (type)
+See Q/=
+See QEQUAL
+See Q=")
+
+  (function qequal
+    "Checks whether the passed quaternions are equal.
+
+Equal here means that the rotation gives the same end result, but may
+differ in the direction in which the rotation happens. Meaning mirror
+symmetric rotations are considered equal.
 
 You may also pass a REAL in place of a quaternion, in which case the REAL
 is treated as if it were a quaternion with the same value in all

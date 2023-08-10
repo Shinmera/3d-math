@@ -35,9 +35,9 @@
   (is qequal (qfrom-angle +vx+ (+ PI)) (qfrom-angle +vx+ (- PI)))
   (is v= +vy+ (qaxis (qfrom-angle +vy+ PI)))
   (is ~= (coerce PI 'single-float) (qangle (qfrom-angle +vy+ PI)))
-  (is q= (qfrom-angle +vy+ PI) (qfrom-mat (qmat (qfrom-angle +vy+ PI))))
-  (is q= (qfrom-angle +vx+ (/ PI 2)) (qfrom-mat (qmat (qfrom-angle +vx+ (/ PI 2)))))
-  (is qequal (qfrom-angle +vy+ PI) (qfrom-mat (mrotation +vy+ PI))))
+  (is q~= (qfrom-angle +vy+ PI) (qfrom-mat (qmat (qfrom-angle +vy+ PI))))
+  (is q~= (qfrom-angle +vx+ (/ PI 2)) (qfrom-mat (qmat (qfrom-angle +vx+ (/ PI 2)))))
+  (is q~= (qfrom-angle +vy+ PI) (qfrom-mat (mrotation +vy+ PI))))
 
 (define-test quaternion-arithmetic
   :parent quaternions

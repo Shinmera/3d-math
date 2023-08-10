@@ -435,6 +435,11 @@
                     collect `(,<t> ,s)))
       a)))
 
+(declaim (inline equal=))
+(defun equal= (a b &optional (eps 1.0e-6))
+  (or (<= (abs (+ a b)) eps)
+      (<= (abs (- a b)) eps)))
+
 (do-type-combinations quat-type define-random)
 (do-type-combinations quat-type define-zero)
 (do-type-combinations quat-type define-conjugate)
@@ -446,8 +451,8 @@
 (do-type-combinations quat-type define-2quatop (+ - * / min max))
 (do-type-combinations quat-type define-squatop (+ - * / min max) (<t> real))
 (do-type-combinations quat-type define-1quatop (- / abs identity))
-(do-type-combinations quat-type define-2quatreduce (and) (= ~= < <= >= >) boolean)
-(do-type-combinations quat-type define-squatreduce (and) (= ~= < <= >= >) (<t> real) boolean)
+(do-type-combinations quat-type define-2quatreduce (and) (= ~= equal= < <= >= >) boolean)
+(do-type-combinations quat-type define-squatreduce (and) (= ~= equal= < <= >= >) (<t> real) boolean)
 (do-type-combinations quat-type define-2quatreduce (or) (/=) boolean)
 (do-type-combinations quat-type define-squatreduce (or) (/=) (<t> real) boolean)
 (do-type-combinations quat-type define-2quatreduce (*) (+) (<t>)) ; dot
