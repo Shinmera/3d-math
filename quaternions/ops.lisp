@@ -165,11 +165,11 @@
 (define-simple-alias q+* (a b s) qzero)
 (define-alias qrand () `(!qrand (quat)))
 
-(define-alias qmat (q &optional (m (mat3)))
-  `(!qmat ,m ,q))
+(define-alias qmat (q &optional m)
+  `(!qmat (or ,m (*as ,q 'mat3)) ,q))
 
 (define-alias qfrom-mat (m)
-  `(!qfrom-mat (quat) ,m))
+  `(!qfrom-mat (*as ,m 'quat) ,m))
 
 (define-alias qaxis (q)
   `(vunit ,q))

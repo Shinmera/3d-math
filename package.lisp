@@ -25,7 +25,8 @@
    #:quat2-type
    #:transform-type
    #:arr
-   #:*zero)
+   #:*zero
+   #:*as)
   ;; toolkit.lisp
   (:export
    #:*matrix-limit*

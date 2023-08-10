@@ -322,7 +322,7 @@
     `((declare (type ,(lisp-type type) q)
                (type ,(lisp-type mtype) x)
                (return-type ,(lisp-type mtype)))
-      (let* ((marr ,(place-form mtype :arr 'x))
+      (let* ((xa ,(place-form mtype :arr 'x))
              (x ,(place-form type :x 'q))
              (y ,(place-form type :y 'q))
              (z ,(place-form type :z 'q))
@@ -332,13 +332,15 @@
              (txx (* tx x)) (txy (* tx y)) (txz (* tz x))
              (tyy (* ty y)) (tyz (* tz y)) (tzz (* tz z)))
         (macrolet ((f (&rest args)
-                     `(setf ,@(loop for i from 0
-                                    for arg in args
-                                    collect `(aref marr ,(+ (mod i 3) (* ,<s> (truncate i 3))))
-                                    collect arg))))
-          (f (- 1 (+ tyy tzz)) (- txy twz) (+ txz twy)
-             (+ txy twz) (- 1 (+ txx tzz)) (- tyz twx)
-             (- txz twy) (+ tyz twx) (- 1 (+ txx tyy)))))
+                     `(progn
+                        ,@(loop for arg in args
+                                for i from 0 for x = (mod i 4) for y = (floor i 4)
+                                when (and (< x ,<s>) (< y ,<s>))
+                                collect `(setf (aref xa ,(+ x (* y ,<s>))) ,arg)))))
+          (f (- 1 (+ tyy tzz)) (- txy twz) (+ txz twy) (,<t> 0)
+             (+ txy twz) (- 1 (+ txx tzz)) (- tyz twx) (,<t> 0)
+             (- txz twy) (+ tyz twx) (- 1 (+ txx tyy)) (,<t> 0)
+             (,<t> 0) (,<t> 0) (,<t> 0) (,<t> 1))))
       x)))
 
 (define-template qfrom-mat <s> <t> (x m)

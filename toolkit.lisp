@@ -245,3 +245,6 @@
 
 (declaim (ftype (function (T) (values T &optional)) *like))
 (defun *like (x) (error "EARLY *LIKE"))
+
+(declaim (ftype (function (T T) (values T &optional)) *as))
+(defun *as (x type) (error "EARLY *AS"))

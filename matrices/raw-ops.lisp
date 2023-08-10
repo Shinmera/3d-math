@@ -558,31 +558,31 @@
     `((declare (type ,(lisp-type vtype) v)
                (type ,<t> angle))
       (let ((c (,<t> (cos angle)))
-            (s (,<t> (sin angle))))
+            (s (,<t> (sin angle)))
+            (x ,(place-form vtype :x 'v))
+            (y ,(place-form vtype :y 'v))
+            (z ,(place-form vtype :z 'v)))
         ,@(case <s>
             (2 (f 'c '(- s)
                   's 'c))
-            (T `((cond ((v= +vx3+ v)
+            (T `((cond ((and (= 1 x) (= 0 y) (= 0 z))
                         ,@(f 1 0 0 0
                              0 'c '(- s) 0
                              0 's 'c 0
                              0 0 0 1))
-                       ((v= +vy3+ v)
+                       ((and (= 0 x) (= 1 y) (= 0 z))
                         ,@(f 'c 0 's 0
                              0 1 0 0
                              '(- s) 0 'c 0
                              0 0 0 1))
-                       ((v= +vz3+ v)
+                       ((and (= 0 x) (= 0 y) (= 1 z))
                         ,@(f 'c '(- s) 0 0
                              's 'c 0 0
                              0 0 1 0
                              0 0 0 1))
                        (T
                         ;; https://joombig.com/sqlc/3D-Rotation-Algorithm-about-arbitrary-axis-with-CC-code-tutorials-advance
-                        (let* ((x ,(place-form vtype :x 'v))
-                               (y ,(place-form vtype :y 'v))
-                               (z ,(place-form vtype :z 'v))
-                               (1-c (- 1 c))
+                        (let* ((1-c (- 1 c))
                                (u2 (expt x 2))
                                (v2 (expt y 2))
                                (w2 (expt z 2))
