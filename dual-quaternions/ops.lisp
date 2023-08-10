@@ -26,8 +26,8 @@
 (define-templated-dispatch !2q2* (x a b)
   :ignore-template-types (vec-type quat-type)
   ((quat2-type 0 0) q2*q2)
-  ((#'(matching-vec 1) quat2-type 0) q2*v)
-  ((#'(matching-quat 1) quat2-type 0) q2*q))
+  ((#'(matching-quat 1) quat2-type 0) q2*q)
+  ((#'(matching-vec 1) quat2-type 0) q2*v))
 
 (define-templated-dispatch !2q2/ (x a b)
   ((quat2-type 0 0) per-part-2op !q/))
@@ -99,10 +99,10 @@
 (define-simple-alias q2unit* (q) q2zero)
 
 (define-alias q2location (q)
-  `(!q2location (quat) ,q))
+  `(!q2location (*as ,q 'quat) ,q))
 
 (define-alias q2from-location (q v)
-  `(!q2from-location (quat2) ,q ,v))
+  `(!q2from-location (*as ,q 'quat2) ,q ,v))
 
 (define-alias q2. (a b)
   `(q. (q2real ,a) (q2real ,b)))

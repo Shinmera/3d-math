@@ -28,19 +28,6 @@
                      `(list ',(lisp-type type) (marr mat)))
                 :stream stream)))))
 
-(defun attribute (type attribute &optional (mat-arg 'm))
-  (destructuring-bind (<s> <t>) (template-arguments type)
-    (declare (ignore <t>))
-    (ecase attribute
-      (:dim-type (if (eql 'n <s>) 'dimension `(integer 0 ,(1- <s>))))
-      (:idx-type (if (eql 'n <s>) 'dimension `(integer 0 ,(1- (* <s> <s>)))))
-      (:cols (cond ((eql 'n <s>) `(,(place type 'cols) ,mat-arg))
-                   ((typep type 'mat-type) <s>)
-                   (T 1)))
-      (:rows (if (eql 'n <s>) `(,(place type 'rows) ,mat-arg) <s>))
-      (:len  (if (eql 'n <s>) `(length (,(place type 'arr) ,mat-arg)) (* <s> <s>)))
-      (:array `(,(place type 'arr) ,mat-arg)))))
-
 (do-combinations define-mat (2 3 4 n)
   (#-3d-math-no-f32 f32
    #-3d-math-no-f64 f64

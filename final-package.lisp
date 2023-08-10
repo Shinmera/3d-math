@@ -20,19 +20,30 @@
                (setf (documentation n 'function)
                      (format NIL "Modifying variant of ~a~%~%See ~a" symbol symbol))))))
 
+(defmacro define-*zero ()
+  (flet ((expand (template &key (type #'lisp-type) (expansion (lambda (x) `(,(lisp-type x)))))
+           (loop for instance in (instances template)
+                 collect `((,(funcall type instance)) ,(lisp-type instance) ,(funcall expansion instance)))))
+    `(define-type-dispatch *zero (x)
+       ,@(expand 'vec-type
+                 :type (lambda (x)
+                         (or (ignore-errors
+                              (when (eql (<s> x) 3)
+                                `(and ,(lisp-type x) (not ,(lisp-type (type-instance 'quat-type (<t> x)))))))
+                             (lisp-type x))))
+       ,@(expand 'mat-type
+                 :expansion (lambda (x)
+                              (if (eql (<s> x) 'org.shirakumo.fraf.math.matrices::n)
+                                  `(,(lisp-type x) ,(attribute x :rows 'x) ,(attribute x :cols 'x))
+                                  `(,(lisp-type x)))))
+       ,@(expand 'quat-type)
+       ,@(expand 'quat2-type)
+       ,@(expand 'transform-type))))
+
 ;; This package stuff sucks ass.
 (in-package #:org.shirakumo.fraf.math)
-(org.shirakumo.type-templates:define-templated-dispatch org.shirakumo.fraf.math.internal:*zero (cl-user::x)
-  :ignore-template-types (org.shirakumo.fraf.math.internal:vec-type
-                          org.shirakumo.fraf.math.internal:mat-type
-                          org.shirakumo.fraf.math.internal:quat-type
-                          org.shirakumo.fraf.math.internal:quat2-type
-                          org.shirakumo.fraf.math.internal:transform-type)
-  ((org.shirakumo.fraf.math.internal:quat-type) (qzero) cl-user::x)
-  ((org.shirakumo.fraf.math.internal:vec-type) (vzero) cl-user::x)
-  ((org.shirakumo.fraf.math.internal:mat-type) (mzero) cl-user::x)
-  ((org.shirakumo.fraf.math.internal:quat2-type) (q2zero) cl-user::x)
-  ((org.shirakumo.fraf.math.internal:transform-type) (tzero) cl-user::x))
+
+(org.shirakumo.fraf.math.internal::define-*zero)
 
 (org.shirakumo.type-templates:define-type-dispatch org.shirakumo.fraf.math.internal:*as (cl-user::x cl:type)
   (((cl:or fmat fvec quat quat2 transform) (cl:eql mat2)) mat2 (mat2))

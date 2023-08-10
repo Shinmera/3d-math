@@ -281,7 +281,7 @@ See *TRANSFORM (type)")
 See *VEC3 (type)
 See *TRANSFORM (type)")
   
-  (function tdquat
+  (function tquat2
     "Computes a dual-quaternion describing the transform.
 
 Note that the dual-quaternion ignores scaling.
@@ -289,7 +289,7 @@ Note that the dual-quaternion ignores scaling.
 See *TRANSFORM (type)
 See *QUAT2 (type)")
   
-  (function tfrom-dquat
+  (function tfrom-quat2
     "Computes a transform from the dual-quaternion.
 
 Note that the scaling of the transform is set to 1,1,1.

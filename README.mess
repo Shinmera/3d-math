@@ -12,7 +12,7 @@ The API is split over five packages for each data type:
 - ``org.shirakumo.fraf.math.dual-quaternions``
 - ``org.shirakumo.fraf.math.transforms``
 
-With the ``org.shirakumo.fraf.math`` vector combining them all into one. All packages are designed to be ``:use``d, and follow strict function name prefixing to avoid name clashes. The following naming rules apply:
+With the ``org.shirakumo.fraf.math`` package combining them all into one. All packages are designed to be ``:use``d, and follow strict function name prefixing to avoid name clashes. The following naming rules apply:
 
 - An operation taking an output target value starts with a ``!``
 - An operation putting the target value into the first argument starts with a ``n``
@@ -183,7 +183,7 @@ The transforms API supports the following operations:
 - Constructors
   ``transform``, ``dtransform``
   ``tmat``, ``tfrom-mat``
-  ``tdquat``, ``tfrom-dquat``
+  ``tquat2``, ``tfrom-quat2``
   ``tcopy``, ``tzero``
 - Accessors
   ``tlocation``, ``tscaling``, ``trotation``

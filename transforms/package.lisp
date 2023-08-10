@@ -49,5 +49,5 @@
   #:tx
   #:ty
   #:tz
-  #:tdquat
-  #:tfrom-dquat)
+  #:tquat*
+  #:tfrom-quat*)

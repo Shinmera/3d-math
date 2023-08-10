@@ -24,6 +24,10 @@
    #:quat-type
    #:quat2-type
    #:transform-type
+   #:attribute
+   #:n
+   #:rows
+   #:cols
    #:arr
    #:*zero
    #:*as)

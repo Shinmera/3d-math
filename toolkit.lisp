@@ -19,6 +19,19 @@
 (deftype index ()
   '(integer 0 #.(1- *matrix-limit*)))
 
+(defun attribute (type attribute mat-arg)
+  (destructuring-bind (<s> <t>) (template-arguments type)
+    (declare (ignore <t>))
+    (ecase attribute
+      (:dim-type (if (eql 'n <s>) 'dimension `(integer 0 ,(1- <s>))))
+      (:idx-type (if (eql 'n <s>) 'dimension `(integer 0 ,(1- (* <s> <s>)))))
+      (:cols (cond ((eql 'n <s>) `(,(place type 'cols) ,mat-arg))
+                   ((typep type 'mat-type) <s>)
+                   (T 1)))
+      (:rows (if (eql 'n <s>) `(,(place type 'rows) ,mat-arg) <s>))
+      (:len  (if (eql 'n <s>) `(length (,(place type 'arr) ,mat-arg)) (* <s> <s>)))
+      (:array `(,(place type 'arr) ,mat-arg)))))
+
 (defun enlist (list-ish &rest els)
   (if (listp list-ish) list-ish (list* list-ish els)))
 
