@@ -132,20 +132,6 @@
   (declare (ignore x y))
   (random 1.0))
 
-(defmacro do-type-combinations (type template &rest other-template-args)
-  `(do-combinations ,template ,@other-template-args
-     ,@(loop for arg in (template-arguments type)
-             for i from 0
-             collect (delete-duplicates
-                      (loop for instance in (instances type)
-                            collect (nth i (template-arguments instance)))))))
-
-(defmacro do-instance-combinations (template &rest templates)
-  `(do-combinations ,template
-     ,@(loop for type in templates
-             collect (loop for instance in (instances type)
-                           collect (lisp-type instance)))))
-
 (defmacro define-type-reductor (name transfer 2-op &optional 1-op)
   `(progn
      (defun ,name (target value &rest values)
@@ -238,23 +224,6 @@
          `(let ,(list ,@(loop for var in (butlast vars)
                               collect `(list ',var ,var)))
             (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
-
-(defmacro define-slot-accessor (template-type name slot)
-  (let ((instances (loop for instance in (instances template-type)
-                         when (ignore-errors (slot instance slot))
-                         collect instance)))
-    `(progn
-       (define-type-dispatch ,name (obj)
-         ,@(loop for type in instances
-                 for slot-instance = (slot type slot)
-                 collect `((,(lisp-type type)) ,(lisp-type slot-instance)
-                           ,(place-form type slot 'obj))))
-       (define-type-dispatch (setf ,name) (value obj)
-         ,@(loop for type in instances
-                 for slot-instance = (slot type slot)
-                 unless (read-only slot-instance)
-                 collect `((,(lisp-type slot-instance) ,(lisp-type type)) ,(lisp-type slot-instance)
-                           (setf ,(place-form type slot 'obj) value)))))))
 
 (declaim (ftype (function (T) (values T &optional)) *like))
 (defun *like (x) (error "EARLY *LIKE"))
