@@ -42,7 +42,7 @@
                (return-type boolean))
       (and (v~= ,(place-form type :location 'a) ,(place-form type :location 'b))
            (v~= ,(place-form type :scaling 'a) ,(place-form type :scaling 'b))
-           (q~= ,(place-form type :rotation 'a) ,(place-form type :rotation 'b))))))
+           (qequal ,(place-form type :rotation 'a) ,(place-form type :rotation 'b))))))
 
 (define-template t/= <t> (a b)
   (let ((type (type-instance 'transform-type <t>)))
@@ -156,7 +156,8 @@
     `((declare (type ,(lisp-type type) x)
                (type ,(lisp-type mtype) a)
                (return-type ,(lisp-type type)))
-      (let* ((m (,(lisp-type 3mtype)))
+      (let* ((aa ,(place-form mtype :arr 'a))
+             (m (,(lisp-type 3mtype)))
              (rmat (,(lisp-type 3mtype)))
              (rinv (,(lisp-type qtype))))
         (declare (dynamic-extent m rmat rinv))
@@ -165,7 +166,8 @@
         (!qinv rinv ,(place-form type :rotation 'x))
         (!qmat rmat rinv)
         (!m* m m rmat)
-        (!mcol ,(place-form type :location 'x) m 3)
+        (vsetf ,(place-form type :location 'x)
+               (aref aa 3) (aref aa 7) (aref aa 11))
         (!mdiag ,(place-form type :scaling 'x) m))
       x)))
 

@@ -81,11 +81,11 @@
 (define-simple-alias tinv (a) tzero)
 (define-simple-alias tmix (a b tt) tzero)
 
-(define-alias tmat (a &optional (m (mat4)))
-  `(!tmat ,m ,a))
+(define-alias tmat (a &optional m)
+  `(!tmat (or ,m (*as ,a 'mat4)) ,a))
 
-(define-alias tfrom-mat (m)
-  `(!tfrom-mat (transform) ,m))
+(define-alias tfrom-mat (m &optional transform)
+  `(!tfrom-mat (or ,transform (*as ,m 'transform)) ,m))
 
 (define-alias tmove (a v)
   `(let ((tmp (vcopy ,v)))
