@@ -673,7 +673,7 @@
                inline)
       (let ((ma ,(place-form type 'arr 'm))
             (sum (,<t> 0)))
-        (do-times (i 0 ,(attribute type :len 'm) 1 (sqrt sum))
+        (do-times (i 0 ,(attribute type :len 'm) 1 (,<t> (sqrt sum)))
           (setf sum (+ sum (expt (aref ma i) 2))))))))
 
 (define-template mtrace <s> <t> (m)

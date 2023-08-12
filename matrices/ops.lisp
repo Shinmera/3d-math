@@ -104,8 +104,6 @@
                                            (,(lisp-type (type-instance 'mat-type (<s> lhs) (<t> lhs))))
                                            a b))))))
 
-(define-2mat-*-dispatch)
-
 (defmacro define-1mat-dispatch (name op &rest template-args)
   `(define-templated-dispatch ,name (x a)
      ((mat-type 0) ,op ,@template-args)))
@@ -338,13 +336,13 @@
 
 (define-templated-dispatch nmfrustum (x l r b u n f)
   ((mat-type #(0 1) 1 1 1 1 1) mfrustum)
-  #+3d-math-f32 ((mat4 real 1 1 1 1) (mfrustum 4 f32) x (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))
-  #+3d-math-f64 ((dmat4 real 1 1 1 1) (mfrustum 4 f64) x (f64 l) (f64 r) (f64 b) (f64 u) (f64 n) (f64 f)))
+  #+3d-math-f32 ((mat4 real 1 1 1 1 1) (mfrustum 4 f32) x (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))
+  #+3d-math-f64 ((dmat4 real 1 1 1 1 1) (mfrustum 4 f64) x (f64 l) (f64 r) (f64 b) (f64 u) (f64 n) (f64 f)))
 
 (define-templated-dispatch nmortho (x l r b u n f)
   ((mat-type #(0 1) 1 1 1 1 1) mortho)
-  #+3d-math-f32 ((mat4 real 1 1 1 1) (mortho 4 f32) x (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))
-  #+3d-math-f64 ((dmat4 real 1 1 1 1) (mortho 4 f64) x (f64 l) (f64 r) (f64 b) (f64 u) (f64 n) (f64 f)))
+  #+3d-math-f32 ((mat4 real 1 1 1 1 1) (mortho 4 f32) x (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))
+  #+3d-math-f64 ((dmat4 real 1 1 1 1 1) (mortho 4 f64) x (f64 l) (f64 r) (f64 b) (f64 u) (f64 n) (f64 f)))
 
 (define-templated-dispatch nmperspective (x fovy aspect near far)
   ((mat-type #(0 1) 1 1 1) mperspective)
