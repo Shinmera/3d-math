@@ -86,7 +86,7 @@
         (declare (dynamic-extent tmp))
         (!qconjugate tmp tmp)
         (!q* tmp tmp ,(place-form type :dual 'a) (,<t> 2))
-        (!v<- x tmp)))))
+        (v<- x tmp)))))
 
 (define-template qfrom-location <t> (x q v)
   (let ((type (type-instance 'quat2-type <t>))
@@ -122,8 +122,8 @@
                (qsetf ,(place-form type :real 'x) 0 0 0 1)
                (qsetf ,(place-form type :dual 'x) 0 0 0 0))
               (T
-               (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) al) 
-               (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) al)))
+               (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) length) 
+               (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) length)))
         x))))
 
 (do-type-combinations quat2-type define-per-part-2op (!q+ !q- !q/))
