@@ -214,10 +214,14 @@
   (let ((valg (gensym "VAL"))
         (vars (delete-if #'null (list x y z w))))
     (flet ((bind (type)
-             `(symbol-macrolet ,(loop for slot in (slots type)
-                                      for var in vars
-                                      collect `(,var (,(accessor slot) ,valg)))
-                ,@body)))
+             (let ((vars vars)
+                   (slots (remove-if #'realized-slot-p (slots type))))
+               `(symbol-macrolet (,@(loop for slot in slots
+                                          for var = (pop vars)
+                                          collect `(,var (,(accessor slot) ,valg)))
+                                  ,@(loop for var in vars
+                                          collect `(,var (,(lisp-type (first slots)) 0))))
+                  ,@body))))
       `(let ((,valg ,val))
          (etypecase ,valg
            ,@(loop for type in (instances 'vec-type)
