@@ -30,7 +30,7 @@
 
 (define-templated-dispatch !2q* (x a b)
   :ignore-template-types (vec-type)
-  ((quat-type 0 #(0 1)) squatop * <t>)
+  ((quat-type 0 #(0 0)) squatop * <t>)
   ((quat-type 0 real) squatop * real)
   ((quat-type 0 0) q*q)
   ((#'(matching-vec 1) quat-type 0) q*v))
