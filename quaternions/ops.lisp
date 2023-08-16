@@ -135,10 +135,10 @@
        (!q* (*zero ,l) ,m ,@(butlast others) ,l))))
 
 (defun nq* (m &rest others)
-  (apply #'!q* m others))
+  (apply #'!q* m m others))
 
 (define-compiler-macro nq* (m &rest others)
-  `(!q* ,m ,@others))
+  `(!q* ,m ,m ,@others))
 
 (define-templated-dispatch q. (a b)
   ((quat-type 0) 2quatreduce * +))
