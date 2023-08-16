@@ -94,5 +94,6 @@
   #:nqmix
   #:nqnlerp
   #:nqslerp
+  #:nq+*
   #:nqmat
   #:nqfrom-mat)
