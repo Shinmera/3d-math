@@ -507,7 +507,18 @@ is treated as if it were a matrix with the same value in all
 elements.
 
 You may also pass a VEC in place of a matrix, in which case the vector
-is treated as a column-matrix, and the result is a vector.
+is treated as a column-matrix, and the result is a vector. As a
+special convenience you may also multiply larger square matrices with
+smaller vectors, as in MAT4*VEC3 is valid. In this case the missing
+elements of the vector are treated as if they were 1. Meaning
+
+  (m* (mat4) (vec3))
+
+is equivalent to
+
+  (vxyz (m* (mat4) (vec (vec3) 1)))
+
+Just with less overhead.
 
 See NM*
 See !M*
