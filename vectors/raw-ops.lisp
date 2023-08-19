@@ -85,16 +85,17 @@
          (,<red> ,@(loop for i from 0 below <s>
                          collect `(,<comb> ,(place-form type i 'a) s))))))))
 
-(define-template vec+* <s> <t> (x a b s)
+(define-template vec+* <st> <s> <t> (x a b s)
   (let ((type (type-instance 'vec-type <s> <t>)))
     `((declare (type ,(lisp-type type) x a b)
-               (type ,<t> s)
+               (type ,<st> s)
                (return-type ,(lisp-type type))
                inline)
-      (psetf ,@(loop for i from 0 below <s>
-                     collect (place-form type i 'x)
-                     collect `(+ ,(place-form type i 'a)
-                                 (* ,(place-form type i 'b) s))))
+      (let ((s (,<t> s)))
+        (psetf ,@(loop for i from 0 below <s>
+                       collect (place-form type i 'x)
+                       collect `(+ ,(place-form type i 'a)
+                                   (* ,(place-form type i 'b) s)))))
       x)))
 
 (define-template inv <s> <t> (x a)
@@ -117,9 +118,10 @@
     `((declare (type ,(lisp-type type) a x)
                (type ,(case <st> (<t> <t>) (T <st>)) lower upper)
                (return-type ,(lisp-type type)))
-      (psetf ,@(loop for i from 0 below <s>
-                     collect (place-form type i 'x)
-                     collect `(clamp (,<t> lower) ,(place-form type i 'a) (,<t> upper))))
+      (let ((s (,<t> s)))
+        (psetf ,@(loop for i from 0 below <s>
+                       collect (place-form type i 'x)
+                       collect `(clamp (,<t> lower) ,(place-form type i 'a) (,<t> upper)))))
       x)))
 
 (define-template lerp <s> <t> (x from to tt)
@@ -365,7 +367,7 @@
 (do-type-combinations vec-type define-1vecreduce (+ max) (abs) <t>) ; 1norm inorm
 (do-type-combinations vec-type define-1vecreduce (sqrt+) (sqr) float) ; 2norm
 (do-type-combinations vec-type define-1vecreduce (+) (sqr) <t>) ; sqrlen
-(do-type-combinations vec-type define-vec+*)
+(do-type-combinations vec-type define-vec+* (<t> real))
 (do-type-combinations vec-type define-inv)
 (do-type-combinations vec-type define-clamp (<t> real))
 (do-type-combinations vec-type define-lerp)
