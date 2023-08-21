@@ -323,18 +323,22 @@
   ((dmat4 #'(lower-vec 0) real) (mrotate 4 f64) x v (f64 angle)))
 
 (define-templated-dispatch nmtranslation (x v)
-  ((mat-type #'(matching-vec 0)) mtranslation))
+  :ignore-template-types (vec-type)
+  ((mat-type #'(lower-vec 0)) mtranslation))
 
 (define-templated-dispatch nmscaling (x v)
-  ((mat-type #'(matching-vec 0)) mscaling))
+  :ignore-template-types (vec-type)
+  ((mat-type #'(lower-vec 0)) mscaling))
 
 (define-templated-dispatch nmrotation (x v angle)
-  ((mat-type #'(matching-vec 0) #(0 1)) mrotation)
-  #+3d-math-f32 ((mat4 #'(matching-vec 0) real) (mrotation) x v (f32 angle))
-  #+3d-math-f64 ((dmat4 #'(matching-vec 0) real) (mrotation) x v (f64 angle)))
+  :ignore-template-types (vec-type)
+  ((mat-type #'(lower-vec 0) #(0 1)) mrotation)
+  #+3d-math-f32 ((mat4 #'(lower-vec 0) real) (mrotation 4 f32) x v (f32 angle))
+  #+3d-math-f64 ((dmat4 #'(lower-vec 0) real) (mrotation 4 f64) x v (f64 angle)))
 
 (define-templated-dispatch nmlookat (x eye target up)
-  ((mat-type #'(matching-vec 0) 1 1) mlookat))
+  :ignore-template-types (vec-type)
+  ((mat-type #'(lower-vec 0) 1 1) mlookat))
 
 (define-templated-dispatch nmfrustum (x l r b u n f)
   ((mat-type #(0 1) 1 1 1 1 1) mfrustum)
