@@ -118,10 +118,11 @@
     `((declare (type ,(lisp-type type) a x)
                (type ,(case <st> (<t> <t>) (T <st>)) lower upper)
                (return-type ,(lisp-type type)))
-      (let ((s (,<t> s)))
+      (let ((lower (,<t> lower))
+            (upper (,<t> upper)))
         (psetf ,@(loop for i from 0 below <s>
                        collect (place-form type i 'x)
-                       collect `(clamp (,<t> lower) ,(place-form type i 'a) (,<t> upper)))))
+                       collect `(clamp lower ,(place-form type i 'a) upper))))
       x)))
 
 (define-template lerp <s> <t> (x from to tt)
