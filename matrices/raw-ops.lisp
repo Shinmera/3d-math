@@ -621,7 +621,7 @@
         ,@(f (place-form vtype :x 'x) (place-form vtype :y 'x) (place-form vtype :z 'x) '(- (v. x eye))
              (place-form vtype :x 'y) (place-form vtype :y 'y) (place-form vtype :z 'y) '(- (v. y eye))
              (place-form vtype :x 'z) (place-form vtype :y 'z) (place-form vtype :z 'z) '(- (v. z eye))
-             0 0 1)))))
+             0 0 0 1)))))
 
 (define-generation-template mfrustum (x l r b u n f)
   (unless (eql <s> 4) (template-unfulfillable))
