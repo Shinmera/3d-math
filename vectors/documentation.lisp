@@ -732,6 +732,8 @@ See *VEC (type)")
   (function vclamp
     "Returns a fresh vector with each element clamped by the specified lower and upper bounds.
 
+The bounds may either be a REAL or another VEC of the same arity.
+
 See NVCLAMP
 See !VCLAMP
 See *VEC (type)")

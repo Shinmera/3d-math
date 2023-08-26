@@ -45,8 +45,8 @@
             (arr (make-array ,(attribute type :len 'm) :element-type ',<t>)))
         (do-times (i 0 ,(attribute type :len 'm))
           (setf (aref arr i) (aref orig i)))
-        (,(constructor type) arr ,@(when (eql 'n <s>) `(,(place-form type :rows 'm)
-                                                        ,(place-form type :cols 'm))))))))
+        (,(constructor type) arr ,@(when (eql 'n <s>) `(,(attribute type :rows 'm)
+                                                        ,(attribute type :cols 'm))))))))
 
 (define-template smatop <op> <st> <s> <t> (x m s)
   (let ((type (type-instance 'mat-type <s> <t>)))
