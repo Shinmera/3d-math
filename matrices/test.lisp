@@ -181,8 +181,9 @@
   (fail (m* (matn 2 1) (mat4)))
   (fail (m* (matn 6 5) (matn 3 2)))
   (is m= (mat 1 1 1 1) (m/ (mat 2 2 2 2) 2))
-  (fail (m/ (mat2) (mat2)))
-  (fail (m/ (matn 2 3) (matn 3 2)))
+  (skip-on (:arm64) "Division by zero may not generate a condition"
+    (fail (m/ (mat2) (mat2)))
+    (fail (m/ (matn 2 3) (matn 3 2))))
   (let ((mat (mat 1 2 3 4)))
     (is m= (mat 2 3 4 5) (nm+ mat 1))
     (is m= (mat 5 5 5 5) (nm+ mat (mat 3 2 1 0)))
