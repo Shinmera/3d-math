@@ -88,7 +88,7 @@
 (define-template vec+* <st> <s> <t> (x a b s)
   (let ((type (type-instance 'vec-type <s> <t>)))
     `((declare (type ,(lisp-type type) x a b)
-               (type ,<st> s)
+               (type ,(if (eql <st> '<t>) <t> <st>) s)
                (return-type ,(lisp-type type))
                inline)
       (let ((s (,<t> s)))
