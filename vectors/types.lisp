@@ -218,8 +218,10 @@
                    (slots (remove-if #'realized-slot-p (slots type))))
                `(symbol-macrolet (,@(loop for slot in slots
                                           for var = (pop vars)
+                                          when var
                                           collect `(,var (,(accessor slot) ,valg)))
                                   ,@(loop for var in vars
+                                          when var
                                           collect `(,var (,(lisp-type (first slots)) 0))))
                   ,@body))))
       `(let ((,valg ,val))
