@@ -152,7 +152,7 @@
 (define-simple-alias vlerp (from to tt) vzero)
 (define-simple-alias vapply (v func) vzero)
 
-(define-alias vrand (&optional (v #.(vec 0 0 0)) (var 1))
+(define-alias vrand (&optional (v 0.0) (var 1.0))
   `(!vrand (typecase ,v (single-float (vec3)) (double-float (dvec3)) (integer (ivec3)) (T ,v)) ,v ,var))
 (define-alias nvrand (v &optional (var 1))
   `(!vrand ,v ,v ,var))
