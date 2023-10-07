@@ -271,7 +271,7 @@
                (return-type ,(lisp-type type))
                (dynamic-extent q)
                inline)
-      (let ((len (/ (the ,<t> (sqrt (,(compose-name #\/ '2quatreduce '* '+ <t>) q q))))))
+      (let ((len (/ (the ,<t> (sqrt (,(compose-name #\/ '1quatreduce '+ 'sqr <t>) q))))))
         (setf ,@(loop for i from 0 below 4
                       collect (place-form type i 'x)
                       collect `(* len ,(place-form type i 'x))))
@@ -283,7 +283,7 @@
                (return-type ,(lisp-type type))
                (dynamic-extent q)
                inline)
-      (let ((len (the ,<t> (sqrt (,(compose-name #\/ '2quatreduce '* '+ <t>) q q)))))
+      (let ((len (the ,<t> (sqrt (,(compose-name #\/ '1quatreduce '+ 'sqr <t>) q)))))
         (cond ((= 0 len)
                (setf ,@(loop for i from 0 below 4
                              collect (place-form type i 'x)
