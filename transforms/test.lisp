@@ -25,7 +25,17 @@
   (is t~= (transform) (t+ (transform (vec 0 0 0) (vec 2 2 2)) (transform (vec 0 0 0) (vec 0.5 0.5 0.5))))
   (is t~= (transform) (t+ (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI)) (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ (- PI)))))
   (is t~= (transform) (t+ (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI)) (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI))))
-  (is t~= (transform) (t+ (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI)) (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI)))))
+  (is t~= (transform) (t+ (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI)) (transform (vec 0 0 0) (vec 1 1 1) (qfrom-angle +vx+ PI))))
+  (dotimes (i 10)
+    (let* ((quat (qrand))
+           (a (transform quat))
+           (b (transform (qinv quat))))
+      (is v~= (vec 1 1 1) (t*p b (t*p a (vec 1 1 1))))
+      (is v~= (vec 1 1 1) (t*p (t+ b a) (vec 1 1 1)))))
+  (dotimes (i 10)
+    (let* ((a (transform (qrand)))
+           (b (transform (qrand))))
+      (is v~= (t*p (t+ b a) (vec 1 1 1)) (t*p b (t*p a (vec 1 1 1)))))))
 
 (define-test transform-translation
   :parent transforms
