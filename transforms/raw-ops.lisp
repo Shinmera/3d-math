@@ -17,7 +17,7 @@
         (!q* ,(place-form type :location 'x) ,(place-form type :rotation 'a) ,(place-form type :location 'x))
         (!v+ ,(place-form type :location 'x) ,(place-form type :location 'x) aloc))
       (!v* ,(place-form type :scaling 'x) ,(place-form type :scaling 'a) ,(place-form type :scaling 'b))
-      (!q* ,(place-form type :rotation 'x) ,(place-form type :rotation 'a) ,(place-form type :rotation 'b))
+      (!q* ,(place-form type :rotation 'x) ,(place-form type :rotation 'b) ,(place-form type :rotation 'a))
       x)))
 
 (define-template t- <t> (x a b)
