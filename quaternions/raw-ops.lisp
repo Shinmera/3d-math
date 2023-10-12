@@ -480,7 +480,7 @@
 (do-type-combinations quat-type define-squatreduce (and) (= ~= equal= < <= >= >) (<t> real) boolean)
 (do-type-combinations quat-type define-2quatreduce (or) (/=) boolean)
 (do-type-combinations quat-type define-squatreduce (or) (/=) (<t> real) boolean)
-(do-type-combinations quat-type define-2quatreduce (*) (+) (<t>)) ; dot
+(do-type-combinations quat-type define-2quatreduce (+) (*) (<t>)) ; dot
 (do-type-combinations quat-type define-1quatreduce (+) (sqr) <t>) ; sqrlen
 (do-type-combinations quat-type define-q*q)
 (do-type-combinations quat-type define-q*v)

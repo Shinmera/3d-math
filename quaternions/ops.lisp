@@ -141,7 +141,7 @@
   `(!q* ,m ,m ,@others))
 
 (define-templated-dispatch q. (a b)
-  ((quat-type 0) 2quatreduce * +))
+  ((quat-type 0) 2quatreduce + *))
 (define-templated-dispatch qsqrlength (a)
   ((quat-type) 1quatreduce + sqr))
 (define-templated-dispatch qangle (a)
