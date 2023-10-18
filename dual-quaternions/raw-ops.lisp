@@ -23,13 +23,13 @@
       (,<op> ,(place-form type :dual 'x) ,(place-form type :dual 'a))
       x)))
 
-(define-template quat2-reduce <red> <comb> rtype <t> (x a)
+(define-template quat2-reduce <red> <comb> rtype <t> (a b)
   (let ((type (type-instance 'quat2-type <t>))
         (rtype (case rtype
                  (<t> <t>)
                  (float (case <t> (f64 'f64) (T 'f32)))
                  (T rtype))))
-    `((declare (type ,(lisp-type type) x a)
+    `((declare (type ,(lisp-type type) a b)
                (return-type ,rtype)
                (dynamic-extent a))
       (,(if (member rtype '(f32 f64 i32 u32)) rtype 'progn)
@@ -116,8 +116,8 @@
                (return-type ,(lisp-type type))
                (dynamic-extent a))
       (let ((length (/ (qlength ,(place-form type :real 'a)))))
-        (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) al) 
-        (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) al)
+        (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) length)
+        (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) length)
         x))))
 
 (define-template qunit* <t> (x a)
