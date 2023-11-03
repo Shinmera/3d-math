@@ -650,6 +650,12 @@ See *MAT (type)")
 
 See NMORTHO
 See *MAT (type)")
+
+  (function mtensor
+    "Computes the tensor product of the two vectors.
+
+See !MTENSOR
+See *MAT (type)")
   
   (function meye
     "Creates a square identity matrix of the requested size.

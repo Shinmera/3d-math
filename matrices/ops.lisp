@@ -232,6 +232,9 @@
   ((#'(matching-matrix 1 4) mat-type dimension 2 index 4 4 4) mtransfer 4)
   ((#'(matching-matrix 1 n) mat-type dimension 2 index 4 4 4) mtransfer n))
 
+(define-templated-dispatch !mtensor (x a b)
+  ((mat-type #'(matching-vec 0) 1) mtensor/v))
+
 (define-value-reductor m= 2m= and T)
 (define-value-reductor m~= 2m~= and T)
 (define-value-reductor m/= 2m/= and T)
@@ -401,6 +404,20 @@
   #+3d-math-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mortho/4/f32 (mat4) l r b u n f))
   #+3d-math-f32 ((real real real real real real) mat4 (mortho/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f)))
   #+3d-math-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f)))
+
+(define-type-dispatch mtensor (a b)
+  #+3d-math-f32 ((vec2 vec2) mat2 (mtensor/v/2/f32 (mat2) a b))
+  #+3d-math-f32 ((vec3 vec3) mat3 (mtensor/v/3/f32 (mat3) a b))
+  #+3d-math-f32 ((vec4 vec4) mat4 (mtensor/v/4/f32 (mat4) a b))
+  #+3d-math-f64 ((dvec2 dvec2) dmat2 (mtensor/v/2/f64 (dmat2) a b))
+  #+3d-math-f64 ((dvec3 dvec3) dmat3 (mtensor/v/3/f64 (dmat3) a b))
+  #+3d-math-f64 ((dvec4 dvec4) dmat4 (mtensor/v/4/f64 (dmat4) a b))
+  #+3d-math-i32 ((ivec2 ivec2) imat2 (mtensor/v/2/i32 (imat2) a b))
+  #+3d-math-i32 ((ivec3 ivec3) imat3 (mtensor/v/3/i32 (imat3) a b))
+  #+3d-math-i32 ((ivec4 ivec4) imat4 (mtensor/v/4/i32 (imat4) a b))
+  #+3d-math-u32 ((uvec2 uvec2) umat2 (mtensor/v/2/u32 (umat2) a b))
+  #+3d-math-u32 ((uvec3 uvec3) umat3 (mtensor/v/3/u32 (umat3) a b))
+  #+3d-math-u32 ((uvec4 uvec4) umat4 (mtensor/v/4/u32 (umat4) a b)))
 
 (define-constructor meye !meye)
 (define-constructor mrand !mrand)

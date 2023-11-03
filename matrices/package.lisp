@@ -47,6 +47,7 @@
   #:!meye
   #:!mrand
   #:!mtransfer
+  #:!mtensor
   #:m=
   #:m~=
   #:m/=
@@ -108,6 +109,7 @@
   #:mfrustum
   #:mperspective
   #:mortho
+  #:mtensor
   #:meye
   #:mrand
   #:mzero
