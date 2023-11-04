@@ -201,6 +201,14 @@
    #-3d-math-no-u32 u32
    #-3d-math-no-i32 i32))
 
+(defmacro define-mat-describe (type)
+  `(defmethod describe-object ((mat ,(lisp-type type)) stream)
+     (format stream "~&~s:~%" ',(lisp-type type))
+     (write-matrix mat stream)
+     (fresh-line stream)))
+
+(do-instance-combinations define-mat-describe mat-type)
+
 (defun write-matrix (m stream &key (format :nice))
   (etypecase stream
     (null (with-output-to-string (out)
@@ -251,3 +259,5 @@
          (:json
           (simple "[" "]" "" ""))))
      m)))
+
+
