@@ -105,6 +105,7 @@ This file is a part of 3d-math
   #:vclamp
   #:v+*
   #:vinv
+  #:vref
   #:nvinv
   #:nv+
   #:nv-

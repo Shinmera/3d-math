@@ -44,6 +44,16 @@
                      collect `(,<op> ,(place-form type i 'a))))
       x)))
 
+(define-template 1svecop <op> <s> <t> (x s)
+  (let ((type (type-instance 'vec-type <s> <t>)))
+    `((declare (type ,(lisp-type type) x)
+               (return-type ,(lisp-type type))
+               inline)
+      (psetf ,@(loop for i from 0 below <s>
+                     collect (place-form type i 'x)
+                     collect `(,<op> s)))
+      x)))
+
 ;; Element-wise vector reduce operation
 (define-template 2vecreduce <red> <comb> rtype <s> <t> (a b)
   (let ((type (type-instance 'vec-type <s> <t>))
@@ -384,6 +394,7 @@
 (do-type-combinations vec-type define-2vecop (+ - * / min max mod))
 (do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))
 (do-type-combinations vec-type define-1vecop (- / abs identity))
+(do-type-combinations vec-type define-1svecop (identity))
 (do-type-combinations vec-type define-2vecreduce (and) (= ~= /= < <= >= >) boolean)
 (do-type-combinations vec-type define-svecreduce (and) (= ~= /= < <= >= >) (<t> real) boolean)
 (do-type-combinations vec-type define-2vecreduce (or) (/=) boolean)

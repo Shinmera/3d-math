@@ -215,6 +215,13 @@ rather than overflowing.
 See V/
 See *VEC (type)")
 
+  (function vref
+    "Access an element of the vector by index.
+
+The indices follow X Y Z W by 0 1 2 3.
+
+See *VEC (type)")
+
   (function with-vec
     "Bind the variables to convenient accessors for the given elements of the vector.
 
@@ -239,6 +246,8 @@ See *VEC (type)")
     "Updates the members of the vector with values from the given other vector.
 
 The vectors must match in arity.
+You may also pass a REAL, in which case all elements of the vector are
+set to that value.
 
 The updated vector is returned.
 

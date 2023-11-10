@@ -41,7 +41,22 @@
 (define-templated-dispatch vsetf (a x y &optional z w)
   ((vec-type real real T T) setf))
 
-(define-1vec-dispatch v<- 1vecop identity)
+(define-templated-dispatch v<- (x a)
+  ((vec-type 0) 1vecop identity)
+  ((vec-type #(0 1)) 1svecop identity)
+  ;; FIXME: this sucks!!
+  #+3d-math-f32 ((vec2 real) (1svecop identity 2 f32) x (f32 a))
+  #+3d-math-f32 ((vec3 real) (1svecop identity 3 f32) x (f32 a))
+  #+3d-math-f32 ((vec4 real) (1svecop identity 4 f32) x (f32 a))
+  #+3d-math-f64 ((dvec2 real) (1svecop identity 2 f64) x (f64 a))
+  #+3d-math-f64 ((dvec3 real) (1svecop identity 3 f64) x (f64 a))
+  #+3d-math-f64 ((dvec4 real) (1svecop identity 4 f64) x (f64 a))
+  #+3d-math-i32 ((ivec2 real) (1svecop identity 2 i32) x (i32 a))
+  #+3d-math-i32 ((ivec3 real) (1svecop identity 3 i32) x (i32 a))
+  #+3d-math-i32 ((ivec4 real) (1svecop identity 4 i32) x (i32 a))
+  #+3d-math-u32 ((uvec2 real) (1svecop identity 2 u32) x (u32 a))
+  #+3d-math-u32 ((uvec3 real) (1svecop identity 3 u32) x (u32 a))
+  #+3d-math-u32 ((uvec4 real) (1svecop identity 4 u32) x (u32 a)))
 
 (define-templated-dispatch !valign (x a grid)
   ((vec-type 0 #(0 1)) svecop grid <t>)
@@ -209,6 +224,13 @@
   `(!vclamp ,x ,low ,x ,high))
 (define-simple-alias v+* (a b s) vzero)
 (define-simple-alias vinv (a) vzero)
+
+(define-alias vref (m i)
+  `(aref (varr ,m) ,i))
+
+(define-alias (setf vref) (value m i)
+  ;; FIXME: coerce value!
+  `(setf (aref (varr ,m) ,i) ,value))
 
 (defmacro define-all-swizzlers (size)
   (labels ((permute (&rest lists)
