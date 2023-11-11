@@ -49,10 +49,10 @@
            ((,qtype ,qtype) ,type
             ,(constructor 'a 'b))
            ((,type) ,type
-            ,(constructor '(qcopy (qreal a)) '(qcopy (qdual a))))
+            ,(constructor '(qcopy (q2real a)) '(qcopy (q2dual a))))
            ((*quat2) ,type
-            ,(constructor `(,(lisp-type qtype) (qreal a))
-                          `(,(lisp-type qtype) (qdual a)))))))))
+            ,(constructor `(,(lisp-type qtype) (q2real a))
+                          `(,(lisp-type qtype) (q2dual a)))))))))
 
 (do-type-combinations quat2-type define-quat2-constructors)
 
