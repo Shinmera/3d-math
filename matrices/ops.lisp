@@ -205,7 +205,6 @@
 (define-1mat-dispatch !minv minv)
 (define-1mat-dispatch !minv-affine minv-affine)
 (define-1mat-dispatch !mtranspose mtranspose)
-;; FIXME: bounds check for MATN case.
 (define-templated-dispatch !mswap-row (x m r1 r2)
   ((mat-type 0 #'(matching-index 0) 2) mswap-row))
 (define-templated-dispatch !mswap-col (x m c1 c2)
