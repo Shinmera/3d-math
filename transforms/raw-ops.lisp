@@ -150,15 +150,20 @@
       (let* ((l ,(place-form type :location 'a))
              (s ,(place-form type :scaling 'a))
              (r ,(place-form type :rotation 'a))
+             (xa ,(place-form mtype :arr 'mx))
              (x (qx r)) (y (qy r)) (z (qz r)) (w (qw r))
              (xx (* x x)) (xy (* x y)) (xz (* x z)) (xw (* x w))
              (yy (* y y)) (yz (* y z)) (yw (* y w))
              (zz (* z z)) (zw (* z w)))
-        (msetf mx
-               (* (vx s) (- 1 (* 2 (+ yy zz)))) (* (vy s) 2 (- xy zw)) (* (vz s) 2 (+ xz yw)) (vx l)
-               (* (vx s) 2 (+ xy zw)) (* (vy s) (- 1 (* 2 (+ xx zz)))) (* (vz s) 2 (- yz xw)) (vy l)
-               (* (vx s) 2 (- xz yw)) (* (vy s) 2 (+ yz xw)) (* (vz s) (- 1 (* 2 (+ xx yy)))) (vz l)
-               0.0 0.0 0.0 1.0)))))
+        (macrolet ((%msetf (&rest args)
+                     `(progn ,@(loop for i from 0
+                                     for arg in args
+                                     collect `(setf (aref xa ,i) (,',<t> ,arg))))))
+          (%msetf (* (vx s) (- 1 (* 2 (+ yy zz)))) (* (vy s) 2 (- xy zw)) (* (vz s) 2 (+ xz yw)) (vx l)
+                  (* (vx s) 2 (+ xy zw)) (* (vy s) (- 1 (* 2 (+ xx zz)))) (* (vz s) 2 (- yz xw)) (vy l)
+                  (* (vx s) 2 (- xz yw)) (* (vy s) 2 (+ yz xw)) (* (vz s) (- 1 (* 2 (+ xx yy)))) (vz l)
+                  0.0 0.0 0.0 1.0)
+          mx)))))
 
 (define-template tfrom-mat <t> (x a)
   (let ((type (type-instance 'transform-type <t>))
