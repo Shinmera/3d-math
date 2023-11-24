@@ -54,6 +54,8 @@ This file is a part of 3d-math
   #:!vcartesian
   #:!vpolar
   #:!vapply
+  #:!vunit
+  #:!vunit*
   #:v=
   #:v~=
   #:v/=
