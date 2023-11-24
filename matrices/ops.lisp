@@ -249,6 +249,18 @@
 (define-templated-dispatch !mtensor (x a b)
   ((mat-type #'(matching-vec 0) 1) mtensor/v))
 
+(define-type-dispatch !m*4/3 (x m a)
+  #+3d-math-f32 ((vec3 mat4 vec3) vec3 (m*4/3/f32 x m a))
+  #+3d-math-f64 ((dvec3 dmat4 dvec3) dvec3 (m*4/3/f64 x m a))
+  #+3d-math-i32 ((ivec3 imat4 ivec3) ivec3 (m*4/3/i32 x m a))
+  #+3d-math-u32 ((uvec3 umat4 uvec3) uvec3 (m*4/3/u32 x m a)))
+
+(define-type-dispatch !m*4/3inv (x m a)
+  #+3d-math-f32 ((vec3 mat4 vec3) vec3 (m*4/3inv/f32 x m a))
+  #+3d-math-f64 ((dvec3 dmat4 dvec3) dvec3 (m*4/3inv/f64 x m a))
+  #+3d-math-i32 ((ivec3 imat4 ivec3) ivec3 (m*4/3inv/i32 x m a))
+  #+3d-math-u32 ((uvec3 umat4 uvec3) uvec3 (m*4/3inv/u32 x m a)))
+
 (define-value-reductor m= 2m= and T)
 (define-value-reductor m~= 2m~= and T)
 (define-value-reductor m/= 2m/= and T)
@@ -432,6 +444,24 @@
   #+3d-math-u32 ((uvec2 uvec2) umat2 (mtensor/v/2/u32 (umat2) a b))
   #+3d-math-u32 ((uvec3 uvec3) umat3 (mtensor/v/3/u32 (umat3) a b))
   #+3d-math-u32 ((uvec4 uvec4) umat4 (mtensor/v/4/u32 (umat4) a b)))
+
+(define-type-dispatch m*4/3 (m a)
+  #+3d-math-f32 ((mat4 vec3) vec3 (m*4/3/f32 (vec3) m a))
+  #+3d-math-f64 ((dmat4 dvec3) dvec3 (m*4/3/f64 (dvec3) m a))
+  #+3d-math-i32 ((imat4 ivec3) ivec3 (m*4/3/i32 (ivec3) m a))
+  #+3d-math-u32 ((umat4 uvec3) uvec3 (m*4/3/u32 (uvec3) m a)))
+
+(define-type-dispatch m*4/3inv (m a)
+  #+3d-math-f32 ((mat4 vec3) vec3 (m*4/3inv/f32 (vec3) m a))
+  #+3d-math-f64 ((dmat4 dvec3) dvec3 (m*4/3inv/f64 (dvec3) m a))
+  #+3d-math-i32 ((imat4 ivec3) ivec3 (m*4/3inv/i32 (ivec3) m a))
+  #+3d-math-u32 ((umat4 uvec3) uvec3 (m*4/3inv/u32 (uvec3) m a)))
+
+(define-alias n*m4/3 (m a)
+  `(!m*4/3 ,a ,m ,a))
+
+(define-alias n*m4/3inv (m a)
+  `(!m*4/3inv ,a ,m ,a))
 
 (define-constructor meye !meye)
 (define-constructor mrand !mrand)

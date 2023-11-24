@@ -48,6 +48,8 @@
   #:!mrand
   #:!mtransfer
   #:!mtensor
+  #:!m*4/3
+  #:!m*4/3inv
   #:m=
   #:m~=
   #:m/=
@@ -110,6 +112,10 @@
   #:mperspective
   #:mortho
   #:mtensor
+  #:m*4/3
+  #:m*4/3inv
+  #:n*m4/3
+  #:n*m4/3inv
   #:meye
   #:mrand
   #:mzero

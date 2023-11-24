@@ -656,6 +656,27 @@ See *MAT (type)")
 
 See !MTENSOR
 See *MAT (type)")
+
+  (function m*4/3
+    "Perform a multiplication of a mat4 by a vec3 using only the upper 3x3 block.
+
+This is useful for affine transformation matrices when you want to
+eliminate translation and only apply scaling and rotation.
+
+See !M*4/3
+See N*M4/3
+See M*4/3INV")
+
+  (function m*4/3
+    "Perform a multiplication of an inverted mat4 by a vec3 using only the upper 3x3 block.
+
+This is useful for affine transformation matrices when you want to
+eliminate translation and only apply the inverse scaling and
+rotation.
+
+See !M*4/3INV
+See N*M4/3INV
+See M*4/3")
   
   (function meye
     "Creates a square identity matrix of the requested size.
