@@ -215,3 +215,6 @@ Heavy use is made of the "type-templates"(https://shinmera.github.io/type-templa
 The core template types are ``vec-type``, ``mat-type``, ``quat-type``, ``quat2-type``, and ``transform-type`` respectively. We also provide and heavily make use of the custom types ``f32``, ``f64``, ``u32`` and ``i32`` to define the contained immediate value types.
 
 The shared functions and abbreviating macros used for quickly defining the common reductors, type dispatchers, etc. can be found in ``toolkit.lisp``.
+
+## Stack Allocation
+Given a suitably good compiler, such as recent SBCL versions, a lot of the 3d-math results can be stack-allocated to avoid triggering GC by declaring them ``dynamic-extent``. Even relatively complex forms can be automatically transformed to stack allocations. To check whether this is successful, you can use ``sb-ext:stack-allocated-p`` on the value. In cases where the automatic inference fails or you need more precise control, you should be able to use the plain value constructors such as ``vec2``, declare the variable the result is bound to to be ``dynamic-extent``, and then proceed to use the destructive variants of the various operators such as ``nv+`` or ``!v+`` rather than ``v+``.
