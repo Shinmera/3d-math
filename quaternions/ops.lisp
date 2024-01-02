@@ -137,6 +137,8 @@
 (defun nq* (m &rest others)
   (apply #'!q* m m others))
 
+;; FIXME: This does not work for the case of (q* QUAT VEC)
+;;        as in that case the result should be stored in the VEC
 (define-compiler-macro nq* (m &rest others)
   `(!q* ,m ,m ,@others))
 
