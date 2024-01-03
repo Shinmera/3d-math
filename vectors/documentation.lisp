@@ -66,7 +66,7 @@ See IVEC3 (type)
 See IVEC4 (type)")
 
   (type vec
-    "Geveric vector type specifier.
+    "Generic vector type specifier.
 
 You may specify an optional argument to the type:
 

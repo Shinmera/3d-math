@@ -667,7 +667,7 @@ See !M*4/3
 See N*M4/3
 See M*4/3INV")
 
-  (function m*4/3
+  (function m*4/3inv
     "Perform a multiplication of an inverted mat4 by a vec3 using only the upper 3x3 block.
 
 This is useful for affine transformation matrices when you want to
