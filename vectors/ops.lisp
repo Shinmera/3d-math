@@ -39,7 +39,9 @@
 (define-veccomp-dispatch >= and <=)
 
 (define-templated-dispatch vsetf (a x y &optional z w)
-  ((vec-type real real T T) setf))
+  ((*vec4-type real real real real) setf)
+  ((*vec3-type real real real) setf)
+  ((*vec2-type real real) setf))
 
 (define-templated-dispatch v<- (x a)
   ((vec-type 0) 1vecop identity)
