@@ -66,7 +66,19 @@ See IVEC3 (type)
 See IVEC4 (type)")
 
   (type vec
-    "Type encapsulating vectors of any arity and element type.
+    "Geveric vector type specifier.
+
+You may specify an optional argument to the type:
+
+    single-float   --- fvec
+    double-float   --- dvec
+    integer        --- ivec
+    2              --- *vec2
+    3              --- *vec3
+    4              --- *vec4
+    *              --- *vec
+
+If none is specified, this type is the same as fvec.
 
 See VEC2 (type)
 See VEC3 (type)

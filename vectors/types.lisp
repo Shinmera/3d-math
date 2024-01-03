@@ -65,12 +65,15 @@
   #-3d-math-no-f32 vec3 #-3d-math-no-f64 dvec3 #-3d-math-no-i32 ivec3 #-3d-math-no-u32 uvec3
   #-3d-math-no-f32 vec4 #-3d-math-no-f64 dvec4 #-3d-math-no-i32 ivec4 #-3d-math-no-u32 uvec4)
 
-(deftype vec (&optional s) 
+(deftype vec (&optional (s NIL))
   (case s
-    ((NIL) 'fvec)
+    ((NIL single-float) 'fvec)
+    (double-float 'dvec)
+    (integer 'ivec)
     (2 'vec2)
     (3 'vec3)
-    (4 'vec4)))
+    (4 'vec4)
+    (* '*vec)))
 
 (define-alias vec-p (thing)
   `(typep ,thing 'fvec))
