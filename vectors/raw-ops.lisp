@@ -363,6 +363,7 @@
     `((declare (type ,(lisp-type type) a)
                (return-type ,(lisp-type type))
                inline)
+      (declare (ignorable z w))
       (setf ,@(loop for i from 0 below <s>
                     for s in '(x y z w)
                     collect (place-form type i 'a)
