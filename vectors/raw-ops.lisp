@@ -5,6 +5,8 @@
 
 (in-package #:org.shirakumo.fraf.math.vectors)
 
+;; TODO: Avoid multiple array extraction by avoiding place-form
+
 ;; Element-Wise vector operation
 (define-template 2vecop <op> <s> <t> (x a b)
   (let ((type (type-instance 'vec-type <s> <t>)))
@@ -363,11 +365,12 @@
     `((declare (type ,(lisp-type type) a)
                (return-type ,(lisp-type type))
                inline)
-      (declare (ignorable z w))
-      (setf ,@(loop for i from 0 below <s>
-                    for s in '(x y z w)
-                    collect (place-form type i 'a)
-                    collect `(,<t> ,s)))
+      (let ((arr ,(place-form type :arr 'a)))
+        (declare (ignorable z w))
+        (setf ,@(loop for i from 0 below <s>
+                      for s in '(x y z w)
+                      collect `(aref arr ,i)
+                      collect `(,<t> ,s))))
       a)))
 
 (define-template apply <s> <t> (x a f)
