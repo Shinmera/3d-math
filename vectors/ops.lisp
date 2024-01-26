@@ -224,7 +224,7 @@
   `(let ((a (/ (v. ,a ,b)
                (v2norm ,a)
                (v2norm ,b))))
-     (acos (clamp -1 a +1))))
+     (acos (clamp -1.0 a +1.0))))
 (define-alias vclamp (low x high)
   `(!vclamp (vzero ,x) ,low ,x ,high))
 (define-alias nvclamp (low x high)
