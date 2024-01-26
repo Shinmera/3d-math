@@ -364,9 +364,9 @@
   (let ((type (type-instance 'vec-type <s> <t>)))
     `((declare (type ,(lisp-type type) a)
                (return-type ,(lisp-type type))
+               (ignorable z w)
                inline)
       (let ((arr ,(place-form type :arr 'a)))
-        (declare (ignorable z w))
         (setf ,@(loop for i from 0 below <s>
                       for s in '(x y z w)
                       collect `(aref arr ,i)
