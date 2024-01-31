@@ -359,6 +359,11 @@ The elements are coerced to the element-type required by the
 quaternion.
 
 See *QUAT (type)")
+
+  (function qdistance
+    "Returns the angular distance between two quaternions.
+
+See *QUAT (type)")
   
   (function qconjugate
     "Computes the conjugate of the quaternion.

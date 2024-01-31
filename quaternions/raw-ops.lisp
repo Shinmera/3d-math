@@ -465,6 +465,17 @@
                     collect `(,<t> ,s)))
       a)))
 
+(define-template distance <t> (a b)
+  (let ((type (type-instance 'quat-type <t>)))
+    `((declare (type ,(lisp-type type) a b)
+               (return-type ,<t>)
+               inline)
+      (let ((tmp (,(lisp-type type))))
+        (declare (dynamic-extent tmp))
+        (,(compose-name #\/ 'conjugate <t>) tmp b)
+        (,(compose-name #\/ 'q*q <t>) tmp a tmp)
+        (* 2 (acos (the (,<t> -1.0 1.0) (,(place type :r) tmp))))))))
+
 (declaim (inline equal=))
 (defun equal= (a b &optional (eps 1.0e-6))
   (or (<= (abs (+ a b)) eps)
@@ -500,3 +511,4 @@
 (do-type-combinations quat-type define-qnlerp)
 (do-type-combinations quat-type define-qslerp)
 (do-type-combinations quat-type define-setf)
+(do-type-combinations quat-type define-distance)

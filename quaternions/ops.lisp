@@ -153,6 +153,9 @@
 (define-templated-dispatch qsetf (a x y z w)
   ((quat-type real real real real) setf))
 
+(define-templated-dispatch qdistance (a b)
+  ((quat-type 0) distance))
+
 (define-simple-alias qconjugate (q) qzero)
 (define-simple-alias qinv (q) qzero)
 (define-simple-alias qfrom-angle (axis angle) qzero)

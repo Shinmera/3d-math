@@ -60,6 +60,7 @@
   #:qsqrlength
   #:qangle
   #:qsetf
+  #:qdistance
   #:qconjugate
   #:qinv
   #:qfrom-angle
