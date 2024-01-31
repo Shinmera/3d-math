@@ -135,9 +135,9 @@
      (nq* (trotation ,a) q)
      ,a))
 
-(define-alias tx (a) `(t*v ,a +vx3+))
-(define-alias ty (a) `(t*v ,a +vy3+))
-(define-alias tz (a) `(t*v ,a +vz3+))
+(define-alias tx (a &optional (v (vec3))) `(!t*v ,v ,a +vx3+))
+(define-alias ty (a &optional (v (vec3))) `(!t*v ,v ,a +vy3+))
+(define-alias tz (a &optional (v (vec3))) `(!t*v ,v ,a +vz3+))
 
 (define-alias tquat2 (a &optional q)
   `(!q2from-location (or ,q (*as ,a 'quat2)) (trotation ,a) (tlocation ,a)))
