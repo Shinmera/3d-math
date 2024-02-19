@@ -108,6 +108,9 @@ This file is a part of 3d-math
   #:v+*
   #:vinv
   #:vref
+  #:vx-angle
+  #:vy-angle
+  #:vz-angle
   #:nvinv
   #:nv+
   #:nv-

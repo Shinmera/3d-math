@@ -232,6 +232,10 @@
 (define-simple-alias v+* (a b s) vzero)
 (define-simple-alias vinv (a) vzero)
 
+(define-alias vx-angle (vec) `(atan (vz ,vec) (vy ,vec)))
+(define-alias vy-angle (vec) `(atan (vz ,vec) (vx ,vec)))
+(define-alias vz-angle (vec) `(atan (vy ,vec) (vx ,vec)))
+
 (define-alias vref (m i)
   `(aref (varr ,m) ,i))
 

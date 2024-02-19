@@ -227,6 +227,15 @@ rather than overflowing.
 See V/
 See *VEC (type)")
 
+  (function vx-angle
+    "Return the angle from Z+ to VEC around the X axis.")
+
+  (function vy-angle
+    "Return the angle from X+ to VEC around the Y axis.")
+
+  (function vz-angle
+    "Return the angle from X+ to VEC around the Z axis.")
+
   (function vref
     "Access an element of the vector by index.
 
