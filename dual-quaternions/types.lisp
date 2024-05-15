@@ -32,7 +32,9 @@
 (define-slot-accessor quat2-type q2real 0)
 (define-slot-accessor quat2-type q2dual 1)
 
-(define-type-alias *quat2 quat2 dquat2)
+(define-type-alias *quat2
+  #-3d-math-no-f32 quat2
+  #-3d-math-no-f64 dquat2)
 
 (defmacro define-quat2-constructors (<t>)
   (flet ((constructor (real dual)
