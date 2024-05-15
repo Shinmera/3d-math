@@ -33,7 +33,9 @@
 (define-slot-accessor quat-type qk 2)
 (define-slot-accessor quat-type qr 3)
 
-(define-type-alias *quat quat dquat)
+(define-type-alias *quat
+  #-3d-math-no-f32 quat
+  #-3d-math-no-f64 dquat)
 
 (defmacro define-quat-constructors (<t>)
   (flet ((constructor (&rest args)

@@ -36,7 +36,9 @@
 (define-slot-accessor transform-type tscaling 1)
 (define-slot-accessor transform-type trotation 2)
 
-(define-type-alias *transform transform dtransform)
+(define-type-alias *transform
+  #-3d-math-no-f32 transform
+  #-3d-math-no-f64 dtransform)
 
 (defmacro define-transform-constructors (<t>)
   (flet ((constructor (location scaling rotation)
