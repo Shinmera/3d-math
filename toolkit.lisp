@@ -228,7 +228,7 @@
             (,',func ,',(first args) ,',@(butlast vars) ,@,(car (last vars))))))))
 
 (declaim (ftype (function (T) (values T &optional)) *like))
-(defun *like (x) (error "EARLY *LIKE"))
+(defun *like (x) 0)
 
 (declaim (ftype (function (T T) (values T &optional)) *as))
-(defun *as (x type) (error "EARLY *AS"))
+(defun *as (x type) 0)
