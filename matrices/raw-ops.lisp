@@ -545,10 +545,11 @@
   `(define-template ,name <s> <t> ,args
      (let ((type (type-instance 'mat-type <s> <t>)))
        (flet ((f (&rest args)
-                (loop for arg in args
-                      for i from 0 for x = (mod i 4) for y = (floor i 4)
-                      when (and (< x <s>) (< y <s>))
-                      collect `(setf (aref xa ,i) (,<t> ,arg)))))
+                (let ((len (sqrt (length args))))
+                  (loop for arg in args
+                        for i from 0 for x = (mod i len) for y = (floor i len)
+                        when (and (< x <s>) (< y <s>))
+                        collect `(setf (aref xa ,i) (,<t> ,arg))))))
          `((declare (type ,(lisp-type type) x)
                     (return-type ,(lisp-type type)))
            (let ((xa ,(place-form type 'arr 'x)))
@@ -598,10 +599,13 @@
             (x ,(place-form vtype :x 'v))
             (y ,(place-form vtype :y 'v))
             (z ,(place-form vtype :z 'v)))
-        ,@(case <s>
+        ,@(ecase <s>
             (2 (f 'c '(- s)
                   's 'c))
-            (T `((cond ((and (= 1 x) (= 0 y) (= 0 z))
+            (3 (f 'c '(- s) 0
+                  's 'c     0
+                   0  0     1))
+            (4 `((cond ((and (= 1 x) (= 0 y) (= 0 z))
                         ,@(f 1 0 0 0
                              0 'c '(- s) 0
                              0 's 'c 0
