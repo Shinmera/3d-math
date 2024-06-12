@@ -278,7 +278,7 @@
       (let ((len (/ (the ,<t> (sqrt (,(compose-name #\/ '1quatreduce '+ 'sqr <t>) q))))))
         (setf ,@(loop for i from 0 below 4
                       collect (place-form type i 'x)
-                      collect `(* len ,(place-form type i 'x))))
+                      collect `(* len ,(place-form type i 'q))))
         x))))
 
 (define-template qunit* <t> (x q)
