@@ -629,8 +629,11 @@
   ;; FIXME: coerce value!
   `(setf (aref (marr ,m) ,i) ,value))
 
-(define-alias mtransfer (x m &key (w (mcols x)) (h (mrows x)) (xx 0) (xy 0) (mx 0) (my 0))
-  `(!mtransfer ,x ,m ,w ,h ,xx ,xy ,mx ,my))
+(define-alias mtransfer (x m &key w h (xx 0) (xy 0) (mx 0) (my 0))
+  ;; KLUDGE: We can't use previous args in default values for arguments
+  ;;         with define-alias, as it can't expand correctly in the compiler
+  ;;         macro, so we use the OR instead here.
+  `(!mtransfer ,x ,m (or ,w (mcols ,x)) (or ,h (mrows ,x)) ,xx ,xy ,mx ,my))
 
 (define-alias mblock (m x y w h)
   `(!mtransfer (mat ,w ,h) ,m ,w ,h 0 0 ,x ,y))
