@@ -61,7 +61,7 @@
 (define-1quat-dispatch !qunit* qunit*)
 
 (define-type-reductor !q+ q<- !2q+)
-(define-type-reductor !q* q<- !2q*)
+(define-type-reductor !q* q<- !2q* NIL T)
 (define-type-reductor !q- q<- !2q- !1q-)
 (define-type-reductor !q/ q<- !2q/ !1q/)
 (define-type-reductor !qmin q<- !2qmin)

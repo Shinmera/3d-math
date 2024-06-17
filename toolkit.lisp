@@ -134,7 +134,7 @@
   (declare (ignore x y))
   (random 1.0))
 
-(defmacro define-type-reductor (name transfer 2-op &optional 1-op)
+(defmacro define-type-reductor (name transfer 2-op &optional 1-op from-end)
   `(progn
      (defun ,name (target value &rest values)
        (cond ((null values)
@@ -143,10 +143,18 @@
                    `(,transfer target value)))
              ((null (cdr values))
               (,2-op target value (first values)))
-             (T
-              (,2-op target value (first values))
-              (dolist (value (rest values) target)
-                (,2-op target target value)))))
+             ,(if from-end
+                  `(T
+                    (setf values (nreverse (list* value values)))
+                    (let ((a (pop values))
+                          (b (pop values)))
+                      (,2-op target b a))
+                    (dolist (value values target)
+                      (,2-op target value target)))
+                  `(T
+                    (,2-op target value (first values))
+                    (dolist (value (rest values) target)
+                      (,2-op target target value))))))
 
      (define-compiler-macro ,name (target value &rest values)
        (dbg "Expanding compiler macro (~a~{ ~a~})" ',name (list* value values))
@@ -158,10 +166,18 @@
               `(,',2-op ,target ,value ,(first values)))
              (T
               (let ((targetg (gensym "TARGET")))
-                `(let ((,targetg ,target))
-                   (,',2-op ,targetg ,value ,(first values))
-                   ,@(loop for value in (rest values)
-                           collect `(,',2-op ,targetg ,targetg ,value)))))))))
+                ,(if from-end
+                     `(let* ((values (nreverse (list* value values)))
+                             (a (pop values))
+                             (b (pop values)))
+                        `(let ((,targetg ,target))
+                           (,',2-op ,targetg ,b ,a)
+                           ,@(loop for value in values
+                                   collect `(,',2-op ,targetg ,value ,targetg))))
+                     ``(let ((,targetg ,target))
+                         (,',2-op ,targetg ,value ,(first values))
+                         ,@(loop for value in (rest values)
+                                 collect `(,',2-op ,targetg ,targetg ,value))))))))))
 
 (defmacro define-value-reductor (name 2-op comb identity)
   `(progn
