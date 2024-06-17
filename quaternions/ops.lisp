@@ -158,7 +158,7 @@
 
 (define-simple-alias qconjugate (q) qzero)
 (define-simple-alias qinv (q) qzero)
-(define-simple-alias qfrom-angle (axis angle) qzero)
+(define-pure-alias qfrom-angle (axis angle) qzero !qfrom-angle)
 (define-simple-alias qtowards (from to) qzero)
 (define-simple-alias qlookat (direction up) qzero)
 (define-simple-alias qexpt (q exponent) qzero)
