@@ -9,6 +9,15 @@
   #-3d-math-no-f64 (push :3d-math-f64 *features*)
   #-3d-math-no-i32 (push :3d-math-i32 *features*))
 
+#+sbcl
+(eval-when (:compile-toplevel)
+  (when (< (floor (sb-ext:dynamic-space-size) (* 1024 1024 1024)) 4)
+    (error "3d-Math requires at least 4GB of dynamic space size to compile
+SBCL is currently configured for ~dGB
+
+Make sure SBCL is built or run with --dynamic-space-size 4Gb or more."
+           (ceiling (sb-ext:dynamic-space-size) (* 1024 1024 1024)))))
+
 (defpackage #:org.shirakumo.fraf.math.internal
   (:use #:cl #:org.shirakumo.type-templates)
   (:import-from #:org.shirakumo.type-templates #:dbg #:lambda-list-variables)
