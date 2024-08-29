@@ -642,6 +642,9 @@ See *MAT (type)")
   (function mperspective
     "Creates a matrix that provides a perspective skewed projection.
 
+Note that unlike other functions in 3d-math, the FOVY here is in
+degrees rather than radians, to follow the gluPerspective convention.
+
 See NMPERSPECTIVE
 See *MAT (type)")
   
