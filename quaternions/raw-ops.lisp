@@ -103,7 +103,7 @@
               (T
                (let ((half (nvunit (v+ ff tt))))
                  (declare (dynamic-extent half))
-                 (!vc x ff tt)
+                 (!vc x ff half)
                  (setf ,(place-form type 3 'x) (v. ff half)))))
         x))))
 
