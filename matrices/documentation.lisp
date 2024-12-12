@@ -414,19 +414,19 @@ See !MSWAP-COL
 See *MAT (type)")
   
   (function mrow
-    "Returns a particular row of the matrix as a vector.
+    "Accesses a particular row of the matrix as a vector.
 
 See !MROW
 See *MAT (type)")
   
   (function mcol
-    "Returns a particular column of the matrix as a vector.
+    "Accesses a particular column of the matrix as a vector.
 
 See !MCOL
 See *MAT (type)")
   
   (function mdiag
-    "Returns the diagonal of the matrix as a vector.
+    "Accesses the diagonal of the matrix as a vector.
 
 See !MDIAG
 See *MAT (type)")

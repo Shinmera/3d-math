@@ -221,6 +221,18 @@
   ((#'(matching-array 1) mat-type) mdiag)
   ((#'(matching-vec 1) mat-type) (mdiag) (varr r) m)
   ((null mat-type) (mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
+(define-templated-dispatch (setf !mrow) (r m ri)
+  ((#'(matching-array 1) mat-type #'(matching-index 1)) setf-mrow)
+  ((#'(matching-vec 1) mat-type #'(matching-index 1)) (setf-mrow) (varr r) m ri)
+  ((null mat-type #'(matching-index 1)) (setf-mrow) (make-array (mcols m) :element-type (array-element-type (marr m))) m ri))
+(define-templated-dispatch (setf !mcol) (r m ci)
+  ((#'(matching-array 1) mat-type #'(matching-index 1)) setf-mcol)
+  ((#'(matching-vec 1) mat-type #'(matching-index 1)) (setf-mcol) (varr r) m ci)
+  ((null mat-type #'(matching-index 1)) (setf-mcol) (make-array (mrows m) :element-type (array-element-type (marr m))) m ci))
+(define-templated-dispatch (setf !mdiag) (r m)
+  ((#'(matching-array 1) mat-type) setf-mdiag)
+  ((#'(matching-vec 1) mat-type) (setf-mdiag) (varr r) m)
+  ((null mat-type) (setf-mdiag) (make-array (min (mcols m) (mrows m)) :element-type (array-element-type (marr m))) m))
 
 (define-type-reductor !m+ m<- !2m+)
 (define-type-reductor !m* m<- !2m*)
@@ -279,6 +291,9 @@
 (define-alias mrow (m ri) `(!mrow NIL ,m ,ri))
 (define-alias mcol (m ri) `(!mcol NIL ,m ,ri))
 (define-alias mdiag (m) `(!mdiag NIL ,m))
+(define-alias (setf mrow) (v m ri) `(setf (!mrow ,m ,ri) ,v))
+(define-alias (setf mcol) (v m ri) `(setf (!mcol ,m ,ri) ,v))
+(define-alias (setf mdiag) (v m) `(setf (!mdiag ,m) ,v))
 
 ;; KLUDGE: This fucking sucks man.
 (define-alias mtranspose (m)
