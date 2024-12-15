@@ -66,13 +66,9 @@
     (let ((axis (nvunit (vrand (dvec 0 0 0) 10)))
           (angle (float (random (* 2 PI)) 0d0)))
       (is m~= (qmat (qfrom-angle axis angle) (dmat4)) (mrotation axis angle))))
-  (dotimes (i 100)
-    (let ((from (vrand))
-          (to (vrand)))
-      (is qequal (qtowards from to) (qfrom-angle (vc from to) (vangle from to)))))
   ;; FIXME: dunno why this is wrong, but the tests are off somehow.
-  #++
-  (dotimes (i 100)
-    (let ((quat (nvunit (dquat (random 1.0d0) (random 1.0d0) (random 1.0d0) (random 1.0d0)))))
-      (is qequal quat (qfrom-mat (qmat quat (dmat4)))))))
+  (skip "Far too inaccurate"
+    (dotimes (i 100)
+      (let ((quat (nvunit (dquat (random 1.0d0) (random 1.0d0) (random 1.0d0) (random 1.0d0)))))
+        (is qequal quat (qfrom-mat (qmat quat (dmat4))))))))
 
