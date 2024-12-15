@@ -182,6 +182,7 @@
         (!mtransfer m a 3 3 0 0 0 0)
         (!qfrom-mat ,(place-form type :rotation 'x) m)
         (!qinv rinv ,(place-form type :rotation 'x))
+        (nqunit ,(place-form type :rotation 'x))
         (!qmat rmat rinv)
         (!m* m m rmat)
         (vsetf ,(place-form type :location 'x)
