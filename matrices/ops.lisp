@@ -429,11 +429,11 @@
 
 (define-type-dispatch mrotation (v angle)
   #+3d-math-f32 ((null f32) mat3 (mrotation/3/f32 (mat3) +vx+ angle))
-  #+3d-math-f32 ((null real) mat3 (mrotation/3/f32 (mat3) +vx+ (f32 angle)))
   #+3d-math-f64 ((null f64) dmat3 (mrotation/3/f64 (dmat3) +vx+ angle))
+  #+3d-math-f32 ((null real) mat3 (mrotation/3/f32 (mat3) +vx+ (f32 angle)))
   #+3d-math-f32 ((vec3 f32) mat4 (mrotation/4/f32 (mat4) v angle))
-  #+3d-math-f32 ((vec3 real) mat4 (mrotation/4/f32 (mat4) v (f32 angle)))
-  #+3d-math-f64 ((dvec3 f64) dmat4 (mrotation/4/f64 (dmat4) v angle)))
+  #+3d-math-f64 ((dvec3 f64) dmat4 (mrotation/4/f64 (dmat4) v angle))
+  #+3d-math-f32 ((vec3 real) mat4 (mrotation/4/f32 (mat4) v (f32 angle))))
 
 (define-type-dispatch mlookat (eye target up)
   #+3d-math-f32 ((vec3 vec3 vec3) mat4 (mlookat/4/f32 (mat4) eye target up))
@@ -441,18 +441,18 @@
 
 (define-type-dispatch mfrustum (l r b u n f)
   #+3d-math-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mfrustum/4/f32 (mat4) l r b u n f))
-  #+3d-math-f32 ((real real real real real real) mat4 (mfrustum/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f)))
-  #+3d-math-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mfrustum/4/f64 (dmat4) l r b u n f)))
+  #+3d-math-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mfrustum/4/f64 (dmat4) l r b u n f))
+  #+3d-math-f32 ((real real real real real real) mat4 (mfrustum/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))))
 
 (define-type-dispatch mperspective (fovy aspect n f)
   #+3d-math-f32 ((f32 f32 f32 f32) mat4 (mperspective/4/f32 (mat4) fovy aspect n f))
-  #+3d-math-f32 ((real real real real) mat4 (mperspective/4/f32 (mat4) (f32 fovy) (f32 aspect) (f32 n) (f32 f)))
-  #+3d-math-f64 ((f64 f64 f64 f64) dmat4 (mperspective/4/f64 (dmat4) fovy aspect n f)))
+  #+3d-math-f64 ((f64 f64 f64 f64) dmat4 (mperspective/4/f64 (dmat4) fovy aspect n f))
+  #+3d-math-f32 ((real real real real) mat4 (mperspective/4/f32 (mat4) (f32 fovy) (f32 aspect) (f32 n) (f32 f))))
 
 (define-type-dispatch mortho (l r b u n f)
   #+3d-math-f32 ((f32 f32 f32 f32 f32 f32) mat4 (mortho/4/f32 (mat4) l r b u n f))
-  #+3d-math-f32 ((real real real real real real) mat4 (mortho/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f)))
-  #+3d-math-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f)))
+  #+3d-math-f64 ((f64 f64 f64 f64 f64 f64) dmat4 (mortho/4/f64 (dmat4) l r b u n f))
+  #+3d-math-f32 ((real real real real real real) mat4 (mortho/4/f32 (mat4) (f32 l) (f32 r) (f32 b) (f32 u) (f32 n) (f32 f))))
 
 (define-type-dispatch mtensor (a b)
   #+3d-math-f32 ((vec2 vec2) mat2 (mtensor/v/2/f32 (mat2) a b))

@@ -146,17 +146,6 @@
       `(progn
          (export '(,name))
          (define-type-dispatch ,name (&optional ,@args)
-           ((dimension dimension sequence) ,mat*
-            (cond ((/= ,(first args) ,(second args))
-                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))
-                  ((= ,(first args) 2)
-                   (,(lisp-type (type-instance 'mat-type 2 type)) ,(third args)))
-                  ((= ,(first args) 3)
-                   (,(lisp-type (type-instance 'mat-type 3 type)) ,(third args)))
-                  ((= ,(first args) 4)
-                   (,(lisp-type (type-instance 'mat-type 4 type)) ,(third args)))
-                  (T
-                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))))
            ((dimension dimension) ,mat*
             (cond ((/= ,(first args) ,(second args))
                    (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args)))
@@ -168,6 +157,17 @@
                    (,(lisp-type (type-instance 'mat-type 4 type))))
                   (T
                    (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args)))))
+           ((dimension dimension sequence) ,mat*
+            (cond ((/= ,(first args) ,(second args))
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))
+                  ((= ,(first args) 2)
+                   (,(lisp-type (type-instance 'mat-type 2 type)) ,(third args)))
+                  ((= ,(first args) 3)
+                   (,(lisp-type (type-instance 'mat-type 3 type)) ,(third args)))
+                  ((= ,(first args) 4)
+                   (,(lisp-type (type-instance 'mat-type 4 type)) ,(third args)))
+                  (T
+                   (,(lisp-type (type-instance 'mat-type 'n type)) ,(first args) ,(second args) ,(third args)))))
            ((dimension) ,mat*
             (cond ((= ,(first args) 2)
                    (,(lisp-type (type-instance 'mat-type 2 type))))
