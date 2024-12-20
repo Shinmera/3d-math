@@ -44,13 +44,29 @@
   (float value 0d0))
 
 (define-type-with-converter u32 (unsigned-byte 32) (value)
-  (ldb (byte 32 0) (truncate value)))
+  (ldb (byte 32 0) (round value)))
 
 (define-type-with-converter i32 (signed-byte 32) (value)
-  (let ((i (truncate value)))
+  (let ((i (round value)))
     (if (<= 0 i)
         (ldb (byte 31 0) i)
         (- (ldb (byte 32 0) (- i))))))
+
+(define-type-with-converter fix fixnum (value)
+  (let ((i (round value)))
+    (cond ((< most-positive-fixnum i)
+           most-positive-fixnum)
+          ((< i most-negative-fixnum)
+           most-negative-fixnum)
+          (T value))))
+
+(defun upgraded-type (a b)
+  (cond ((eql 'f64 a) a)
+        ((eql 'f64 b) b)
+        ((eql 'f32 a) a)
+        ((eql 'f32 b) b)
+        ((or (eql 'real a) (eql 'real b)) 'f64)
+        (T 'fix)))
 
 (defmacro type-array (<s> <t> &rest values)
   (let ((array (gensym "ARRAY")))

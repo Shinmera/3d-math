@@ -190,3 +190,9 @@
     (is v= (vec 3 2 1 0) (nvapply vec #'1-))
     (is v= (vec 8 7 6 5) (vincf vec 5))
     (is v= (vec 6 5 4 3) (vdecf vec 2))))
+
+(define-test vector-integer-math
+  :parent vectors
+  :depends-on (vector-comparators)
+  (is v= (ivec 2 2 2) (v* (ivec 1 1 1) 2))
+  (is v= (ivec 2 2 2) (v* (ivec 4 4 4) 0.5)))
