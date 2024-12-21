@@ -194,5 +194,13 @@
 (define-test vector-integer-math
   :parent vectors
   :depends-on (vector-comparators)
+  (is v= (ivec 1 1) (v* (ivec 3 3) 1/3))
   (is v= (ivec 2 2 2) (v* (ivec 1 1 1) 2))
-  (is v= (ivec 2 2 2) (v* (ivec 4 4 4) 0.5)))
+  (is v= (ivec 2 2 2 2) (v* (ivec 4 4 4 4) 0.5))
+  (is v= (ivec 2 2) (ivec (vec 2 2)))
+  (is v= (ivec 2 2 2) (ivec (vec 2.2 2.2 2.2)))
+  (is v= (ivec 2 2 2 2) (ivec (vec 1.8 1.8 1.8 1.8)))
+  (is = 14 (v. (ivec 1 2 3) (ivec 1 2 3)))
+  (is = 3 (vsqrlength (ivec 1 1 1)))
+  (is = 1 (vlength (ivec 1 0 0)))
+  (is < 15 (vlength (vrand 0 10))))

@@ -111,6 +111,12 @@
   (declare (optimize speed (safety 0)))
   (min (max x min) max))
 
+(declaim (inline random*))
+(defun random* (x var)
+  (if (= 0 var)
+      x
+      (+ x (- (random var) (/ var 2)))))
+
 (defun type-random (type low high)
   (ecase type
     (f32 (+ (f32 low) (random (- (f32 high) (f32 low)))))

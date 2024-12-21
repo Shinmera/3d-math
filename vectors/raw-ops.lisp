@@ -16,7 +16,7 @@
             (a ,(place-form type 'arr 'a))
             (b ,(place-form type 'arr 'b)))
         (do-times (i 0 ,<s>)
-          (setf (aref x i) (,<op> (aref a i) (aref b i)))))
+          (setf (aref x i) (,<t> (,<op> (aref a i) (aref b i))))))
       x)))
 
 ;; Element-wise scalar operation
@@ -74,7 +74,7 @@
             (b ,(place-form type 'arr 'b)))
         (,(if (member rtype '(f32 f64 i32 u32)) rtype 'progn)
          (,<red> ,@(loop for i from 0 below <s>
-                         collect `(,<comb> (aref a ,i) (aref b ,i)))))))))
+                         collect `(the ,rtype (,<comb> (aref a ,i) (aref b ,i))))))))))
 
 ;; Element-wise reduce operation
 (define-template 1vecreduce <red> <comb> rtype <s> <t> (a)
@@ -174,22 +174,6 @@
             (to ,(place-form type 'arr 'to)))
         (do-times (i 0 ,<s>)
           (setf (aref x i) (,<t> (lerp (aref from i) (aref to i) tt)))))
-      x)))
-
-(define-template random <s> <t> (x a var)
-  (let ((type (type-instance 'vec-type <s> <t>)))
-    `((declare (type ,(lisp-type type) x a var)
-               (return-type ,(lisp-type type))
-               (dynamic-extent a var))
-      (let ((x ,(place-form type 'arr 'x))
-            (a ,(place-form type 'arr 'a))
-            (var ,(place-form type 'arr 'var)))
-        (flet ((random* (x var)
-                 (if (= 0.0 var)
-                     x
-                     (+ x (- (random var) (/ var 2f0))))))
-          (do-times (i 0 ,<s>)
-            (setf (aref x i) (random* (aref a i) (aref var i))))))
       x)))
 
 (define-template round <op> <s> <t> (x a divisor)
@@ -437,8 +421,9 @@
       (3 (,(constructor (type-instance 'vec-type 3 <t>)) (make-array 3 :element-type ',<t> :initial-element (,<t> 0))))
       (4 (,(constructor (type-instance 'vec-type 4 <t>)) (make-array 4 :element-type ',<t> :initial-element (,<t> 0)))))))
 
-(do-type-combinations vec-type define-2vecop (+ - * / min max mod))
+(do-type-combinations vec-type define-2vecop (+ - * / min max mod random*))
 (do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))
+(do-type-combinations vec-type define-svecop (random) (real))
 (do-type-combinations vec-type define-1vecop (- / abs identity))
 (do-type-combinations vec-type define-1svecop (identity))
 (do-type-combinations vec-type define-2vecreduce (and) (= ~= /= < <= >= >) boolean)
@@ -457,7 +442,6 @@
 (do-type-combinations vec-type define-lerp)
 (do-type-combinations vec-type define-round (floor round ceiling truncate))
 (do-type-combinations vec-type define-pnorm)
-(do-type-combinations vec-type define-random)
 (do-type-combinations vec-type define-load)
 (do-type-combinations vec-type define-store)
 (do-type-combinations vec-type define-cross)

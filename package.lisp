@@ -59,6 +59,7 @@ Make sure SBCL is built or run with --dynamic-space-size 4Gb or more."
    #:sqrt+
    #:lerp
    #:clamp
+   #:random*
    #:type-random
    #:~=
    #:ensure-function
