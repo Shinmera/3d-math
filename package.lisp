@@ -50,6 +50,7 @@ Make sure SBCL is built or run with --dynamic-space-size 4Gb or more."
    #:f64
    #:u32
    #:i32
+   #:upgraded-type
    #:type-array
    #:type-prefix
    #:sqr
