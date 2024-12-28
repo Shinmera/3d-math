@@ -74,7 +74,7 @@
             (b ,(place-form type 'arr 'b)))
         (,(if (member rtype '(f32 f64 i32 u32)) rtype 'progn)
          (,<red> ,@(loop for i from 0 below <s>
-                         collect `(the ,rtype (,<comb> (aref a ,i) (aref b ,i))))))))))
+                         collect `(,<comb> (aref a ,i) (aref b ,i)))))))))
 
 ;; Element-wise reduce operation
 (define-template 1vecreduce <red> <comb> rtype <s> <t> (a)
@@ -423,7 +423,7 @@
 
 (do-type-combinations vec-type define-2vecop (+ - * / min max mod random*))
 (do-type-combinations vec-type define-svecop (+ - * / min max mod grid) (<t> real))
-(do-type-combinations vec-type define-svecop (random) (real))
+(do-type-combinations vec-type define-svecop (random*) (real))
 (do-type-combinations vec-type define-1vecop (- / abs identity))
 (do-type-combinations vec-type define-1svecop (identity))
 (do-type-combinations vec-type define-2vecreduce (and) (= ~= /= < <= >= >) boolean)
