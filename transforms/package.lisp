@@ -15,6 +15,7 @@
   #:transform-p
   #:tcopy
   #:tzero
+  #:write-transform
   ;; ops.lisp
   #:t<-
   #:!t*v

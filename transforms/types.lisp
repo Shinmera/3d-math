@@ -93,3 +93,20 @@
                                    (,(lisp-type (type-instance 'vec-type 3 type)) 1 1 1)
                                    (,(lisp-type (type-instance 'quat-type type)))))))))
   (emit))
+
+(defun write-transform (transform stream)
+  (etypecase transform
+    (*transform
+     (format stream "~
+Location: ~7,2@f, ~7,2@f, ~7,2@f
+Scaling:  ~7,2@f, ~7,2@f, ~7,2@f
+Rotation: ~7,2@f, ~7,2@f, ~7,2@f, ~7,2@f"
+             (vx (tlocation transform)) (vy (tlocation transform)) (vz (tlocation transform))
+             (vx (tscaling transform)) (vy (tscaling transform)) (vz (tscaling transform))
+             (qx (trotation transform)) (qy (trotation transform)) (qz (trotation transform)) (qw (trotation transform))))
+    (*mat4
+     (handler-case
+         (let ((tf (tfrom-mat transform)))
+           (write-transform tf stream))
+       (error ()
+         (write-matrix transform stream))))))
