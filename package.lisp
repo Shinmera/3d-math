@@ -56,6 +56,7 @@ Make sure SBCL is built or run with --dynamic-space-size 4Gb or more."
    #:sqr
    #:sqr2
    #:grid
+   #:div
    #:sqrt+
    #:lerp
    #:clamp

@@ -85,7 +85,7 @@
     (u32 'u)
     (i32 'i)))
 
-(declaim (inline sqr sqr2 grid))
+(declaim (inline sqr sqr2 grid div))
 (defun sqr (a)
   (expt a 2))
 
@@ -94,6 +94,9 @@
 
 (defun grid (a g)
   (* g (floor (+ a (/ g 2)) g)))
+
+(defun div (a b)
+  (if (= 0 b) b (/ a b)))
 
 (defun sqrt+ (&rest a)
   (sqrt (apply #'+ a)))
