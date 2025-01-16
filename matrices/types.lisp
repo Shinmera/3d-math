@@ -23,10 +23,10 @@
        ,(call-next-method)
        
        (defmethod print-object ((mat ,(lisp-type type)) stream)
-         (write ,(if (eql 'n (first (template-arguments type)))
-                     `(list ',(lisp-type type) (mrows mat) (mcols mat) (marr mat))
-                     `(list ',(lisp-type type) (marr mat)))
-                :stream stream)))))
+         (let ((constructor ,(if (eql 'n (first (template-arguments type)))
+                                 `(list ',(lisp-type type) (mrows mat) (mcols mat) (marr mat))
+                                 `(list ',(lisp-type type) (marr mat)))))
+           (write-constructor constructor stream))))))
 
 (do-combinations define-mat (2 3 4 n)
   (#-3d-math-no-f32 f32

@@ -22,11 +22,11 @@
     `(progn
        ,(call-next-method)
        (defmethod print-object ((obj ,(lisp-type type)) stream)
-         (write (list ',(lisp-type type)
-                      ,@(loop for slot in (slots type)
-                              when (realized-slot-p slot)
-                              collect `(,(accessor slot) obj)))
-                :stream stream)))))
+         (let ((constructor (list ',(lisp-type type)
+                                  ,@(loop for slot in (slots type)
+                                          when (realized-slot-p slot)
+                                          collect `(,(accessor slot) obj)))))
+           (write-constructor constructor stream))))))
 
 (do-combinations define-transform
   (#-3d-math-no-f32 f32

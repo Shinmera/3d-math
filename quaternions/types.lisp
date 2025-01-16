@@ -17,8 +17,7 @@
        ,(call-next-method)
        
        (defmethod print-object ((quat ,(lisp-type type)) stream)
-         (write (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat))
-                :stream stream)))))
+         (write-constructor (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat)) stream)))))
 
 (do-combinations define-quat
   (#-3d-math-no-f32 f32

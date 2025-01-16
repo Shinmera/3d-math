@@ -32,11 +32,11 @@
     `(progn
        ,(call-next-method)
        (defmethod print-object ((vec ,(lisp-type type)) stream)
-         (write (list ',(lisp-type type)
-                      ,@(loop for slot in (slots type)
-                              unless (realized-slot-p slot)
-                              collect `(,(accessor slot) vec)))
-                :stream stream)))))
+         (let ((constructor (list ',(lisp-type type)
+                                  ,@(loop for slot in (slots type)
+                                          unless (realized-slot-p slot)
+                                          collect `(,(accessor slot) vec)))))
+           (write-constructor constructor stream))))))
 
 (do-combinations define-vec (2 3 4)
   (#-3d-math-no-f32 f32

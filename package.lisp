@@ -53,6 +53,7 @@ Make sure SBCL is built or run with --dynamic-space-size 4Gb or more."
    #:upgraded-type
    #:type-array
    #:type-prefix
+   #:write-constructor
    #:sqr
    #:sqr2
    #:grid

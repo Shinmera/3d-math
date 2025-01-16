@@ -85,6 +85,11 @@
     (u32 'u)
     (i32 'i)))
 
+(defun write-constructor (constructor stream)
+  (if *print-readably*
+      (format stream "#.~s" constructor)
+      (format stream "~a" constructor)))
+
 (declaim (inline sqr sqr2 grid div))
 (defun sqr (a)
   (expt a 2))
