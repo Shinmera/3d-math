@@ -42,6 +42,7 @@
   #:!qmix
   #:!qnlerp
   #:!qslerp
+  #:!qeuler
   #:q=
   #:q~=
   #:qequal
@@ -78,6 +79,7 @@
   #:qfrom-mat
   #:qaxis
   #:qlength
+  #:qeuler
   #:nq+
   #:nq-
   #:nq*

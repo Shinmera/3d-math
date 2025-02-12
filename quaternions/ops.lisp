@@ -110,6 +110,9 @@
   ((quat-type 0 0 #(0 0)) qslerp)
   ((quat 0 0 real) (qslerp f32) x a b (f32 tt))
   ((dquat 0 0 real) (qslerp f64) x a b (f64 tt)))
+(define-templated-dispatch !qeuler (x a)
+  :ignore-template-types (vec-type)
+  ((#'(matching-vec 1) quat-type) qeuler))
 
 (define-value-reductor q= 2q= and T)
 (define-value-reductor q~= 2q~= and T)
@@ -169,6 +172,7 @@
 (define-simple-alias qslerp (a b tt) qzero)
 (define-simple-alias q+* (a b s) qzero)
 (define-alias qrand () `(!qrand (quat)))
+(define-alias qeuler (q) `(!qeuler (*as ,q 'vec3) ,q))
 
 (define-alias qmat (q &optional m)
   `(!qmat (or ,m (*as ,q 'mat3)) ,q))

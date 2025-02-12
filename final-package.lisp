@@ -46,6 +46,12 @@
 (org.shirakumo.fraf.math.internal::define-*zero)
 
 (org.shirakumo.type-templates:define-type-dispatch org.shirakumo.fraf.math.internal:*as (cl-user::x cl:type)
+  (((cl:or fmat fvec quat quat2 transform) (cl:eql vec2)) vec2 (vec2))
+  (((cl:or dmat dvec dquat dquat2 dtransform) (cl:eql vec2)) dvec2 (dvec2))
+  (((cl:or fmat fvec quat quat2 transform) (cl:eql vec3)) vec3 (vec3))
+  (((cl:or dmat dvec dquat dquat2 dtransform) (cl:eql vec3)) dvec3 (dvec3))
+  (((cl:or fmat fvec quat quat2 transform) (cl:eql vec4)) vec4 (vec4))
+  (((cl:or dmat dvec dquat dquat2 dtransform) (cl:eql vec4)) dvec4 (dvec4))
   (((cl:or fmat fvec quat quat2 transform) (cl:eql mat2)) mat2 (mat2))
   (((cl:or dmat dvec dquat dquat2 dtransform) (cl:eql mat2)) dmat2 (dmat2))
   (((cl:or fmat fvec quat quat2 transform) (cl:eql mat3)) mat3 (mat3))

@@ -482,4 +482,10 @@ See *QUAT (type)")
   (function qlength
     "Returns the length or magnitude of the quaternion.
 
-See *QUAT (type)"))
+See *QUAT (type)")
+
+  (function qeuler
+    "Returns the euler angle deconstruction of the quaternion.
+
+See *QUAT (type)
+See *VEC (type)"))

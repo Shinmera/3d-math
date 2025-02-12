@@ -287,7 +287,7 @@
 (define-value-reductor m> 2m> and T)
 (define-value-reductor m>= 2m>= and T)
 
-(define-alias meuler (m) `(!meuler (vec3) ,m))
+(define-alias meuler (m) `(!meuler (*as ,m 'vec3) ,m))
 (define-pure-alias mapply (m f) mzero !mapply)
 (define-modifying-alias nmapply (m f) !mapply)
 (define-simple-alias mcof (m) mzero)
