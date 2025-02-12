@@ -50,6 +50,7 @@
   #:!mtensor
   #:!m*4/3
   #:!m*4/3inv
+  #:!meuler
   #:m=
   #:m~=
   #:m/=
@@ -77,6 +78,7 @@
   #:mminor
   #:mdet
   #:mtrace
+  #:meuler
   #:m1norm
   #:minorm
   #:m2norm

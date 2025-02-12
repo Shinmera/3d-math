@@ -445,6 +445,16 @@ See *MAT (type)")
     "Computes the trace of the matrix.
 
 See *MAT (type)")
+
+  (function meuler
+    "Computes the Euler rotation angle deconstruction of the rotation matrix.
+
+Note that this will almost never give you back exactly what you
+constructed a rotation matrix with.
+
+See !MEULER
+See *MAT (type)
+See *VEC (type)")
   
   (function m1norm
     "Computes the 1/column norm of the matrix.

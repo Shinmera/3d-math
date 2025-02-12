@@ -273,6 +273,12 @@
   #+3d-math-i32 ((ivec3 imat4 ivec3) ivec3 (m*4/3inv/i32 x m a))
   #+3d-math-u32 ((uvec3 umat4 uvec3) uvec3 (m*4/3inv/u32 x m a)))
 
+(define-type-dispatch !meuler (x m)
+  #+3d-math-f32 ((vec3 mat4) vec3 (meuler/4/f32 x m))
+  #+3d-math-f64 ((dvec3 dmat4) dvec3 (meuler/4/f64 x m))
+  #+3d-math-f32 ((vec3 mat3) vec3 (meuler/3/f32 x m))
+  #+3d-math-f64 ((dvec3 dmat3) dvec3 (meuler/3/f64 x m)))
+
 (define-value-reductor m= 2m= and T)
 (define-value-reductor m~= 2m~= and T)
 (define-value-reductor m/= 2m/= and T)
@@ -281,6 +287,7 @@
 (define-value-reductor m> 2m> and T)
 (define-value-reductor m>= 2m>= and T)
 
+(define-alias meuler (m) `(!meuler (vec3) ,m))
 (define-pure-alias mapply (m f) mzero !mapply)
 (define-modifying-alias nmapply (m f) !mapply)
 (define-simple-alias mcof (m) mzero)
