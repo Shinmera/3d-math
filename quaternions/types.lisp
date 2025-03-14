@@ -17,7 +17,13 @@
        ,(call-next-method)
        
        (defmethod print-object ((quat ,(lisp-type type)) stream)
-         (write-constructor (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat)) stream)))))
+         (write-constructor (list ',(lisp-type type) (qx quat) (qy quat) (qz quat) (qw quat)) stream))
+
+       (defmethod describe-object ((quat ,(lisp-type type)) stream)
+         (format stream "~&~s~%  [3d-math quaternion]~%~%" quat)
+         ,@(loop for slot in (slots type)
+                 when (or (not (realized-slot-p slot)) (find 'w (names slot)))
+                 collect `(format stream "~a = ~@f~%" ',(accessor slot) (,(accessor slot) quat)))))))
 
 (do-combinations define-quat
   (#-3d-math-no-f32 f32

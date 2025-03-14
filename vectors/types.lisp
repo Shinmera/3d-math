@@ -36,7 +36,13 @@
                                   ,@(loop for slot in (slots type)
                                           unless (realized-slot-p slot)
                                           collect `(,(accessor slot) vec)))))
-           (write-constructor constructor stream))))))
+           (write-constructor constructor stream)))
+
+       (defmethod describe-object ((vec ,(lisp-type type)) stream)
+         (format stream "~&~s~%  [3d-math vector]~%~%" vec)
+         ,@(loop for slot in (slots type)
+                 unless (realized-slot-p slot)
+                 collect `(format stream "~a = ~@f~%" ',(accessor slot) (,(accessor slot) vec)))))))
 
 (do-combinations define-vec (2 3 4)
   (#-3d-math-no-f32 f32
