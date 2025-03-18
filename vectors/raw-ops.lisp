@@ -376,10 +376,10 @@
         ,(case <s>
            (2 `(setf (aref x 0) (,<t> len)
                      (aref x 1) (,<t> atan)))
-           (3 `(let ((d (aref x 2)))
+           (3 `(let ((d (aref a 2)))
                  (setf (aref x 0) (,<t> len)
                        (aref x 1) (,<t> atan)
-                       (aref x 2) (,<t> (/ len d)))))
+                       (aref x 2) (,<t> (acos (/ d len))))))
            (T (template-unfulfillable))))
       x)))
 
