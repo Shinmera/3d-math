@@ -243,6 +243,7 @@
           (try (- (* -2 phi) (* 2 (acos (/ -1 p))))))
         (!q* out (s (- minimal-a)) q)))))
 
+(declaim (inline nqalign qalign))
 (defun nqalign (r up n &optional (tolerance 1f-3))
   (!qalign r r up n tolerance))
 
