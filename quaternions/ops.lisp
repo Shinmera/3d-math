@@ -191,3 +191,60 @@
 
 (define-alias qlength (q)
   `(sqrt (qsqrlength ,q)))
+
+(declaim (ftype (function (quat quat vec3 vec3 &optional single-float) (values quat &optional)) !qalign))
+(defun !qalign (out r up n &optional (tolerance 1f-3))
+  (let* ((axis (vec3))
+         (cosine (v. up n))
+         (q (quat))
+         (tmp (vec3))
+         (qtmp (quat)))
+    (declare (dynamic-extent q axis tmp qtmp))
+    ;; first, compute a rotation q that maps up onto n.
+    (nvunit (!vc axis up n))
+    (unless (v= up n)
+      (!qfrom-angle q axis (acos cosine)))
+    ;; if the angle is too small, then up and n are nearly parallel, so any rotation by pi will do.
+    (unless (< (v2norm (!v- tmp n (!q* qtmp q up))) tolerance)
+      (unless (v= up n)
+        (!qfrom-angle q axis (- (acos cosine)))))
+    ;; We know at this point that q rotates up to n.
+    (let* ((f (q. q r))
+           (g (+ (- (v. r (vc n q)))
+                 (* -1 (qw q) (v. r n))
+                 (* (qw r) (v. n q))))
+           ;; combine the angles:
+           (p (* (signum f) (sqrt (+ (* f f) (* g g)))))
+           (phi (atan (/ (- g) f)))
+           (minimal-a nil)
+           (minimal-value most-positive-fixnum))
+      (labels ((s (a)
+                 (!qfrom-angle qtmp n a))
+               (d (q1 q2) ; d is the geodesic distance between two quaternions
+                 (acos (clamp -1 (- (* 2 (expt (q. q1 q2) 2)) 1) 1)))
+               (try (a)
+                 (let ((new-value (d r (!q* qtmp (s (- a)) q))))
+                   (when (< new-value minimal-value)
+                     (setf minimal-value new-value
+                           minimal-a a)))))
+        ;; the matrix r' is of the form r' = s(- a) q.
+        ;; it is possible to analytically find the two values of a that minimise C(a)=d( s(- a) q, r).
+        ;; test each of them in turn and return the one that minimises the geodesic distance
+        ;; there are four situations to consider: the two values of a for which the derivative of C(a) vanishes, and C(a) being 1 or -1.
+        ;; C(a) = p cos (a/2 + phi)
+        (try (* -2 phi))                ; dC/da=0
+        (unless (< (abs p) 1)
+          ;; solutions to C(a) = +-1 exist, so push them
+          ;; C = +1
+          (try (+ (* -2 phi) (* 2 (acos (/ p)))))
+          (try (- (* -2 phi) (* 2 (acos (/ p)))))
+          ;; C = -1
+          (try (+ (* -2 phi) (* 2 (acos (/ -1 p)))))
+          (try (- (* -2 phi) (* 2 (acos (/ -1 p))))))
+        (!q* out (s (- minimal-a)) q)))))
+
+(defun nqalign (r up n &optional (tolerance 1f-3))
+  (!qalign r r up n tolerance))
+
+(defun qalign (r up n &optional (tolerance 1f-3))
+  (!qalign (quat) r up n tolerance))

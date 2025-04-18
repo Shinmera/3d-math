@@ -488,4 +488,17 @@ See *QUAT (type)")
     "Returns the euler angle deconstruction of the quaternion.
 
 See *QUAT (type)
-See *VEC (type)"))
+See *VEC (type)")
+
+  (function qalign
+    "Computes a quaternion aligned with the given normal vector.
+
+This is similar to QLOOKAT, with the difference being that it
+does a best-effort to preserve rotation around the principal axis in
+the resulting quaternion.
+
+Usually this function is useful to align an object's orientation to a
+surface.
+
+See QUAT (type)
+See VEC (type)"))

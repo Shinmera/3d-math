@@ -99,4 +99,7 @@
   #:nqslerp
   #:nq+*
   #:nqmat
-  #:nqfrom-mat)
+  #:nqfrom-mat
+  #:!qalign
+  #:nqalign
+  #:qalign)
