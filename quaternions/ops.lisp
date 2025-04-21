@@ -201,7 +201,7 @@
          (qtmp (quat)))
     (declare (dynamic-extent q axis tmp qtmp))
     ;; first, compute a rotation q that maps up onto n.
-    (nvunit (!vc axis up n))
+    (nvunit* (!vc axis up n))
     (unless (v= up n)
       (!qfrom-angle q axis (acos cosine)))
     ;; if the angle is too small, then up and n are nearly parallel, so any rotation by pi will do.
