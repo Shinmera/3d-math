@@ -254,6 +254,8 @@
           (simple "{" "}" "{" "}"))
          ((:lisp :array)
           (simple "#2A(" ")" "(" ")" " "))
+         (:constructor
+          (simple "(mat " ")" "" "" " " (format NIL "~%     ")))
          (:c
           (simple "{" "}" "" ""))
          (:json
