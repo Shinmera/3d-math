@@ -107,6 +107,9 @@ This file is a part of 3d-math
   #:vclamp
   #:v+*
   #:vinv
+  #:vproject
+  #:!vproject
+  #:nvproject
   #:vref
   #:vx-angle
   #:vy-angle

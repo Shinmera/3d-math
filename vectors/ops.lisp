@@ -232,6 +232,13 @@
 (define-simple-alias v+* (a b s) vzero)
 (define-simple-alias vinv (a) vzero)
 
+(define-alias vproject (a onto)
+  `(v* ,onto (/ (v. ,a ,onto) (vsqrlength ,onto))))
+(define-alias !vproject (x a onto)
+  `(!v* ,x ,onto (/ (v. ,a ,onto) (vsqrlength ,onto))))
+(define-alias nvproject (a onto)
+  `(!v* ,a ,onto (/ (v. ,a ,onto) (vsqrlength ,onto))))
+
 (define-alias vx-angle (vec) `(atan (vz ,vec) (vy ,vec)))
 (define-alias vy-angle (vec) `(atan (vz ,vec) (vx ,vec)))
 (define-alias vz-angle (vec) `(atan (vy ,vec) (vx ,vec)))

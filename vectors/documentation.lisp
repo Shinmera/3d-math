@@ -227,6 +227,13 @@ rather than overflowing.
 See V/
 See *VEC (type)")
 
+  (function vproject
+    "Project the vector onto another.
+
+This is equivalent to onto(a*onto)/||onto||^2
+
+See *VEC (type)")
+
   (function vx-angle
     "Return the angle from Z+ to VEC around the X axis.")
 
