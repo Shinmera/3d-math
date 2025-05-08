@@ -25,6 +25,7 @@ This file is a part of 3d-math
   #:vcopy
   #:vzero
   #:with-vec
+  #:write-vector
   ;; ops.lisp
   #:vsetf
   #:v<-

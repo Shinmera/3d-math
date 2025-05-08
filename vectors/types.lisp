@@ -237,3 +237,33 @@
          (etypecase ,valg
            ,@(loop for type in (instances 'vec-type)
                    collect `(,(lisp-type type) ,(bind type))))))))
+
+(defun write-vector (m stream &key (format :nice))
+  (etypecase stream
+    (null (with-output-to-string (out)
+            (write-vector m out :format format)))
+    ((eql T) (write-vector m *standard-output* :format format))
+    (stream
+     (labels ((val (value)
+                (etypecase value
+                  (integer (format stream "~d" value))
+                  (single-float (format stream "~8,4f" value))
+                  (double-float (format stream "~8,4f" value))))
+              (simple (prefix suffix &optional (value-separator ", "))
+                (write-string prefix stream)
+                (let ((arr (varr m)))
+                  (loop for i from 0 below (length arr)
+                        do (val (aref arr i))
+                           (unless (= (length arr) (1+ i))
+                             (write-string value-separator stream))))
+                (write-string suffix stream)))
+       (ecase format
+         ((:c :wolfram)
+          (simple "{" "}"))
+         ((:lisp :array)
+          (simple "#A(" ")"))
+         (:constructor
+             (simple "(vec " ")" " "))
+         ((:json :nice)
+          (simple "[" "]"))))
+     m)))
