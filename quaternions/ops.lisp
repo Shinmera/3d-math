@@ -130,12 +130,22 @@
 (define-rest-alias qmax (q &rest others) qzero)
 
 (defun q* (m &rest others)
-  (apply #'!q* (*zero (car (last others))) m others))
+  (let ((prototype m))
+    (loop for other in (cdr others)
+          do (unless (realp other) (setf prototype other)))
+    (apply #'!q* (*zero prototype) m others)))
 
 (define-compiler-macro q* (m &rest others)
-  (let ((l (gensym "LAST")))
-    `(let ((,l ,(car (last others))))
-       (!q* (*zero ,l) ,m ,@(butlast others) ,l))))
+  (let ((prototype (gensym "PROTOTYPE"))
+        (first (gensym "FIRST"))
+        (others (loop for other in others
+                      collect (list (gensym "OTHER") other))))
+    `(let* (,@others
+            (,first ,m)
+            (,prototype ,first))
+       ,@(loop for (g) in others
+               collect `(unless (realp ,g) (setf ,prototype ,g)))
+       (!q* (*zero ,prototype) ,first ,@(mapcar #'first others)))))
 
 (defun nq* (m &rest others)
   (apply #'!q* m m others))
