@@ -125,13 +125,14 @@
     `((declare (type ,(lisp-type type) x a)
                (return-type ,(lisp-type type))
                (dynamic-extent a))
-      (let ((length (/ (qlength ,(place-form type :real 'a)))))
+      (let ((length (qlength ,(place-form type :real 'a))))
         (cond ((<= length ,(ecase <t>
                              (f32 SINGLE-FLOAT-EPSILON)
                              (f64 DOUBLE-FLOAT-EPSILON)))
                (qsetf ,(place-form type :real 'x) 0 0 0 1)
                (qsetf ,(place-form type :dual 'x) 0 0 0 0))
               (T
+               (setf length (/ length))
                (!q* ,(place-form type :real 'x) ,(place-form type :real 'a) length) 
                (!q* ,(place-form type :dual 'x) ,(place-form type :dual 'a) length)))
         x))))
