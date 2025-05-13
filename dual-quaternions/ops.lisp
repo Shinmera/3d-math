@@ -85,10 +85,10 @@
        (!q2* (*zero ,l) ,m ,@(butlast others) ,l))))
 
 (defun nq2* (m &rest others)
-  (apply #'!q2* m others))
+  (apply #'!q2* m m others))
 
 (define-compiler-macro nq2* (m &rest others)
-  `(!q2* ,m ,@others))
+  `(!q2* ,m ,m ,@others))
 
 (define-value-reductor q2= 2q2= and T)
 (define-value-reductor q2~= 2q2~= and T)
