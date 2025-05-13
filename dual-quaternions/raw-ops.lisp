@@ -89,9 +89,9 @@
                (type ,(lisp-type vtype) x)
                (return-type ,(lisp-type vtype))
                (dynamic-extent a))
-      (let ((tmp (,(lisp-type qtype) ,(place-form type :real 'a))))
+      (let ((tmp (,(lisp-type qtype))))
         (declare (dynamic-extent tmp))
-        (!qconjugate tmp tmp)
+        (!qconjugate tmp ,(place-form type :real 'a))
         (!q* tmp tmp ,(place-form type :dual 'a) (,<t> 2))
         (v<- x tmp)))))
 
@@ -107,7 +107,7 @@
       (q<- ,(place-form type :real 'x) q)
       (v<- ,(place-form type :dual 'x) v)
       (setf (qw ,(place-form type :dual 'x)) 0.0)
-      (!q* ,(place-form type :dual 'x) q ,(place-form type :dual 'x) (,<t> 0.5))
+      (!q* ,(place-form type :dual 'x) ,(place-form type :real 'x) ,(place-form type :dual 'x) (,<t> 0.5))
       x)))
 
 (define-template qunit <t> (x a)
