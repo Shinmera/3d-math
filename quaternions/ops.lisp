@@ -205,11 +205,12 @@
 (declaim (ftype (function (quat quat vec3 vec3 &optional single-float) (values quat &optional)) !qalign))
 (defun !qalign (out r up n &optional (tolerance 1f-3))
   (let* ((axis (vec3))
+         (n (vunit n))
          (cosine (v. up n))
          (q (quat))
          (tmp (vec3))
          (qtmp (quat)))
-    (declare (dynamic-extent q axis tmp qtmp))
+    (declare (dynamic-extent n q axis tmp qtmp))
     ;; first, compute a rotation q that maps up onto n.
     (nvunit* (!vc axis up n))
     (unless (v= up n)
