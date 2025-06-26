@@ -422,20 +422,24 @@ See NQUNIT*
 See *QUAT (type)")
   
   (function qmix
-    "Computes a mix between the two quaternions.
+    "Computes a component-wise mix of the two quaternions.
 
 Note that this mix is done linearly and may thus give undesired
 results for large differences in the arguments.
 
 See !QMIX
 See NQMIX
+See QNLERP
 See *QUAT (type)")
   
   (function qnlerp
     "Computes the linear interpolation of the two quaternions.
 
+Unlike qmix, the resulting quaternion is a unit quaternion.
+
 See !QNLERP
 See NQNLERP
+See QMIX
 See *QUAT (type)")
   
   (function qslerp
@@ -446,6 +450,8 @@ under large differences in the arguments.
 
 See !QSLERP
 See NQSLERP
+See QNLERP
+See QMIX
 See *QUAT (type)")
 
   (function q+*

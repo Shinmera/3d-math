@@ -442,11 +442,10 @@
                (return-type ,(lisp-type type))
                (dynamic-extent a b)
                inline)
-      (let ((1-t (- 1 t-t)))
-        (psetf ,@(loop for i from 0 below 4
-                       collect (place-form type i 'x)
-                       collect `(+ (* 1-t ,(place-form type i 'a))
-                                   (* t-t ,(place-form type i 'b))))))
+      (psetf ,@(loop for i from 0 below 4
+                     collect (place-form type i 'x)
+                     collect `(+ ,(place-form type i 'a)
+                                 (* t-t (- ,(place-form type i 'b) ,(place-form type i 'a))))))
       x)))
 
 (define-template qnlerp <t> (x a b t-t)
