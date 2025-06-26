@@ -336,7 +336,7 @@
              (cos/2 (cos f))
              (sin/2 (sin f)))
         (declare (dynamic-extent axis))
-        (!vunit axis q)
+        (!vunit* axis q)
         (setf ,(place-form type :x 'x) (* ,(place-form vtype :x 'axis) sin/2)
               ,(place-form type :y 'x) (* ,(place-form vtype :y 'axis) sin/2)
               ,(place-form type :z 'x) (* ,(place-form vtype :z 'axis) sin/2)
