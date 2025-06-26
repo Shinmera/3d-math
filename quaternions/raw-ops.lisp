@@ -466,7 +466,7 @@
                (type ,<t> t-t)
                (return-type ,(lisp-type type))
                (dynamic-extent a b))
-      (cond ((~= 1 (,(compose-name #\/ '2quatreduce '+ '* <t>) a b))
+      (cond ((< (- 1 1.0e-6) (abs (,(compose-name #\/ '2quatreduce '+ '* <t>) a b)))
              (,(compose-name #\/ 'qnlerp <t>) x a b t-t))
             (T
              (let ((tmp (,(lisp-type type) a)))
