@@ -320,7 +320,7 @@
                (setf len (/ len))
                (setf ,@(loop for i from 0 below 4
                              collect (place-form type i 'x)
-                             collect `(* len ,(place-form type i 'x))))))
+                             collect `(* len ,(place-form type i 'q))))))
         x))))
 
 (define-template qexpt <t> (x q e)
@@ -472,7 +472,7 @@
              (let ((tmp (,(lisp-type type) a)))
                (declare (dynamic-extent tmp))
                (,(compose-name #\/ 'inverses <t>) tmp a)
-               (,(compose-name #\/ 'q*q <t>) tmp tmp b)
+               (,(compose-name #\/ 'q*q <t>) tmp b tmp)
                (,(compose-name #\/ 'qexpt <t>) tmp tmp t-t)
                (,(compose-name #\/ 'q*q <t>) tmp tmp a)
                (,(compose-name #\/ 'qunit* <t>) x tmp)))))))
