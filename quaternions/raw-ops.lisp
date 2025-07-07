@@ -471,7 +471,11 @@
             (T
              (let ((tmp (,(lisp-type type) a)))
                (declare (dynamic-extent tmp))
-               (,(compose-name #\/ 'inverses <t>) tmp a)
+               (cond ((< (,(compose-name #\/ '2quatreduce '+ '* <t>) a b) 0.0)
+                      (,(compose-name #\/ '1quatop '- <t>) tmp a)
+                      (,(compose-name #\/ 'inverses <t>) tmp tmp))
+                     (T
+                      (,(compose-name #\/ 'inverses <t>) tmp a)))
                (,(compose-name #\/ 'q*q <t>) tmp b tmp)
                (,(compose-name #\/ 'qexpt <t>) tmp tmp t-t)
                (,(compose-name #\/ 'q*q <t>) tmp tmp a)

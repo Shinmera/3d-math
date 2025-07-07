@@ -446,7 +446,8 @@ See *QUAT (type)")
     "Computes the spherical interpolation of the two quaternions.
 
 This will rotate along the unit sphere, preserving the rotation even
-under large differences in the arguments.
+under large differences in the arguments. It will also always
+interpolate along the shortest possible rotation angle.
 
 See !QSLERP
 See NQSLERP
