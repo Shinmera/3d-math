@@ -64,7 +64,9 @@
            ((real real real real) ,type
             ,(constructor 'a 'b 'c 'd))
            ((*quat) ,type
-            ,(constructor '(qx a) '(qy a) '(qz a) '(qw a))))))))
+            ,(constructor '(qx a) '(qy a) '(qz a) '(qw a)))
+           (((array * (4))) ,type
+            ,(constructor '(aref a 0) '(aref a 1) '(aref a 2) '(aref a 3))))))))
 
 (do-type-combinations quat-type define-quat-constructors)
 
