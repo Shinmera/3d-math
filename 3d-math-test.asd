@@ -9,9 +9,9 @@
   :author "Yukari Hafner <shinmera@tymoon.eu>"
   :maintainer "Yukari Hafner <shinmera@tymoon.eu>"
   :description "Tests for the 3d-math system."
-  :homepage "https://Shinmera.github.io/3d-math/"
-  :bug-tracker "https://github.com/Shinmera/3d-math/issues"
-  :source-control (:git "https://github.com/Shinmera/3d-math.git")
+  :homepage "https://shinmera.com/docs/3d-math/"
+  :bug-tracker "https://shinmera.com/project/3d-math/issues"
+  :source-control (:git "https://shinmera.com/project/3d-math.git")
   :serial T
   :components ((:file "test")
                (:file "vectors/test")

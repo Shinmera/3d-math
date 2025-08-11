@@ -9,9 +9,9 @@
   :author "Yukari Hafner <shinmera@tymoon.eu>"
   :maintainer "Yukari Hafner <shinmera@tymoon.eu>"
   :description "A library implementing the necessary linear algebra math for 2D and 3D computations"
-  :homepage "https://shinmera.github.io/3d-math/"
-  :bug-tracker "https://github.com/shinmera/3d-math/issues"
-  :source-control (:git "https://github.com/shinmera/3d-math.git")
+  :homepage "https://shinmera.com/docs/3d-math/"
+  :bug-tracker "https://shinmera.com/project/3d-math/issues"
+  :source-control (:git "https://shinmera.com/project/3d-math.git")
   :serial T
   :components ((:file "package")
                (:file "toolkit")
